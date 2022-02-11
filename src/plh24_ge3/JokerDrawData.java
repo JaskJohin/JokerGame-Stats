@@ -14,7 +14,30 @@ package plh24_ge3;
  *     int prizeTier2_1winners, int prizeTier2_1dividend,
  *     int prizeTier1_1winners, int prizeTier1_1dividend)</pre>
  * <pre>Methods:
- * getX()            Get the jokerdrawdata's x.
+ * getDrawId()                  Get the drawId.
+ * getDrawDate()                Get the drawDate.
+ * getWinningNum1()             Get the 1st winning number.
+ * getWinningNum2()             Get the 2nd winning number.
+ * getWinningNum3()             Get the 3rd winning number.
+ * getWinningNum4()             Get the 4th winning number.
+ * getWinningNum5()             Get the 5th winning number.
+ * getBonusNum()                Get the bonus winning number.
+ * getPrizeTier5_1winners()     Get the number of winners in the "5+1" tier.
+ * getPrizeTier5_1dividend()    Get the shares of each winner in the "5+1" tier.
+ * getPrizeTier5winners()       Get the number of winners in the "5" tier.
+ * getPrizeTier5dividend()      Get the shares of each winner in the "5" tier.
+ * getPrizeTier4_1winners()     Get the number of winners in the "4+1" tier.
+ * getPrizeTier4_1dividend()    Get the shares of each winner in the "4+1" tier.
+ * getPrizeTier4winners()       Get the number of winners in the "4" tier.
+ * getPrizeTier4dividend()      Get the shares of each winner in the "4" tier.
+ * getPrizeTier3_1winners()     Get the number of winners in the "3+1" tier.
+ * getPrizeTier3_1dividend()    Get the shares of each winner in the "3+1" tier.
+ * getPrizeTier3winners()       Get the number of winners in the "3" tier.
+ * getPrizeTier3dividend()      Get the shares of each winner in the "3" tier.
+ * getPrizeTier2_1winners()     Get the number of winners in the "2+1" tier.
+ * getPrizeTier2_1dividend()    Get the shares of each winner in the "2+1" tier.
+ * getPrizeTier1_1winners()     Get the number of winners in the "1+1" tier.
+ * getPrizeTier1_1dividend()    Get the shares of each winner in the "1+1" tier.
  * </pre>
  * @author Athanasios Theodoropoulos
  * @author Aleksandros Dimitrakopoulos
@@ -117,145 +140,145 @@ public class JokerDrawData
 
 	// Methods
 	/**
-	 * Get the drawId.
+	 * Get the draw id.
 	 * @return An int representing the draw id.
 	 */
 	public int getDrawId() {return this.drawId;}
 
 	/**
-	 * Get the drawDate.
+	 * Get the draw date.
 	 * @return A string representing the draw date.
 	 */
 	public String getDrawDate() {return this.drawDate;}
 
 	/**
-	 * Get the winningNum1.
+	 * Get the 1st winning number.
 	 * @return An int representing the 1st winning number.
 	 */
 	public int getWinningNum1() {return this.winningNum1;}
 
 	/**
-	 * Get the winningNum2.
+	 * Get the 2nd winning number.
 	 * @return An int representing the 2nd winning number.
 	 */
 	public int getWinningNum2() {return this.winningNum2;}
 
 	/**
-	 * Get the winningNum3.
+	 * Get the 3rd winning number.
 	 * @return An int representing the 3rd winning number.
 	 */
 	public int getWinningNum3() {return this.winningNum3;}
 
 	/**
-	 * Get the winningNum4.
+	 * Get the 4th winning number.
 	 * @return An int representing the 4th winning number.
 	 */
 	public int getWinningNum4() {return this.winningNum4;}
 
 	/**
-	 * Get the winningNum5.
+	 * Get the 5th winning number.
 	 * @return An int representing the 5th winning number.
 	 */
 	public int getWinningNum5() {return this.winningNum5;}
 
 	/**
-	 * Get the bonusNum.
+	 * Get the bonus winning number.
 	 * @return An int representing the bonus winning number.
 	 */
 	public int getBonusNum() {return this.bonusNum;}
 
 	/**
-	 * Get the prizeTier5_1winners.
+	 * Get the number of winners in the "5+1" tier.
 	 * @return An int representing the number of winners in the "5+1" tier.
 	 */
 	public int getPrizeTier5_1winners() {return this.prizeTier5_1winners;}
 
 	/**
-	 * Get the prizeTier5_1dividend.
+	 * Get the shares of each winner in the "5+1" tier.
 	 * @return An int representing the shares of each winner in the "5+1" tier.
 	 */
 	public int getPrizeTier5_1dividend() {return this.prizeTier5_1dividend;}
 
 	/**
-	 * Get the prizeTier5winners.
+	 * Get the number of winners in the "5" tier.
 	 * @return An int representing the number of winners in the "5" tier.
 	 */
 	public int getPrizeTier5winners() {return this.prizeTier5winners;}
 
 	/**
-	 * Get the prizeTier5dividend.
+	 * Get the shares of each winner in the "5" tier.
 	 * @return An int representing the shares of each winner in the "5" tier.
 	 */
 	public int getPrizeTier5dividend() {return this.prizeTier5dividend;}
 
 	/**
-	 * Get the prizeTier4_1winners.
+	 * Get the number of winners in the "4+1" tier.
 	 * @return An int representing the number of winners in the "4+1" tier.
 	 */
 	public int getPrizeTier4_1winners() {return this.prizeTier4_1winners;}
 
 	/**
-	 * Get the prizeTier4_1dividend.
+	 * Get the shares of each winner in the "4+1" tier.
 	 * @return An int representing the shares of each winner in the "4+1" tier.
 	 */
 	public int getPrizeTier4_1dividend() {return this.prizeTier4_1dividend;}
 
 	/**
-	 * Get the prizeTier4winners.
+	 * Get the number of winners in the "4" tier.
 	 * @return An int representing the number of winners in the "4" tier.
 	 */
 	public int getPrizeTier4winners() {return this.prizeTier4winners;}
 
 	/**
-	 * Get the prizeTier4dividend.
+	 * Get the shares of each winner in the "4" tier.
 	 * @return An int representing the shares of each winner in the "4" tier.
 	 */
 	public int getPrizeTier4dividend() {return this.prizeTier4dividend;}
 
 	/**
-	 * Get the prizeTier3_1winners.
+	 * Get the number of winners in the "3+1" tier.
 	 * @return An int representing the number of winners in the "3+1" tier.
 	 */
 	public int getPrizeTier3_1winners() {return this.prizeTier3_1winners;}
 
 	/**
-	 * Get the prizeTier3_1dividend.
+	 * Get the shares of each winner in the "3+1" tier.
 	 * @return An int representing the shares of each winner in the "3+1" tier.
 	 */
 	public int getPrizeTier3_1dividend() {return this.prizeTier3_1dividend;}
 
 	/**
-	 * Get the prizeTier3winners.
+	 * Get the number of winners in the "3" tier.
 	 * @return An int representing the number of winners in the "3" tier.
 	 */
 	public int getPrizeTier3winners() {return this.prizeTier3winners;}
 
 	/**
-	 * Get the prizeTier3dividend.
+	 * Get the shares of each winner in the "3" tier.
 	 * @return An int representing the shares of each winner in the "3" tier.
 	 */
 	public int getPrizeTier3dividend() {return this.prizeTier3dividend;}
 
 	/**
-	 * Get the prizeTier2_1winners.
+	 * Get the number of winners in the "2+1" tier.
 	 * @return An int representing the number of winners in the "2+1" tier.
 	 */
 	public int getPrizeTier2_1winners() {return this.prizeTier2_1winners;}
 
 	/**
-	 * Get the prizeTier2_1dividend.
+	 * Get the shares of each winner in the "2+1" tier.
 	 * @return An int representing the shares of each winner in the "2+1" tier.
 	 */
 	public int getPrizeTier2_1dividend() {return this.prizeTier2_1dividend;}
 
 	/**
-	 * Get the prizeTier1_1winners.
+	 * Get the number of winners in the "1+1" tier.
 	 * @return An int representing the number of winners in the "1+1" tier.
 	 */
 	public int getPrizeTier1_1winners() {return this.prizeTier1_1winners;}
 
 	/**
-	 * Get the prizeTier1_1dividend.
+	 * Get the shares of each winner in the "1+1" tier.
 	 * @return An int representing the shares of each winner in the "1+1" tier.
 	 */
 	public int getPrizeTier1_1dividend() {return this.prizeTier1_1dividend;}

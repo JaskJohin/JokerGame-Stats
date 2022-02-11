@@ -2,6 +2,7 @@ package plh24_ge3;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
@@ -55,78 +56,99 @@ public class WindowMain    // MainClass
 		Color backColor = new java.awt.Color(244, 244, 250);
 
 
-		// Labels
-		JLabel labelTitle = new JLabel("Τζόκερ stats");
-		labelTitle.setFont(new Font("Arial", 3, 53));
-		labelTitle.setForeground(Color.ORANGE);
-
-		JLabel labelTitleShadow = new JLabel("Τζόκερ stats");
-		labelTitleShadow.setFont(new Font("Arial", 3, 53));
-		labelTitleShadow.setForeground(Color.BLUE);
-
-
-		// Buttons
-		JButton button1 = new JButton("Διαχείριση δεδομένων");
-		button1.addActionListener(this::button1ActionPerformed);
-
-		JButton button2 = new JButton("Προβολή δεδομένων");
-		button2.addActionListener(this::button2ActionPerformed);
-
-		JButton button3 = new JButton("Προβολή στατιστικών δεδομένων");
-		button3.addActionListener(this::button3ActionPerformed);
-
-		JButton buttonExit = new JButton("Έξοδος");
-		buttonExit.setPreferredSize(new java.awt.Dimension(90, 26));
-        buttonExit.addActionListener(this::buttonExitActionPerformed);
-
-		JButton buttonAbout = new JButton("Σχετικά");
-		buttonAbout.setPreferredSize(new java.awt.Dimension(90, 26));
-		buttonAbout.addActionListener(this::buttonAboutActionPerformed);
-
-
-		// Panels
-		JPanel topPanel = new JPanel();    // Panel with the window title label
+		/*
+		 * Top panel with the window title
+		 */
+		JPanel topPanel = new JPanel();
 		topPanel.setBorder(BorderFactory.createEmptyBorder(6, 30, 0, 0));
 		topPanel.setLayout(new GridLayout(0, 1, 0, -76));
-		topPanel.setPreferredSize(new java.awt.Dimension(374, 89));
-		topPanel.setMinimumSize(new java.awt.Dimension(374, 89));
-		topPanel.setMaximumSize(new java.awt.Dimension(374, 89));
+		topPanel.setPreferredSize(new Dimension(374, 89));
+		topPanel.setMinimumSize(new Dimension(374, 89));
+		topPanel.setMaximumSize(new Dimension(374, 89));
 		topPanel.setBackground(backColor);
+
+			// Labels with the title
+			JLabel labelTitle = new JLabel("Τζόκερ stats");
+			labelTitle.setFont(new Font("Arial", 3, 53));
+			labelTitle.setForeground(Color.ORANGE);
+
+			JLabel labelTitleShadow = new JLabel("Τζόκερ stats");
+			labelTitleShadow.setFont(new Font("Arial", 3, 53));
+			labelTitleShadow.setForeground(Color.BLUE);
+
 		topPanel.add(labelTitle);
 		topPanel.add(labelTitleShadow);
 
-		JPanel middlePanel = new JPanel();    // Panel with the main buttons
+
+		/*
+		 * Middle panel with the main buttons
+		 */
+		JPanel middlePanel = new JPanel();
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(23, 30, 0, 30));
 		middlePanel.setLayout(new GridLayout(0, 1, 0, 16));
-		middlePanel.setPreferredSize(new java.awt.Dimension(374, 174));
-		middlePanel.setMinimumSize(new java.awt.Dimension(374, 174));
-		middlePanel.setMaximumSize(new java.awt.Dimension(374, 174));
+		middlePanel.setPreferredSize(new Dimension(374, 174));
+		middlePanel.setMinimumSize(new Dimension(374, 174));
+		middlePanel.setMaximumSize(new Dimension(374, 174));
 		middlePanel.setBackground(backColor);
+
+			// Manage data button
+			JButton button1 = new JButton("Διαχείριση δεδομένων");
+			button1.addActionListener(this::button1ActionPerformed);
+
+			// Show data button
+			JButton button2 = new JButton("Προβολή δεδομένων");
+			button2.addActionListener(this::button2ActionPerformed);
+
+			// Show stats button
+			JButton button3 = new JButton("Προβολή στατιστικών δεδομένων");
+			button3.addActionListener(this::button3ActionPerformed);
+
 		middlePanel.add(button1);
 		middlePanel.add(button2);
 		middlePanel.add(button3);
 
-		JPanel bottomPanel = new JPanel();    // Panel with About and Exit buttons
+
+		/*
+		 * Bottom panel with the with About and Exit buttons
+		 */
+		JPanel bottomPanel = new JPanel();
 		bottomPanel.setBorder(BorderFactory.createEmptyBorder(50, 10, 0, 10));
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
 		bottomPanel.setBackground(backColor);
+
+			// About button
+			JButton buttonAbout = new JButton("Σχετικά");
+			buttonAbout.setPreferredSize(new Dimension(90, 26));
+			buttonAbout.addActionListener(this::buttonAboutActionPerformed);
+
+			// Exit button
+			JButton buttonExit = new JButton("Έξοδος");
+			buttonExit.setPreferredSize(new Dimension(90, 26));
+			buttonExit.addActionListener(this::buttonExitActionPerformed);
+
 		bottomPanel.add(buttonAbout);
 		bottomPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
 		bottomPanel.add(buttonExit);
 
-		JPanel mainPanel = new JPanel();    // Main panel
+
+		/*
+		 * Main panel
+		 */
+		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 30, 10));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
 		mainPanel.add(bottomPanel);
-		mainPanel.setPreferredSize(new java.awt.Dimension(394, 369));
-		mainPanel.setMinimumSize(new java.awt.Dimension(394, 369));
-		mainPanel.setMaximumSize(new java.awt.Dimension(394, 369));
+		mainPanel.setPreferredSize(new Dimension(394, 369));
+		mainPanel.setMinimumSize(new Dimension(394, 369));
+		mainPanel.setMaximumSize(new Dimension(394, 369));
 
 
-		// Main window
+		/*
+		 * Main window
+		 */
 		JFrame frame = new JFrame();
 		frame.add(mainPanel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

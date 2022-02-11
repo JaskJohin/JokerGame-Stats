@@ -3,6 +3,7 @@ package plh24_ge3;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -54,9 +55,9 @@ public class WindowShowData
 		JPanel topPanel = new JPanel();
 		topPanel.setBorder(BorderFactory.createEmptyBorder(6, 30, 0, 0));
 		topPanel.setLayout(new GridLayout(0, 1, 0, -76));
-		topPanel.setPreferredSize(new java.awt.Dimension(490, 89));
-		topPanel.setMinimumSize(new java.awt.Dimension(490, 89));
-		topPanel.setMaximumSize(new java.awt.Dimension(490, 89));
+		topPanel.setPreferredSize(new Dimension(490, 89));
+		topPanel.setMinimumSize(new Dimension(490, 89));
+		topPanel.setMaximumSize(new Dimension(490, 89));
 		topPanel.setBackground(backColor);
 
 			// Labels with the title
@@ -77,13 +78,14 @@ public class WindowShowData
 		 */
 		JPanel middlePanel = new JPanel();
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
-		middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.X_AXIS));
+		middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 		middlePanel.setBackground(backColor);
 
 			// Game selection panel
 			JPanel gameSelectPanel = new JPanel();
 			gameSelectPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 			gameSelectPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
+			gameSelectPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameSelectPanel.getMinimumSize().height));
 			gameSelectPanel.setBackground(backColor);
 
 				JLabel labelGameSelect = new JLabel("Επιλέξτε τυχερό παιχνίδι");
@@ -110,7 +112,7 @@ public class WindowShowData
 
 			// Close button
 			JButton buttonClose = new JButton("Κλείσιμο");
-			buttonClose.setPreferredSize(new java.awt.Dimension(116, 26));
+			buttonClose.setPreferredSize(new Dimension(116, 26));
 			buttonClose.addActionListener(this::buttonCloseActionPerformed);
 
 		bottomPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
@@ -123,7 +125,7 @@ public class WindowShowData
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new java.awt.Dimension(596, 362));
+		mainPanel.setPreferredSize(new Dimension(596, 362));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
@@ -140,7 +142,7 @@ public class WindowShowData
 		dialog.setModal(true);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new java.awt.Dimension(590, 360));
+		dialog.setMinimumSize(new Dimension(590, 360));
 //		dialog.setResizable(false);
 		dialog.setVisible(true);
 	}

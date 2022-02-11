@@ -47,13 +47,13 @@ public class WindowShowStats
 
 
 		// Labels
-		JLabel label = new JLabel("Προβολή στατιστικών");
-		label.setFont(new Font("Arial", 3, 42));
-		label.setForeground(Color.ORANGE);
+		JLabel labelTitle = new JLabel("Προβολή στατιστικών");
+		labelTitle.setFont(new Font("Arial", 3, 42));
+		labelTitle.setForeground(Color.ORANGE);
 
-		JLabel labelShadow = new JLabel("Προβολή στατιστικών");
-		labelShadow.setFont(new Font("Arial", 3, 42));
-		labelShadow.setForeground(Color.BLUE);
+		JLabel labelTitleShadow = new JLabel("Προβολή στατιστικών");
+		labelTitleShadow.setFont(new Font("Arial", 3, 42));
+		labelTitleShadow.setForeground(Color.BLUE);
 
 
 
@@ -65,15 +65,15 @@ public class WindowShowStats
 
 
 		// Panels
-		JPanel topPanel = new JPanel();
+		JPanel topPanel = new JPanel();    // Panel with the window title label
 		topPanel.setBorder(BorderFactory.createEmptyBorder(6, 30, 0, 0));
 		topPanel.setLayout(new GridLayout(0, 1, 0, -76));
 		topPanel.setPreferredSize(new java.awt.Dimension(500, 89));
 		topPanel.setMinimumSize(new java.awt.Dimension(500, 89));
 		topPanel.setMaximumSize(new java.awt.Dimension(500, 89));
 		topPanel.setBackground(backColor);
-		topPanel.add(label);
-		topPanel.add(labelShadow);
+		topPanel.add(labelTitle);
+		topPanel.add(labelTitleShadow);
 
 
 

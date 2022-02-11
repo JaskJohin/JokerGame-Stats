@@ -32,23 +32,23 @@ public class WindowAbout
 {
 	// Variables declaration
 	private final JPanel middlePanelCards;
-	private final JButton buttonAbout;
+	private final JButton buttonLicense;
 	private final JDialog dialog;
 
 
 	// Button actions
-	private void buttonAboutActionPerformed(java.awt.event.ActionEvent evt)
+	private void buttonLicenseActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		CardLayout cl = (CardLayout)(middlePanelCards.getLayout());
-		if (buttonAbout.getText().equals("Άδεια"))
+		if (buttonLicense.getText().equals("Άδεια"))
 		{
 			cl.show(middlePanelCards, "License");
-			buttonAbout.setText("Πληροφορίες");
+			buttonLicense.setText("Πληροφορίες");
 		}
-		else if (buttonAbout.getText().equals("Πληροφορίες"))
+		else if (buttonLicense.getText().equals("Πληροφορίες"))
 		{
 			cl.show(middlePanelCards, "Info");
-			buttonAbout.setText("Άδεια");
+			buttonLicense.setText("Άδεια");
 		}
 	}
 
@@ -135,9 +135,9 @@ public class WindowAbout
 		buttonClose.setPreferredSize(new java.awt.Dimension(116, 26));
         buttonClose.addActionListener(this::buttonCloseActionPerformed);
 
-		buttonAbout = new JButton("Άδεια");
-		buttonAbout.setPreferredSize(new java.awt.Dimension(116, 26));
-		buttonAbout.addActionListener(this::buttonAboutActionPerformed);
+		buttonLicense = new JButton("Άδεια");
+		buttonLicense.setPreferredSize(new java.awt.Dimension(116, 26));
+		buttonLicense.addActionListener(this::buttonLicenseActionPerformed);
 
 
 		// Panels
@@ -178,11 +178,11 @@ public class WindowAbout
 		middlePanelCards.add(middlePanelInfo, "Info");
 		middlePanelCards.add(middlePanelLicense, "License");
 
-		JPanel bottomPanel = new JPanel();    // Panel with About and Close buttons
+		JPanel bottomPanel = new JPanel();    // Panel with License and Close buttons
 		bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
 		bottomPanel.setBackground(backColor);
-		bottomPanel.add(buttonAbout);
+		bottomPanel.add(buttonLicense);
 		bottomPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
 		bottomPanel.add(buttonClose);
 

@@ -56,13 +56,13 @@ public class WindowMain    // MainClass
 
 
 		// Labels
-		JLabel label = new JLabel("Τζόκερ stats");
-		label.setFont(new Font("Arial", 3, 53));
-		label.setForeground(Color.ORANGE);
+		JLabel labelTitle = new JLabel("Τζόκερ stats");
+		labelTitle.setFont(new Font("Arial", 3, 53));
+		labelTitle.setForeground(Color.ORANGE);
 
-		JLabel labelShadow = new JLabel("Τζόκερ stats");
-		labelShadow.setFont(new Font("Arial", 3, 53));
-		labelShadow.setForeground(Color.BLUE);
+		JLabel labelTitleShadow = new JLabel("Τζόκερ stats");
+		labelTitleShadow.setFont(new Font("Arial", 3, 53));
+		labelTitleShadow.setForeground(Color.BLUE);
 
 
 		// Buttons
@@ -85,15 +85,15 @@ public class WindowMain    // MainClass
 
 
 		// Panels
-		JPanel topPanel = new JPanel();    // Panel with the label
+		JPanel topPanel = new JPanel();    // Panel with the window title label
 		topPanel.setBorder(BorderFactory.createEmptyBorder(6, 30, 0, 0));
 		topPanel.setLayout(new GridLayout(0, 1, 0, -76));
 		topPanel.setPreferredSize(new java.awt.Dimension(374, 89));
 		topPanel.setMinimumSize(new java.awt.Dimension(374, 89));
 		topPanel.setMaximumSize(new java.awt.Dimension(374, 89));
 		topPanel.setBackground(backColor);
-		topPanel.add(label);
-		topPanel.add(labelShadow);
+		topPanel.add(labelTitle);
+		topPanel.add(labelTitleShadow);
 
 		JPanel middlePanel = new JPanel();    // Panel with the main buttons
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(23, 30, 0, 30));

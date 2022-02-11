@@ -141,7 +141,7 @@ public class WindowAbout
 
 
 		// Panels
-		JPanel topPanel = new JPanel();    // Panel with the label
+		JPanel topPanel = new JPanel();    // Panel with the window title label
 		topPanel.setBorder(BorderFactory.createEmptyBorder(6, 20, 4, 0));
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 		topPanel.setBackground(new java.awt.Color(78, 116, 221));

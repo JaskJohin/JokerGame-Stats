@@ -54,12 +54,8 @@ public class DrawData {
             Statement statement = connection.createStatement();
             String selectSQL = "(select * from Draws)";
             ResultSet resultSet = statement.executeQuery(selectSQL);
-            //while(resultSet.next()) {
-            //    System.out.println(resultSet.getString("gameID") + ", " + resultSet.getString("drawID") + resultSet.getString("drawTime") + resultSet.getString("status") + resultSet.getString("drawBreak") + resultSet.getString("visualDraw"));
-            //}
             statement.close();
             connection.close();
-            //System.out.println("Done!");
             return resultSet;
         } catch (SQLException ex) {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          

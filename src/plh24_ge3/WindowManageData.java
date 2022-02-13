@@ -1,12 +1,22 @@
 package plh24_ge3;
 
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.CompletableFuture;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -30,18 +40,165 @@ import javax.swing.JTextField;
 public class WindowManageData
 {
 	// Variables declaration
+	private String dateOfFirstDraw;
+	private String lastDrawId;
 	private final JDialog dialog;
+	private final JComboBox comboBoxGameSelect;
+	private final JRadioButton radioButtonSingleDraw;
+	private final JTextField textFieldDrawId;
+	private final JTextField textFieldDate1;
+	private final JTextField textFieldDate2;
+	private final JComboBox comboBoxPredefinedRange;
+
+
+	// Methods
+	private void findDateOfFirstDraw()
+	{
+		// The 1st draw can be found from: "https://api.opap.gr/draws/v3.0/{gameId}/1";
+		// Kino is an exception. It's earliest data are from about 3 years in the past.
+		if (comboBoxGameSelect.getSelectedItem().equals("Κίνο"))
+		{
+			// Current local date
+			LocalDate dateNow = LocalDate.now();
+
+			// Date format
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+			dateOfFirstDraw = formatter.format(dateNow.minusYears(3));
+		}
+
+		switch (comboBoxGameSelect.getSelectedItem().toString())
+		{
+			case "Powerspin": dateOfFirstDraw = "2020-06-30"; break;
+			case "Super3":    dateOfFirstDraw = "2002-11-25"; break;
+			case "Πρότο":     dateOfFirstDraw = "2000-01-01"; break;
+			case "Λόττο":     dateOfFirstDraw = "2000-01-01"; break;
+			case "Τζόκερ":    dateOfFirstDraw = "2000-01-01"; break;
+			case "Extra5":    dateOfFirstDraw = "2002-11-25"; break;
+		}
+	}
+
+
+	private void findLastDrawId(boolean populateTextFieldDrawId)
+	{
+		// Get selected game id
+		String gId = null;
+
+		switch (comboBoxGameSelect.getSelectedItem().toString())
+		{
+			case "Κίνο":      gId = "1100"; break;
+			case "Powerspin": gId = "1110"; break;
+			case "Super3":    gId = "2100"; break;
+			case "Πρότο":     gId = "2101"; break;
+			case "Λόττο":     gId = "5103"; break;
+			case "Τζόκερ":    gId = "5104"; break;
+			case "Extra5":    gId = "5106"; break;
+		}
+
+
+		// URL string
+		String urlStr = "https://api.opap.gr/draws/v3.0/" + gId + "/last-result-and-active";
+
+
+		try
+		{
+			// URL
+			URL website = new URL(urlStr);
+
+			// Start connection and set timeout to 2 seconds
+			URLConnection connection = website.openConnection();
+			connection.setConnectTimeout(2*1000);
+
+			// Open BufferedReader
+			InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+			BufferedReader in = new BufferedReader(isr);
+
+			// Get json string
+			String jsonStr = in.readLine();
+
+			// Close BufferedReader
+			in.close();
+
+
+			// Parse jsonStr into json element and get an object structure
+			JsonElement jElement = new JsonParser().parse(jsonStr);
+			JsonObject jObject = jElement.getAsJsonObject();
+
+			// Get the last draw object
+			JsonObject lastDraw = jObject.getAsJsonObject("last");
+
+			// Get the drawId from the last draw
+			lastDrawId = lastDraw.get("drawId").toString();
+
+			// Populate textFieldDrawId
+			if (populateTextFieldDrawId)
+			{
+				textFieldDrawId.setText(lastDrawId);
+			}
+		}
+		catch (Exception ex) { /* Silently continue */ }
+	}
 
 
 	// Button actions
+	private void comboBoxGameSelectActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		findDateOfFirstDraw();
+		CompletableFuture.runAsync(() -> findLastDrawId(false));  // Run asynchronously
+	}
+
+
 	private void buttonFindLatestDrawActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		// TODO
+		textFieldDrawId.setText(lastDrawId);
+	}
+
+
+	private void comboBoxPredefinedRangeActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		// Current local date
+		LocalDate dateNow = LocalDate.now();
+
+		// Date format
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		// Change the text in textFieldDate1 and textFieldDate2
+		switch (comboBoxPredefinedRange.getSelectedIndex())
+		{
+			case 0:    // Last week
+				textFieldDate1.setText(formatter.format(dateNow.minusDays(7)));
+				textFieldDate2.setText(formatter.format(dateNow));
+				break;
+			case 1:    // Last month
+				textFieldDate1.setText(formatter.format(dateNow.minusMonths(1)));
+				textFieldDate2.setText(formatter.format(dateNow));
+				break;
+			case 2:    // Last 3 months
+				textFieldDate1.setText(formatter.format(dateNow.minusMonths(3)));
+				textFieldDate2.setText(formatter.format(dateNow));
+				break;
+			case 3:    // Last year
+				textFieldDate1.setText(formatter.format(dateNow.minusYears(1)));
+				textFieldDate2.setText(formatter.format(dateNow));
+				break;
+			case 4:    // First year
+				textFieldDate1.setText(dateOfFirstDraw);
+				LocalDate date = LocalDate.parse(dateOfFirstDraw);
+				textFieldDate2.setText(formatter.format(date.plusYears(1)));
+				break;
+		}
 	}
 
 	private void buttonDownloadActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		// TODO
+		if (radioButtonSingleDraw.isSelected())
+		{
+
+		}
+		else
+		{
+			
+		}
 	}
 
 	private void buttonCloseActionPerformed(java.awt.event.ActionEvent evt)
@@ -100,9 +257,10 @@ public class WindowManageData
 				JLabel labelGameSelect = new JLabel("Επιλέξτε τυχερό παιχνίδι");
 
 				// ComboBox game select
-				String comboBoxGameSelectItems[] = {"Τζόκερ (id: 5104)"};
-				JComboBox comboBoxGameSelect = new JComboBox(comboBoxGameSelectItems);
+				String opapGames[] = {"Τζόκερ"};
+				comboBoxGameSelect = new JComboBox(opapGames);
 				comboBoxGameSelect.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+				comboBoxGameSelect.addActionListener(this::comboBoxGameSelectActionPerformed);
 				comboBoxGameSelect.setBackground(backColor);
 
 			gameSelectPanel.add(labelGameSelect);
@@ -130,7 +288,7 @@ public class WindowManageData
 			singleDrawMethodPanel.setBackground(backColor);
 
 				// Radio button for single draw
-				JRadioButton radioButtonSingleDraw = new JRadioButton();
+				radioButtonSingleDraw = new JRadioButton();
 				radioButtonSingleDraw.setText("Συγκεκριμένη κλήρωση");
 				radioButtonSingleDraw.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 				radioButtonSingleDraw.setBackground(backColor);
@@ -141,9 +299,9 @@ public class WindowManageData
 				labelDrawId.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 6));
 
 				// Text field for draw id
-				JTextField textFieldDrawId = new JTextField();
+				textFieldDrawId = new JTextField();
 				textFieldDrawId.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
-				textFieldDrawId.setPreferredSize(new Dimension(38, 20));
+				textFieldDrawId.setPreferredSize(new Dimension(58, 20));
 
 				// Button to find latest draw
 				JButton buttonFindLatestDraw = new JButton("Εύρεση τελευταίας κλήρωσης");
@@ -153,7 +311,7 @@ public class WindowManageData
 			singleDrawMethodPanel.add(radioButtonSingleDraw);
 			singleDrawMethodPanel.add(labelDrawId);
 			singleDrawMethodPanel.add(textFieldDrawId);
-			singleDrawMethodPanel.add(Box.createRigidArea(new Dimension(99,0)));
+			singleDrawMethodPanel.add(Box.createRigidArea(new Dimension(79,0)));
 			singleDrawMethodPanel.add(buttonFindLatestDraw);
 
 
@@ -180,7 +338,7 @@ public class WindowManageData
 				labelFrom.setBorder(BorderFactory.createEmptyBorder(0, 53, 0, 6));
 
 				// Text field for date 1
-				JTextField textFieldDate1 = new JTextField();
+				textFieldDate1 = new JTextField();
 				textFieldDate1.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
 				textFieldDate1.setPreferredSize(new Dimension(74, 20));
 
@@ -189,7 +347,7 @@ public class WindowManageData
 				labelUpTo.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
 
 				// Text field for date 2
-				JTextField textFieldDate2 = new JTextField();
+				textFieldDate2 = new JTextField();
 				textFieldDate2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
 				textFieldDate2.setPreferredSize(new Dimension(74, 20));
 
@@ -198,10 +356,12 @@ public class WindowManageData
 				labelPredefinedRange.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 6));
 
 				// ComboBox quick select
-				String comboBoxPredefinedRangeItems[] = {"Τελευταία εβδομάδα", "Τελευταίος μήνας", "Τελευταίο 3μηνο", "Τελευταίο έτος"};
-				JComboBox comboBoxPredefinedRange = new JComboBox(comboBoxPredefinedRangeItems);
+				String dateRanges[] = {"Τελευταία εβδομάδα", "Τελευταίος μήνας", "Τελευταίο 3μηνο", "Τελευταίο έτος", "Πρώτο έτος"};
+				comboBoxPredefinedRange = new JComboBox(dateRanges);
 				comboBoxPredefinedRange.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
 				comboBoxPredefinedRange.setPreferredSize(new Dimension(152, 20));
+				comboBoxPredefinedRange.addActionListener(this::comboBoxPredefinedRangeActionPerformed);
+				comboBoxPredefinedRange.setSelectedIndex(0);
 				comboBoxPredefinedRange.setBackground(backColor);
 
 			dateRangeMethodPanel.add(radioButtonDateRange);
@@ -276,6 +436,11 @@ public class WindowManageData
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
 		dialog.setMinimumSize(new Dimension(800, 486));
+
+		// Find dateOfFirstDraw & lastDrawId in advance, populate textFieldDrawId
+		findDateOfFirstDraw();
+		CompletableFuture.runAsync(() -> findLastDrawId(true));  // Run asynchronously
+
 		dialog.setVisible(true);
 	}
 }

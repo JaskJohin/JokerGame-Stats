@@ -1,6 +1,7 @@
 package plh24_ge3;
 
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -26,6 +27,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -40,7 +42,8 @@ import javax.swing.JTextField;
 public class WindowManageData
 {
 	// Variables declaration
-	private String dateOfFirstDraw;
+	private String firstDrawDate;
+	private String firstDrawId;
 	private String lastDrawId;
 	private final JDialog dialog;
 	private final JComboBox comboBoxGameSelect;
@@ -64,17 +67,73 @@ public class WindowManageData
 			// Date format
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-			dateOfFirstDraw = formatter.format(dateNow.minusYears(3));
+			firstDrawDate = formatter.format(dateNow.minusYears(3));
 		}
 
 		switch (comboBoxGameSelect.getSelectedItem().toString())
 		{
-			case "Powerspin": dateOfFirstDraw = "2020-06-30"; break;
-			case "Super3":    dateOfFirstDraw = "2002-11-25"; break;
-			case "Πρότο":     dateOfFirstDraw = "2000-01-01"; break;
-			case "Λόττο":     dateOfFirstDraw = "2000-01-01"; break;
-			case "Τζόκερ":    dateOfFirstDraw = "2000-01-01"; break;
-			case "Extra5":    dateOfFirstDraw = "2002-11-25"; break;
+			case "Powerspin": firstDrawDate = "2020-06-30"; break;
+			case "Super3":    firstDrawDate = "2002-11-25"; break;
+			case "Πρότο":     firstDrawDate = "2000-01-01"; break;
+			case "Λόττο":     firstDrawDate = "2000-01-01"; break;
+			case "Τζόκερ":    firstDrawDate = "2000-01-01"; break;
+			case "Extra5":    firstDrawDate = "2002-11-25"; break;
+		}
+	}
+
+
+	private void findIdOfFirstDraw()
+	{
+		// Kino's earliest data are from about 3 years in the past.
+		if (comboBoxGameSelect.getSelectedItem().equals("Κίνο"))
+		{
+			// Current local date
+			LocalDate dateNow = LocalDate.now();
+
+			// Date format
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+			// Early Kino draw date - 3 years ago
+			String date = formatter.format(dateNow.minusYears(3));
+
+			// URL string
+			String urlStr = "https://api.opap.gr/draws/v3.0/1100/draw-date/"+date+"/"+date;
+
+			try
+			{
+				// URL
+				URL website = new URL(urlStr);
+
+				// Start connection and set timeout to 2 seconds
+				URLConnection connection = website.openConnection();
+				connection.setConnectTimeout(2*1000);
+
+				// Open BufferedReader
+				InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+				BufferedReader in = new BufferedReader(isr);
+
+				// Get json string
+				String jsonStr = in.readLine();
+
+				// Close BufferedReader
+				in.close();
+
+
+				// Parse jsonStr into json element and get an object structure
+				JsonElement jElement = new JsonParser().parse(jsonStr);
+				JsonObject jObject = jElement.getAsJsonObject();
+
+				// Get the last draw object
+				JsonArray content = jObject.getAsJsonArray("content");
+
+				// Get the drawId from the last draw
+				firstDrawId = content.get(0).getAsJsonObject().get("drawId").toString();
+			}
+			catch (Exception ex) { ex.printStackTrace(); /* Silently continue */ }
+		}
+		else
+		{
+			firstDrawId = "1";
 		}
 	}
 
@@ -97,7 +156,7 @@ public class WindowManageData
 
 
 		// URL string
-		String urlStr = "https://api.opap.gr/draws/v3.0/" + gId + "/last-result-and-active";
+		String urlStr = "https://api.opap.gr/draws/v3.0/"+gId+"/last-result-and-active";
 
 
 		try
@@ -144,6 +203,7 @@ public class WindowManageData
 	private void comboBoxGameSelectActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		findDateOfFirstDraw();
+		CompletableFuture.runAsync(() -> findIdOfFirstDraw());    // Run asynchronously
 		CompletableFuture.runAsync(() -> findLastDrawId(false));  // Run asynchronously
 	}
 
@@ -182,8 +242,8 @@ public class WindowManageData
 				textFieldDate2.setText(formatter.format(dateNow));
 				break;
 			case 4:    // First year
-				textFieldDate1.setText(dateOfFirstDraw);
-				LocalDate date = LocalDate.parse(dateOfFirstDraw);
+				textFieldDate1.setText(firstDrawDate);
+				LocalDate date = LocalDate.parse(firstDrawDate);
 				textFieldDate2.setText(formatter.format(date.plusYears(1)));
 				break;
 		}
@@ -193,11 +253,40 @@ public class WindowManageData
 	{
 		if (radioButtonSingleDraw.isSelected())
 		{
-
+			String dId = textFieldDrawId.getText();
+			if (dId.matches("\\d+") && (Integer.parseInt(dId) >= Integer.parseInt(firstDrawId)) && (Integer.parseInt(dId) <= Integer.parseInt(lastDrawId)))
+			{
+				// TODO
+			}
+			else
+			{
+				String message = "Ο αριθμός κλήρωσης πρέπει να είναι από " + firstDrawId + " έως " + lastDrawId + ".";
+				JOptionPane.showMessageDialog(null, message, "Λάθος είσοδος", 0);
+			}
 		}
 		else
 		{
-			
+			LocalDate dateNow = LocalDate.now();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			String errorMsg = "Η αρχική ημερομηνία πρέπει να είναι >= " + firstDrawDate + " και η τελική <= " + formatter.format(dateNow) + ".";
+			try
+			{
+				LocalDate date1 = LocalDate.parse(textFieldDate1.getText());
+				LocalDate date2 = LocalDate.parse(textFieldDate2.getText());
+				LocalDate firstDate = LocalDate.parse(firstDrawDate);
+				if (date1.plusDays(1).isAfter(firstDate) && date2.minusDays(1).isBefore(dateNow) && date1.minusDays(1).isBefore(date2))
+				{
+					// TODO
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, errorMsg, "Λάθος είσοδος", 0);
+				}
+			}
+			catch (Exception ex)
+			{
+				JOptionPane.showMessageDialog(null, errorMsg, "Λάθος είσοδος", 0);
+			}
 		}
 	}
 
@@ -437,9 +526,10 @@ public class WindowManageData
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
 		dialog.setMinimumSize(new Dimension(800, 486));
 
-		// Find dateOfFirstDraw & lastDrawId in advance, populate textFieldDrawId
+		// Find firstDrawDate & lastDrawId in advance, populate textFieldDrawId
 		findDateOfFirstDraw();
-		CompletableFuture.runAsync(() -> findLastDrawId(true));  // Run asynchronously
+		CompletableFuture.runAsync(() -> findIdOfFirstDraw());    // Run asynchronously
+		CompletableFuture.runAsync(() -> findLastDrawId(true));   // Run asynchronously
 
 		dialog.setVisible(true);
 	}

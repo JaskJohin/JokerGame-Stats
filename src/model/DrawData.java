@@ -13,14 +13,14 @@ import java.util.logging.Logger;
 
 public class DrawData {
     
-    
+    //Table constructor
     private static void createTable() {
         try {
             Connection connection = connect();
             String createTableSQL = "CREATE TABLE Draw ("
-                    + "gameID int(32) NOT NULL, "
-                    + "drawID int(32) NOT NULL, "
-                    + "drawTime bigint(64) NOT NULL, "
+                    + "gameID int(10) NOT NULL, "
+                    + "drawID int(10) NOT NULL, "
+                    + "drawTime bigint(19) NOT NULL, "
                     + "status varchar(30) NOT NULL, "
                     + "drawBreak int(10) NOT NULL, "
                     + "visualDraw int(10) NOT NULL, "
@@ -34,11 +34,11 @@ public class DrawData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    
+    //method to drop an existing table
     private static void dropTable() {
         try {
             Connection connection = connect();
-            String dropTableSQL = "DROP TABLE IF EXISTS Draw;";    
+            String dropTableSQL = "DROP TABLE Draw;";    
             Statement statement = connection.createStatement();
             statement.executeUpdate(dropTableSQL);
             statement.close();
@@ -47,7 +47,7 @@ public class DrawData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    
+    //mathod to select all Table congtents (for testing purposes)
     private static ResultSet selectAll() {
         try {
             Connection connection = connect();   
@@ -66,7 +66,7 @@ public class DrawData {
         }
         return null;
     }
-    
+    //method to insert data to the table (one tuple at a time)
     private static void insertData (int gameId, int drawId, long drawTime, String status, int drawBreak, int visualDraw) {
         try {
             Connection connection = connect();
@@ -92,8 +92,8 @@ public class DrawData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    
-    private static void updateDraw (int gameId, int drawId, long drawTime, String status, int drawBreak, int visualDraw) {
+    //method to update a tuple
+    private static void updateData (int gameId, int drawId, long drawTime, String status, int drawBreak, int visualDraw) {
         try {
             Connection connection = connect();
             String updateSQL = "UPDATE Draw SET "
@@ -118,25 +118,37 @@ public class DrawData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    
-    private static void deleteData (int gameId, int drawId) {
+    //method to delete entire tuples for a specific draw, based on the primary key
+    private static void deleteDrawData (int gameId, int drawId) {
         try {
             Connection connection = connect();
             String deleteSQL = "DELETE FROM Draw WHERE gameID = ? AND drawID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.setInt(2, drawId);
-            int count = preparedStatement.executeUpdate();
-            if(count > 0)
-                System.out.println(count + " Records updated");
+            preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
-            System.out.println("Done!");
         } catch (SQLException ex) {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     
+    //method to delete entire all data for a specific game
+    private static void deleteGameData (int gameId) {
+        try {
+            Connection connection = connect();
+            String deleteSQL = "DELETE FROM Draw WHERE gameID = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
+            preparedStatement.setInt(1, gameId);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+        }
+    }
+    //method to connect to the database
     private static Connection connect() {
         String connectionString = "jdbc:derby:draw";
         Connection connection = null;

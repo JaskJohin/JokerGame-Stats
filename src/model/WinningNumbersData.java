@@ -26,7 +26,7 @@ public class WinningNumbersData {
                     +"number4 int(3) NOT NULL, "
                     +"number5 int(3) NOT NULL, "
                     +"bonus int(3) NOT NULL, "
-                    +"FOREIGN KEY (gameID, drawID) REFERENCES DrawData(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT;";
+                    +"FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT;";
             Statement statement = connection.createStatement();
             statement.executeUpdate(createTableSQL);
             statement.close();
@@ -79,13 +79,13 @@ public class WinningNumbersData {
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
             preparedStatement.setInt(1, number1);
-            preparedStatement.setInt(1, number2);
-            preparedStatement.setInt(1, number3);
-            preparedStatement.setInt(1, number4);
-            preparedStatement.setInt(1, number5);
-            preparedStatement.setInt(1, bonus);
-            preparedStatement.setInt(9, gameId);
-            preparedStatement.setInt(10, drawId);
+            preparedStatement.setInt(2, number2);
+            preparedStatement.setInt(3, number3);
+            preparedStatement.setInt(4, number4);
+            preparedStatement.setInt(5, number5);
+            preparedStatement.setInt(6, bonus);
+            preparedStatement.setInt(7, gameId);
+            preparedStatement.setInt(8, drawId);
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
@@ -153,7 +153,7 @@ public class WinningNumbersData {
     }
     //method to connect to the database
     private static Connection connect() {
-        String connectionString = "jdbc:derby:draw";
+        String connectionString = "jdbc:derby:jokerStatData";
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(connectionString);

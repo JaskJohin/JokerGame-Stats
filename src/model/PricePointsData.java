@@ -15,15 +15,14 @@ import java.util.logging.Logger;
  * @author Xristoforos Ampelas
  * @author Athanasios Theodoropoulos
  */
-public class WagerData {
+public class PricePointsData {
     
 //Table constructor
     private static void createTable() {
         try {
             Connection connection = connect();
-            String createTableSQL = "CREATE TABLE Wagers ("
-                    + "columns int(10) DEFAULT 0 NOT NULL, "
-                    + "wagers int(10) DEFAULT 0 NOT NULL, "
+            String createTableSQL = "CREATE TABLE PricePoints ("
+                    + "ammount double NOT NULL, "
                     +"FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT;";
             Statement statement = connection.createStatement();
             statement.executeUpdate(createTableSQL);
@@ -37,7 +36,7 @@ public class WagerData {
     private static void dropTable() {
         try {
             Connection connection = connect();
-            String dropTableSQL = "DROP TABLE Wagers;";    
+            String dropTableSQL = "DROP TABLE PricePoints;";    
             Statement statement = connection.createStatement();
             statement.executeUpdate(dropTableSQL);
             statement.close();
@@ -51,7 +50,7 @@ public class WagerData {
         try {
             Connection connection = connect();   
             Statement statement = connection.createStatement();
-            String selectSQL = "(select * from Wagers)";
+            String selectSQL = "(select * from PricePoints)";
             ResultSet resultSet = statement.executeQuery(selectSQL);
             statement.close();
             connection.close();
@@ -62,20 +61,18 @@ public class WagerData {
         return null;
     }
     //method to insert data to the table (one tuple at a time)
-    private static void insertData (int column,int wagers,  int gameId, int drawId) {
+    private static void insertData (int ammount, int gameId, int drawId) {
         try {
             Connection connection = connect();
-            String insertSQL = "INSERT INTO Wagers("
-                    + "column, "
-                    + "wagers, "
+            String insertSQL = "INSERT INTO PricePoints("
+                    + "ammount, "
                     + "gameId, "
                     + "drawId) "
-                    + "VALUES (?, ?, ?, ?);";
+                    + "VALUES (?, ?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
-            preparedStatement.setInt(1, column);
-            preparedStatement.setInt(2, wagers);
-            preparedStatement.setInt(3, gameId);
-            preparedStatement.setInt(4, drawId);
+            preparedStatement.setInt(1, ammount);
+            preparedStatement.setInt(2, gameId);
+            preparedStatement.setInt(3, drawId);
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
@@ -84,18 +81,16 @@ public class WagerData {
         }
     }
     //method to update a tuple
-    private static void updateData (int column, int wagers ,  int gameId, int drawId) {
+    private static void updateData (int ammount, int gameId, int drawId) {
         try {
             Connection connection = connect();
-            String updateSQL = "UPDATE Wagers SET "
-                    + "column = ?, "
-                    + "wagers = ?, "
+            String updateSQL = "UPDATE PricePoints SET "
+                    + "ammount = ?, "
                     + "WHERE gameID = ? AND drawID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
-            preparedStatement.setInt(1, column);
-            preparedStatement.setInt(2, wagers);
-            preparedStatement.setInt(3, gameId);
-            preparedStatement.setInt(4, drawId);
+            preparedStatement.setInt(1, ammount);
+            preparedStatement.setInt(2, gameId);
+            preparedStatement.setInt(3, drawId);
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
@@ -107,7 +102,7 @@ public class WagerData {
     private static void deleteTupple (int gameId, int drawId) {
         try {
             Connection connection = connect();
-            String deleteSQL = "DELETE FROM Wagers WHERE gameID = ? AND drawID = ?;";
+            String deleteSQL = "DELETE FROM PricePoints WHERE gameID = ? AND drawID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.setInt(2, drawId);
@@ -123,7 +118,7 @@ public class WagerData {
     private static void deleteGameData (int gameId) {
         try {
             Connection connection = connect();
-            String deleteSQL = "DELETE FROM Wagers WHERE gameID = ?;";
+            String deleteSQL = "DELETE FROM PricePoints WHERE gameID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.executeUpdate();

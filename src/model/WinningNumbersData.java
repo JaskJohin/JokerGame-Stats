@@ -10,8 +10,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Thanos Theodoropoulos
+ * @author Aleksandros Dimitrakopoulos
+ * @author Odysseas Raftopoulos
+ * @author Xristoforos Ampelas
+ * @author Athanasios Theodoropoulos
  */
 public class WinningNumbersData {
     

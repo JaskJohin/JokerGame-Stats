@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class PricePointsData {
     
 //Table constructor
-    private static void createTable() {
+    public static void createTable() {
         try {
             Connection connection = connect();
             String createTableSQL = "CREATE TABLE PricePoints ("
@@ -33,7 +33,7 @@ public class PricePointsData {
         }
     }
     //method to drop existing table
-    private static void dropTable() {
+    public static void dropTable() {
         try {
             Connection connection = connect();
             String dropTableSQL = "DROP TABLE PricePoints;";    
@@ -46,7 +46,7 @@ public class PricePointsData {
         }
     }
     //mathod to select all Table congtents (for testing purposes)
-    private static ResultSet selectAll() {
+    public static ResultSet selectAll() {
         try {
             Connection connection = connect();   
             Statement statement = connection.createStatement();
@@ -61,7 +61,7 @@ public class PricePointsData {
         return null;
     }
     //method to insert data to the table (one tuple at a time)
-    private static void insertData (int ammount, int gameId, int drawId) {
+    public static void insertData (int ammount, int gameId, int drawId) {
         try {
             Connection connection = connect();
             String insertSQL = "INSERT INTO PricePoints("
@@ -81,7 +81,7 @@ public class PricePointsData {
         }
     }
     //method to update a tuple
-    private static void updateData (int ammount, int gameId, int drawId) {
+    public static void updateData (int ammount, int gameId, int drawId) {
         try {
             Connection connection = connect();
             String updateSQL = "UPDATE PricePoints SET "
@@ -99,7 +99,7 @@ public class PricePointsData {
         }
     }
     //method to delete entire tuples for a specific draw, based on the primary key
-    private static void deleteTupple (int gameId, int drawId) {
+    public static void deleteTupple (int gameId, int drawId) {
         try {
             Connection connection = connect();
             String deleteSQL = "DELETE FROM PricePoints WHERE gameID = ? AND drawID = ?;";
@@ -115,7 +115,7 @@ public class PricePointsData {
     }
     
     //method to delete entire all data for a specific game
-    private static void deleteGameData (int gameId) {
+    public static void deleteGameData (int gameId) {
         try {
             Connection connection = connect();
             String deleteSQL = "DELETE FROM PricePoints WHERE gameID = ?;";
@@ -129,7 +129,7 @@ public class PricePointsData {
         }
     }
     //method to connect to the database
-    private static Connection connect() {
+    public static Connection connect() {
         String connectionString = "jdbc:derby:jokerStatData";
         Connection connection = null;
         try {

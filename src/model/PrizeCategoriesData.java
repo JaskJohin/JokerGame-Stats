@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class PrizeCategoriesData {
     
     //Table constructor
-    private static void createTable() {
+    public static void createTable() {
         try {
             Connection connection = connect();
             String createTableSQL = "CREATE TABLE PrizeCategories ("
@@ -38,7 +38,7 @@ public class PrizeCategoriesData {
         }
     }
     //method to drop existing table
-    private static void dropTable() {
+    public static void dropTable() {
         try {
             Connection connection = connect();
             String dropTableSQL = "DROP TABLE PrizeCategories;";    
@@ -51,7 +51,7 @@ public class PrizeCategoriesData {
         }
     }
     //mathod to select all Table congtents (for testing purposes)
-    private static ResultSet selectAll() {
+    public static ResultSet selectAll() {
         try {
             Connection connection = connect();   
             Statement statement = connection.createStatement();
@@ -67,7 +67,7 @@ public class PrizeCategoriesData {
         return null;
     }
     //method to insert data to the table (one tuple at a time)
-    private static void insertData (int categoryId, double divident, int winners, double distributed, double jackpot, double fixed, int categoryType, String gameType, int gameId, int drawId) {
+    public static void insertData (int categoryId, double divident, int winners, double distributed, double jackpot, double fixed, int categoryType, String gameType, int gameId, int drawId) {
         try {
             Connection connection = connect();
             String insertSQL = "INSERT INTO PrizeCategories("
@@ -101,7 +101,7 @@ public class PrizeCategoriesData {
         }
     }
     //method to update a tuple
-    private static void updateData (int categoryId, double divident, int winners, double distributed, double jackpot, double fixed, int categoryType, String gameType, int gameId, int drawId) {
+    public static void updateData (int categoryId, double divident, int winners, double distributed, double jackpot, double fixed, int categoryType, String gameType, int gameId, int drawId) {
         try {
             Connection connection = connect();
             String updateSQL = "UPDATE PrizeCategories SET "
@@ -132,7 +132,7 @@ public class PrizeCategoriesData {
         }
     }
     //method to delete entire tuples for a specific draw, based on the primary key
-    private static void deleteTupple (int gameId, int drawId, int categoryId) {
+    public static void deleteTupple (int gameId, int drawId, int categoryId) {
         try {
             Connection connection = connect();
             String deleteSQL = "DELETE FROM PrizeCategories WHERE gameID = ? AND drawID = ? AND categoryId = ?;";
@@ -149,7 +149,7 @@ public class PrizeCategoriesData {
     }
     
     //method to delete entire all data for a specific game
-    private static void deleteGameData (int gameId) {
+    public static void deleteGameData (int gameId) {
         try {
             Connection connection = connect();
             String deleteSQL = "DELETE FROM PrizeCategories WHERE gameID = ?;";
@@ -163,7 +163,7 @@ public class PrizeCategoriesData {
         }
     }
     //method to connect to the database
-    private static Connection connect() {
+    public static Connection connect() {
         String connectionString = "jdbc:derby:jokerStatData";
         Connection connection = null;
         try {

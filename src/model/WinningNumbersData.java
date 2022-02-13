@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class WinningNumbersData {
     
 //Table constructor
-    private static void createTable() {
+    public static void createTable() {
         try {
             Connection connection = connect();
             String createTableSQL = "CREATE TABLE WinningNumbers ("
@@ -38,7 +38,7 @@ public class WinningNumbersData {
         }
     }
     //method to drop existing table
-    private static void dropTable() {
+    public static void dropTable() {
         try {
             Connection connection = connect();
             String dropTableSQL = "DROP TABLE WinningNumbers;";    
@@ -51,7 +51,7 @@ public class WinningNumbersData {
         }
     }
     //mathod to select all Table congtents (for testing purposes)
-    private static ResultSet selectAll() {
+    public static ResultSet selectAll() {
         try {
             Connection connection = connect();   
             Statement statement = connection.createStatement();
@@ -66,7 +66,7 @@ public class WinningNumbersData {
         return null;
     }
     //method to insert data to the table (one tuple at a time)
-    private static void insertData (int number1,int number2 ,int number3, int number4, int number5, int bonus,  int gameId, int drawId) {
+    public static void insertData (int number1,int number2 ,int number3, int number4, int number5, int bonus,  int gameId, int drawId) {
         try {
             Connection connection = connect();
             String insertSQL = "INSERT INTO WinningNumbers("
@@ -96,7 +96,7 @@ public class WinningNumbersData {
         }
     }
     //method to update a tuple
-    private static void updateData (int number1, int number2 ,int number3, int number4, int number5, int bonus,  int gameId, int drawId) {
+    public static void updateData (int number1, int number2 ,int number3, int number4, int number5, int bonus,  int gameId, int drawId) {
         try {
             Connection connection = connect();
             String updateSQL = "UPDATE WinningNumbers SET "
@@ -124,7 +124,7 @@ public class WinningNumbersData {
         }
     }
     //method to delete entire tuples for a specific draw, based on the primary key
-    private static void deleteTupple (int gameId, int drawId) {
+    public static void deleteTupple (int gameId, int drawId) {
         try {
             Connection connection = connect();
             String deleteSQL = "DELETE FROM WinningNumbers WHERE gameID = ? AND drawID = ?;";
@@ -140,7 +140,7 @@ public class WinningNumbersData {
     }
     
     //method to delete entire all data for a specific game
-    private static void deleteGameData (int gameId) {
+    public static void deleteGameData (int gameId) {
         try {
             Connection connection = connect();
             String deleteSQL = "DELETE FROM WinningNumbers WHERE gameID = ?;";
@@ -154,7 +154,7 @@ public class WinningNumbersData {
         }
     }
     //method to connect to the database
-    private static Connection connect() {
+    public static Connection connect() {
         String connectionString = "jdbc:derby:jokerStatData";
         Connection connection = null;
         try {

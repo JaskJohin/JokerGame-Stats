@@ -75,30 +75,30 @@ public class JokerDrawData
 
 	// Constructor
 	/**
-	 * @param drawId
-	 * @param drawDate
-	 * @param winningNum1
-	 * @param winningNum2
-	 * @param winningNum3
-	 * @param winningNum4
-	 * @param winningNum5
-	 * @param bonusNum
-	 * @param prizeTier5_1winners
-	 * @param prizeTier5_1dividend
-	 * @param prizeTier5winners
-	 * @param prizeTier5dividend
-	 * @param prizeTier4_1winners
-	 * @param prizeTier4_1dividend
-	 * @param prizeTier4winners
-	 * @param prizeTier4dividend
-	 * @param prizeTier3_1winners
-	 * @param prizeTier3_1dividend
-	 * @param prizeTier3winners
-	 * @param prizeTier3dividend
-	 * @param prizeTier2_1winners
-	 * @param prizeTier2_1dividend
-	 * @param prizeTier1_1winners
-	 * @param prizeTier1_1dividend
+	 * @param drawId                The draw id.
+	 * @param drawDate              The draw date.
+	 * @param winningNum1           The 1st winning number.
+	 * @param winningNum2           The 2nd winning number.
+	 * @param winningNum3           The 3rd winning number.
+	 * @param winningNum4           The 4th winning number.
+	 * @param winningNum5           The 5th winning number.
+	 * @param bonusNum              The bonus winning number.
+	 * @param prizeTier5_1winners   The number of winners in the "5+1" tier.
+	 * @param prizeTier5_1dividend  The shares of each winner in the "5+1" tier.
+	 * @param prizeTier5winners     The number of winners in the "5" tier.
+	 * @param prizeTier5dividend    The shares of each winner in the "5" tier.
+	 * @param prizeTier4_1winners   The number of winners in the "4+1" tier.
+	 * @param prizeTier4_1dividend  The shares of each winner in the "4+1" tier.
+	 * @param prizeTier4winners     The number of winners in the "4" tier.
+	 * @param prizeTier4dividend    The shares of each winner in the "4" tier.
+	 * @param prizeTier3_1winners   The number of winners in the "3+1" tier.
+	 * @param prizeTier3_1dividend  The shares of each winner in the "3+1" tier.
+	 * @param prizeTier3winners     The number of winners in the "3" tier.
+	 * @param prizeTier3dividend    The shares of each winner in the "3" tier.
+	 * @param prizeTier2_1winners   The number of winners in the "2+1" tier.
+	 * @param prizeTier2_1dividend  The shares of each winner in the "2+1" tier.
+	 * @param prizeTier1_1winners   The number of winners in the "1+1" tier.
+	 * @param prizeTier1_1dividend  The shares of each winner in the "1+1" tier.
 	 */
 	public JokerDrawData(int drawId, String drawDate, int winningNum1, int winningNum2,
 		int winningNum3, int winningNum4, int winningNum5, int bonusNum,

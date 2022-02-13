@@ -17,7 +17,7 @@ public class DrawData {
     private static void createTable() {
         try {
             Connection connection = connect();
-            String createTableSQL = "CREATE TABLE Draw ("
+            String createTableSQL = "CREATE TABLE Draws ("
                     + "gameID int(10) NOT NULL, "
                     + "drawID int(10) NOT NULL, "
                     + "drawTime bigint(19) NOT NULL, "
@@ -34,11 +34,11 @@ public class DrawData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    //method to drop an existing table
+    //method to drop existing table
     private static void dropTable() {
         try {
             Connection connection = connect();
-            String dropTableSQL = "DROP TABLE Draw;";    
+            String dropTableSQL = "DROP TABLE Draws;";    
             Statement statement = connection.createStatement();
             statement.executeUpdate(dropTableSQL);
             statement.close();
@@ -52,7 +52,7 @@ public class DrawData {
         try {
             Connection connection = connect();   
             Statement statement = connection.createStatement();
-            String selectSQL = "(select * from Draw)";
+            String selectSQL = "(select * from Draws)";
             ResultSet resultSet = statement.executeQuery(selectSQL);
             //while(resultSet.next()) {
             //    System.out.println(resultSet.getString("gameID") + ", " + resultSet.getString("drawID") + resultSet.getString("drawTime") + resultSet.getString("status") + resultSet.getString("drawBreak") + resultSet.getString("visualDraw"));
@@ -70,7 +70,7 @@ public class DrawData {
     private static void insertData (int gameId, int drawId, long drawTime, String status, int drawBreak, int visualDraw) {
         try {
             Connection connection = connect();
-            String insertSQL = "INSERT INTO Draw("
+            String insertSQL = "INSERT INTO Draws("
                     + "gameID, "
                     + "drawID, "
                     + "drawTime, "
@@ -96,7 +96,7 @@ public class DrawData {
     private static void updateData (int gameId, int drawId, long drawTime, String status, int drawBreak, int visualDraw) {
         try {
             Connection connection = connect();
-            String updateSQL = "UPDATE Draw SET "
+            String updateSQL = "UPDATE Draws SET "
                     + "drawTime = ?, "
                     + "status = ?, "
                     + "drawBreak = ?, "
@@ -119,10 +119,10 @@ public class DrawData {
         }
     }
     //method to delete entire tuples for a specific draw, based on the primary key
-    private static void deleteDrawData (int gameId, int drawId) {
+    private static void deleteTupple (int gameId, int drawId) {
         try {
             Connection connection = connect();
-            String deleteSQL = "DELETE FROM Draw WHERE gameID = ? AND drawID = ?;";
+            String deleteSQL = "DELETE FROM Draws WHERE gameID = ? AND drawID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.setInt(2, drawId);
@@ -138,7 +138,7 @@ public class DrawData {
     private static void deleteGameData (int gameId) {
         try {
             Connection connection = connect();
-            String deleteSQL = "DELETE FROM Draw WHERE gameID = ?;";
+            String deleteSQL = "DELETE FROM Draws WHERE gameID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.executeUpdate();
@@ -150,7 +150,7 @@ public class DrawData {
     }
     //method to connect to the database
     private static Connection connect() {
-        String connectionString = "jdbc:derby:draw";
+        String connectionString = "jdbc:derby:jokerStatData";
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(connectionString);

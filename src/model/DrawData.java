@@ -13,6 +13,17 @@ import java.util.logging.Logger;
 
 public class DrawData {
     
+        //method to connect to the database
+    public static Connection connect() {
+        String connectionString = "jdbc:derby:jokerStatData";
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(connectionString);
+        } catch (SQLException ex) {
+            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return connection;
+    }     
     //Table constructor
     public static void createTable() {
         try {
@@ -47,7 +58,7 @@ public class DrawData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    //mathod to select all Table congtents (for testing purposes)
+    //method to select all table contents (for testing purposes)
     public static ResultSet selectAll() {
         try {
             Connection connection = connect();   
@@ -114,7 +125,7 @@ public class DrawData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    //method to delete entire tuples for a specific draw, based on the primary key
+    //method to delete all tuples for a specific draw, based on the primary key
     public static void deleteTupple (int gameId, int drawId) {
         try {
             Connection connection = connect();
@@ -130,7 +141,7 @@ public class DrawData {
         }
     }
     
-    //method to delete entire all data for a specific game
+    //method to delete all data for a specific game
     public static void deleteGameData (int gameId) {
         try {
             Connection connection = connect();
@@ -143,17 +154,5 @@ public class DrawData {
         } catch (SQLException ex) {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
-    }
-    //method to connect to the database
-    public static Connection connect() {
-        String connectionString = "jdbc:derby:jokerStatData";
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(connectionString);
-        } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return connection;
-    }
-    
+    }   
 }

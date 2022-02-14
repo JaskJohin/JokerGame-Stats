@@ -1,6 +1,5 @@
 package plh24_ge3;
 
-
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;

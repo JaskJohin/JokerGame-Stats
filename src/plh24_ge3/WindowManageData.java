@@ -1,6 +1,5 @@
 package plh24_ge3;
 
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -39,6 +38,7 @@ import javax.swing.JTextField;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 public class WindowManageData
 {
 	// Variables declaration

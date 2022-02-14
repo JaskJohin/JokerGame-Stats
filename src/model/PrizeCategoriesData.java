@@ -50,7 +50,7 @@ public class PrizeCategoriesData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    //mathod to select all Table congtents (for testing purposes)
+    //mathod to select all table contents (for testing purposes)
     public static ResultSet selectAll() {
         try {
             Connection connection = connect();   
@@ -131,7 +131,7 @@ public class PrizeCategoriesData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    //method to delete entire tuples for a specific draw, based on the primary key
+    //method to delete all tuples for a specific draw, based on the primary key
     public static void deleteTupple (int gameId, int drawId, int categoryId) {
         try {
             Connection connection = connect();

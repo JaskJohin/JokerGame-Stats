@@ -39,11 +39,13 @@ package plh24_ge3;
  * getPrizeTier1_1winners()     Get the number of winners in the "1+1" tier.
  * getPrizeTier1_1dividend()    Get the shares of each winner in the "1+1" tier.
  * </pre>
+ * 
  * @author Athanasios Theodoropoulos
  * @author Aleksandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 public class JokerDrawData
 {
 	// Attributes

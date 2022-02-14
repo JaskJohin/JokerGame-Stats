@@ -9,13 +9,15 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 /**
  * @author Athanasios Theodoropoulos
@@ -25,19 +27,22 @@ import javax.swing.JPanel;
  */
 
 public class WindowShowGraphStats {
-    // Variables declaration
+        // Variables declaration
 	private final JDialog dialog;
+        private final JTextField textFieldDate1;
+	private final JTextField textFieldDate2;
 
 	// Button actions
 	private void buttonCloseActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		dialog.dispose();
 	}
-        /*Print PDF
+        
+        //Print PDF
         private void buttonPrintPdfActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		dialog.dispose();
-	}*/
+	//	
+	}
 
 	// Constructor
 	public WindowShowGraphStats()
@@ -86,19 +91,56 @@ public class WindowShowGraphStats {
 			gameSelectPanel.setBackground(backColor);
 
 				JLabel labelGameSelect = new JLabel("Επιλέξτε τυχερό παιχνίδι");
-
 				String comboBoxGameSelectItems[] = {"Τζόκερ (id: 5104)"};
 				JComboBox comboBoxGameSelect = new JComboBox(comboBoxGameSelectItems);
 				comboBoxGameSelect.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 				comboBoxGameSelect.setBackground(backColor);
-
+                             
 			gameSelectPanel.add(labelGameSelect);
 			gameSelectPanel.add(comboBoxGameSelect);
+                        
+                        // Button to print stats to PDF file
+                        JButton buttonPrintPdf = new JButton("Εκτύπωση σε PDF");
+			buttonPrintPdf.setPreferredSize(new Dimension(206, 20));
+			buttonPrintPdf.addActionListener(this::buttonPrintPdfActionPerformed);
+                        
+                       // Date range method panel
+			JPanel dateRangeMethodPanel = new JPanel();
+			dateRangeMethodPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+			dateRangeMethodPanel.setLayout(new FlowLayout(0, 0, 0));
+			dateRangeMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, dateRangeMethodPanel.getMinimumSize().height));
+			dateRangeMethodPanel.setBackground(backColor);			
 
+				// Label from
+				JLabel labelFrom = new JLabel("Από");
+                                //labelFrom.setBorder(BorderFactory.createEmptyBorder(0, 53, 0, 6));
+				labelFrom.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 6));
+
+				// Text field for date 1
+				textFieldDate1 = new JTextField();
+				textFieldDate1.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+				textFieldDate1.setPreferredSize(new Dimension(74, 20));
+
+				// Label up to
+				JLabel labelUpTo = new JLabel("Έως");
+				labelUpTo.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
+
+				// Text field for date 2
+				textFieldDate2 = new JTextField();
+				textFieldDate2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+				textFieldDate2.setPreferredSize(new Dimension(74, 20)); 
+                                
+                        dateRangeMethodPanel.add(labelFrom);
+			dateRangeMethodPanel.add(textFieldDate1);
+			dateRangeMethodPanel.add(labelUpTo);
+			dateRangeMethodPanel.add(textFieldDate2);
+                        dateRangeMethodPanel.add(buttonPrintPdf);
+                                    
+                middlePanel.add(dateRangeMethodPanel, BorderLayout.CENTER);
+		//dateRangeMethodPanel.add(Box.createVerticalGlue(), BorderLayout.CENTER);        
 		middlePanel.add(gameSelectPanel, BorderLayout.CENTER);
 		middlePanel.add(Box.createVerticalGlue(), BorderLayout.CENTER);
-
-
+                
 		/*
 		 * Bottom panel with the Close button
 		 */

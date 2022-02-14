@@ -5,28 +5,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Athanasios Theodoropoulos
+ * @author Thanos Theodoropoulos
  * @author Alexandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
 
 public class PrizeCategoriesData {
-    //method to connect to the database
-    public static Connection connect() {
-        String connectionString = "jdbc:derby:jokerStatData";
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(connectionString);
-        } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return connection;
-    }
+
     //Table constructor
     public static void createTable() {
         try {
-            Connection connection = connect();
+            Connection connection = DbConnect.connect();
             String createTableSQL = "CREATE TABLE PrizeCategories ("
                     + "categoryID int(2) NOT NULL, "
                     + "divident double DEFAULT 0 NOT NULL, "
@@ -50,7 +40,7 @@ public class PrizeCategoriesData {
     //method to drop existing table
     public static void dropTable() {
         try {
-            Connection connection = connect();
+            Connection connection = DbConnect.connect();
             String dropTableSQL = "DROP TABLE PrizeCategories;";    
             Statement statement = connection.createStatement();
             statement.executeUpdate(dropTableSQL);
@@ -63,7 +53,7 @@ public class PrizeCategoriesData {
     //method to select all table contents (for testing purposes)
     public static ResultSet selectAll() {
         try {
-            Connection connection = connect();   
+            Connection connection = DbConnect.connect();   
             Statement statement = connection.createStatement();
             String selectSQL = "(select * from PrizeCategories)";
             ResultSet resultSet = statement.executeQuery(selectSQL);
@@ -79,7 +69,7 @@ public class PrizeCategoriesData {
     //method to insert data to the table (one tuple at a time)
     public static void insertData (int categoryId, double divident, int winners, double distributed, double jackpot, double fixed, int categoryType, String gameType, int gameId, int drawId) {
         try {
-            Connection connection = connect();
+            Connection connection = DbConnect.connect();
             String insertSQL = "INSERT INTO PrizeCategories("
                     + "categoryID, "
                     + "divident, "
@@ -113,7 +103,7 @@ public class PrizeCategoriesData {
     //method to update a tuple
     public static void updateData (int categoryId, double divident, int winners, double distributed, double jackpot, double fixed, int categoryType, String gameType, int gameId, int drawId) {
         try {
-            Connection connection = connect();
+            Connection connection = DbConnect.connect();
             String updateSQL = "UPDATE PrizeCategories SET "
                     + "divident = ?, "
                     + "winners = ?, "
@@ -144,7 +134,7 @@ public class PrizeCategoriesData {
     //method to delete all tuples for a specific draw, based on the primary key
     public static void deleteTupple (int gameId, int drawId, int categoryId) {
         try {
-            Connection connection = connect();
+            Connection connection = DbConnect.connect();
             String deleteSQL = "DELETE FROM PrizeCategories WHERE gameID = ? AND drawID = ? AND categoryId = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
@@ -161,7 +151,7 @@ public class PrizeCategoriesData {
     //method to delete all data for a specific game
     public static void deleteGameData (int gameId) {
         try {
-            Connection connection = connect();
+            Connection connection = DbConnect.connect();
             String deleteSQL = "DELETE FROM PrizeCategories WHERE gameID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);

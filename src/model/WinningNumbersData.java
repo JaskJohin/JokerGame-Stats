@@ -8,25 +8,15 @@ import java.util.logging.Logger;
  * @author Alexandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
- * @author Athanasios Theodoropoulos
+ * @author Thanos Theodoropoulos
  */
 
 public class WinningNumbersData {
-    //method to connect to the database
-    public static Connection connect() {
-        String connectionString = "jdbc:derby:jokerStatData";
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(connectionString);
-        } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return connection;
-    }    
+   
     //Table constructor
     public static void createTable() {
         try {
-            Connection connection = connect();
+            Connection connection = DbConnect.connect();
             String createTableSQL = "CREATE TABLE WinningNumbers ("
                     +"number1 int(3) NOT NULL, "
                     +"number2 int(3) NOT NULL, "
@@ -46,7 +36,7 @@ public class WinningNumbersData {
     //method to drop existing table
     public static void dropTable() {
         try {
-            Connection connection = connect();
+            Connection connection = DbConnect.connect();
             String dropTableSQL = "DROP TABLE WinningNumbers;";    
             Statement statement = connection.createStatement();
             statement.executeUpdate(dropTableSQL);
@@ -59,7 +49,7 @@ public class WinningNumbersData {
     //method to select all table contents (for testing purposes)
     public static ResultSet selectAll() {
         try {
-            Connection connection = connect();   
+            Connection connection = DbConnect.connect();   
             Statement statement = connection.createStatement();
             String selectSQL = "(select * from WinningNumbers)";
             ResultSet resultSet = statement.executeQuery(selectSQL);
@@ -74,7 +64,7 @@ public class WinningNumbersData {
     //method to insert data to the table (one tuple at a time)
     public static void insertData (int number1,int number2 ,int number3, int number4, int number5, int bonus,  int gameId, int drawId) {
         try {
-            Connection connection = connect();
+            Connection connection = DbConnect.connect();
             String insertSQL = "INSERT INTO WinningNumbers("
                     + "number1, "
                     + "number2, "
@@ -104,7 +94,7 @@ public class WinningNumbersData {
     //method to update a tuple
     public static void updateData (int number1, int number2 ,int number3, int number4, int number5, int bonus,  int gameId, int drawId) {
         try {
-            Connection connection = connect();
+            Connection connection = DbConnect.connect();
             String updateSQL = "UPDATE WinningNumbers SET "
                     + "number1 = ?, "
                     + "number2 = ?, "
@@ -132,7 +122,7 @@ public class WinningNumbersData {
     //method to delete all tuples for a specific draw, based on the primary key
     public static void deleteTupple (int gameId, int drawId) {
         try {
-            Connection connection = connect();
+            Connection connection = DbConnect.connect();
             String deleteSQL = "DELETE FROM WinningNumbers WHERE gameID = ? AND drawID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
@@ -148,7 +138,7 @@ public class WinningNumbersData {
     //method to delete all data for a specific game
     public static void deleteGameData (int gameId) {
         try {
-            Connection connection = connect();
+            Connection connection = DbConnect.connect();
             String deleteSQL = "DELETE FROM WinningNumbers WHERE gameID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);

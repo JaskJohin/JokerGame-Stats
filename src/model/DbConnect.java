@@ -10,6 +10,7 @@ import java.util.logging.Logger;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 public class DbConnect {
     
     //Method to connect to the database

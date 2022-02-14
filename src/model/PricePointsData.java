@@ -19,7 +19,9 @@ public class PricePointsData {
             Connection connection = DbConnect.connect();
             String createTableSQL = "CREATE TABLE PricePoints ("
                     + "ammount DOUBLE NOT NULL, "
-                    +"FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT";
+                    + "gameID INTEGER NOT NULL, "
+                    + "drawID INTEGER NOT NULL, "
+                    + "FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT";
             Statement statement = connection.createStatement();
             statement.execute(createTableSQL);
             statement.close();

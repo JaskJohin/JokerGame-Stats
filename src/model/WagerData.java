@@ -18,9 +18,11 @@ public class WagerData {
         try {
             Connection connection = DbConnect.connect();
             String createTableSQL = "CREATE TABLE Wagers ("
-                    + "columns integer(10) DEFAULT 0 NOT NULL, "
-                    + "wagers integer(10) DEFAULT 0 NOT NULL, "
-                    +"FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT";
+                    + "columns INTEGER DEFAULT 0 NOT NULL, "
+                    + "wagers INTEGER DEFAULT 0 NOT NULL, "
+                    + "gameID INTEGER NOT NULL, "
+                    + "drawID INTEGER NOT NULL, "
+                    + "FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
             Statement statement = connection.createStatement();
             statement.executeUpdate(createTableSQL);
             statement.close();

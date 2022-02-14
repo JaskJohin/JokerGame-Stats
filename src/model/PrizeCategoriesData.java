@@ -18,16 +18,16 @@ public class PrizeCategoriesData {
         try {
             Connection connection = DbConnect.connect();
             String createTableSQL = "CREATE TABLE PrizeCategories ("
-                    + "categoryID INTEGER(2) PRIMARY KEY, "
+                    + "categoryID INTEGER PRIMARY KEY NOT NULL, "
                     + "divident DOUBLE DEFAULT 0 NOT NULL, "
                     + "winners INTEGER DEFAULT 0 NOT NULL, "
                     + "distributed DOUBLE NOT NULL, "
                     + "jackpot DOUBLE NOT NULL, "
-                    + "fixed double NOT NULL, "
-                    + "categoryType INTEGER(1) NOT NULL, "
+                    + "fixed DOUBLE NOT NULL, "
+                    + "categoryType INTEGER NOT NULL, "
                     + "gameType VARCHAR(30) NOT NULL, "
-                    + "drawID INTEGER(10) NOT NULL, "
-                    + "gameID INTEGER(10) NOT NULL, "
+                    + "drawID INTEGER NOT NULL, "
+                    + "gameID INTEGER NOT NULL, "
                     + "FOREIGN KEY (gameID, drawID) REFERENCES Draws (gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
             Statement statement = connection.createStatement();
             statement.execute(createTableSQL);

@@ -1,6 +1,5 @@
 package plh24_ge3;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,6 +23,7 @@ import javax.swing.JPanel;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 public class WindowShowStats
 {
 	// Variables declaration

@@ -34,7 +34,7 @@ import javax.swing.JTextField;
 
 /**
  * @author Athanasios Theodoropoulos
- * @author Aleksandros Dimitrakopoulos
+ * @author Alexandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */

@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 /**
  * @author Athanasios Theodoropoulos
- * @author Aleksandros Dimitrakopoulos
+ * @author Alexandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
@@ -42,12 +42,12 @@ public class WindowMain    // MainClass
 	{
 		new WindowAbout();
 	}
-
+        
+        
 	private void buttonExitActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		System.exit(0);
 	}
-
 
 	// Constructor
 	public WindowMain()
@@ -102,11 +102,10 @@ public class WindowMain    // MainClass
 			// Show stats button
 			JButton button3 = new JButton("Προβολή στατιστικών δεδομένων");
 			button3.addActionListener(this::button3ActionPerformed);
-
+                        
 		middlePanel.add(button1);
 		middlePanel.add(button2);
 		middlePanel.add(button3);
-
 
 		/*
 		 * Bottom panel with the with About and Exit buttons

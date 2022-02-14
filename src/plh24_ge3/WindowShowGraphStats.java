@@ -24,9 +24,8 @@ import javax.swing.JPanel;
  * @author Xristoforos Ampelas
  */
 
-public class WindowShowStats
-{
-	// Variables declaration
+public class WindowShowGraphStats {
+    // Variables declaration
 	private final JDialog dialog;
 
 	// Button actions
@@ -34,13 +33,14 @@ public class WindowShowStats
 	{
 		dialog.dispose();
 	}
-        private void buttonGraphStatsActionPerformed(java.awt.event.ActionEvent evt)
+        /*Print PDF
+        private void buttonPrintPdfActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		new WindowShowGraphStats();
-	}
+		dialog.dispose();
+	}*/
 
 	// Constructor
-	public WindowShowStats()
+	public WindowShowGraphStats()
 	{
 		// Background color
 		Color backColor = new java.awt.Color(244, 244, 250);
@@ -58,12 +58,12 @@ public class WindowShowStats
 		topPanel.setBackground(backColor);
 
 			// Labels with the title
-			JLabel labelTitle = new JLabel("Προβολή στατιστικών");
-			labelTitle.setFont(new Font("Arial", 3, 42));
+			JLabel labelTitle = new JLabel("Προβολή στατιστικών σε γραφική μορφή");
+			labelTitle.setFont(new Font("Arial", 2, 23));
 			labelTitle.setForeground(Color.ORANGE);
 
-			JLabel labelTitleShadow = new JLabel("Προβολή στατιστικών");
-			labelTitleShadow.setFont(new Font("Arial", 3, 42));
+			JLabel labelTitleShadow = new JLabel("Προβολή στατιστικών σε γραφική μορφή");
+			labelTitleShadow.setFont(new Font("Arial", 2, 23));
 			labelTitleShadow.setForeground(Color.BLUE);
 
 		topPanel.add(labelTitle);
@@ -78,27 +78,22 @@ public class WindowShowStats
 		middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 		middlePanel.setBackground(backColor);
 
-			// Game selection & show graph stats panel
+			// Game selection panel
 			JPanel gameSelectPanel = new JPanel();
 			gameSelectPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-			gameSelectPanel.setLayout(new FlowLayout(1, 5, 5));  // align,hgap,vgap (1,5,5)
+			gameSelectPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
 			gameSelectPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameSelectPanel.getMinimumSize().height));
 			gameSelectPanel.setBackground(backColor);
 
 				JLabel labelGameSelect = new JLabel("Επιλέξτε τυχερό παιχνίδι");
+
 				String comboBoxGameSelectItems[] = {"Τζόκερ (id: 5104)"};
 				JComboBox comboBoxGameSelect = new JComboBox(comboBoxGameSelectItems);
 				comboBoxGameSelect.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 				comboBoxGameSelect.setBackground(backColor);
-                        
-                                // Show graph stats button
-                                JButton buttonGraphStats = new JButton("Προβολή στατιστικών σε γραφική μορφή");
-                                buttonGraphStats.addActionListener(this::buttonGraphStatsActionPerformed);
 
 			gameSelectPanel.add(labelGameSelect);
 			gameSelectPanel.add(comboBoxGameSelect);
-                        gameSelectPanel.add(buttonGraphStats);
-                  
 
 		middlePanel.add(gameSelectPanel, BorderLayout.CENTER);
 		middlePanel.add(Box.createVerticalGlue(), BorderLayout.CENTER);
@@ -140,7 +135,7 @@ public class WindowShowStats
 		dialog = new JDialog();
 		dialog.add(mainPanel, BorderLayout.CENTER);
 		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		dialog.setTitle("Show stats");
+		dialog.setTitle("Show stats in graph form");
 		dialog.setModal(true);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen

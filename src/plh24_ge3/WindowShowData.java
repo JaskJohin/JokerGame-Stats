@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 
 /**
  * @author Athanasios Theodoropoulos
- * @author Aleksandros Dimitrakopoulos
+ * @author Alexandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
@@ -36,10 +36,6 @@ public class WindowShowData
 	{
 		dialog.dispose();
 	}
-
-
-
-
 
 	// Constructor
 	public WindowShowData()

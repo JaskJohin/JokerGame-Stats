@@ -129,7 +129,7 @@ public class WindowManageData
 				// Get the drawId from the last draw
 				firstDrawId = content.get(0).getAsJsonObject().get("drawId").toString();
 			}
-			catch (Exception ex) { ex.printStackTrace(); /* Silently continue */ }
+			catch (Exception ex) { /* Silently continue */ }
 		}
 		else
 		{
@@ -157,7 +157,6 @@ public class WindowManageData
 
 		// URL string
 		String urlStr = "https://api.opap.gr/draws/v3.0/"+gId+"/last-result-and-active";
-
 
 		try
 		{
@@ -249,8 +248,22 @@ public class WindowManageData
 		}
 	}
 
+
 	private void buttonDownloadActionPerformed(java.awt.event.ActionEvent evt)
 	{
+		// If lastDrawId is null, there was a connection error when the window was openned.
+		// Try again and show appropriate message.
+		if (lastDrawId == null)
+		{
+			findLastDrawId(false);
+			if (lastDrawId == null)
+			{
+				String message = "Σφάλμα σύνδεσης στο API του ΟΠΑΠ.";
+				JOptionPane.showMessageDialog(null, message, "Σφάλμα σύνδεσης", 0);
+				return;
+			}
+		}
+
 		if (radioButtonSingleDraw.isSelected())
 		{
 			String dId = textFieldDrawId.getText();
@@ -268,7 +281,7 @@ public class WindowManageData
 		{
 			LocalDate dateNow = LocalDate.now();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			String errorMsg = "Η αρχική ημερομηνία πρέπει να είναι >= " + firstDrawDate + " και η τελική <= " + formatter.format(dateNow) + ".";
+			String errorMsg = "Η αρχική ημερομηνία πρέπει να είναι από " + firstDrawDate + " και η τελική έως " + formatter.format(dateNow) + ".";
 			try
 			{
 				LocalDate date1 = LocalDate.parse(textFieldDate1.getText());

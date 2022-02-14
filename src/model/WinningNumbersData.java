@@ -18,12 +18,12 @@ public class WinningNumbersData {
         try {
             Connection connection = DbConnect.connect();
             String createTableSQL = "CREATE TABLE WinningNumbers ("
-                    +"number1 int(3) NOT NULL, "
-                    +"number2 int(3) NOT NULL, "
-                    +"number3 int(3) NOT NULL, "
-                    +"number4 int(3) NOT NULL, "
-                    +"number5 int(3) NOT NULL, "
-                    +"bonus int(3) NOT NULL, "
+                    +"number1 int(3) NOT NULL,"
+                    +"number2 int(3) NOT NULL,"
+                    +"number3 int(3) NOT NULL,"
+                    +"number4 int(3) NOT NULL,"
+                    +"number5 int(3) NOT NULL,"
+                    +"bonus int(3) NOT NULL,"
                     +"FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT;";
             Statement statement = connection.createStatement();
             statement.executeUpdate(createTableSQL);
@@ -66,14 +66,14 @@ public class WinningNumbersData {
         try {
             Connection connection = DbConnect.connect();
             String insertSQL = "INSERT INTO WinningNumbers("
-                    + "number1, "
-                    + "number2, "
-                    + "number3, "
-                    + "number4, "
-                    + "number5, "
-                    + "bonus, "
-                    + "gameId, "
-                    + "drawId) "
+                    + "number1,"
+                    + "number2,"
+                    + "number3,"
+                    + "number4,"
+                    + "number5,"
+                    + "bonus,"
+                    + "gameId,"
+                    + "drawId)"
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
             preparedStatement.setInt(1, number1);
@@ -95,13 +95,13 @@ public class WinningNumbersData {
     public static void updateData (int number1, int number2 ,int number3, int number4, int number5, int bonus,  int gameId, int drawId) {
         try {
             Connection connection = DbConnect.connect();
-            String updateSQL = "UPDATE WinningNumbers SET "
-                    + "number1 = ?, "
-                    + "number2 = ?, "
-                    + "number3 = ?, "
-                    + "number4 = ?, "
-                    + "number5 = ?, "
-                    + "bonus = ?, "
+            String updateSQL = "UPDATE WinningNumbers SET"
+                    + "number1 = ?,"
+                    + "number2 = ?,"
+                    + "number3 = ?,"
+                    + "number4 = ?,"
+                    + "number5 = ?,"
+                    + "bonus = ?,"
                     + "WHERE gameID = ? AND drawID = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
             preparedStatement.setInt(1, number1);

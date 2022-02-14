@@ -19,16 +19,16 @@ public class DrawData {
         try {
             Connection connection = DbConnect.connect();
             String createTableSQL = "CREATE TABLE Draws ("
-                    + "gameID int(10) NOT NULL, "
-                    + "drawID int(10) NOT NULL, "
-                    + "drawTime bigint(19) NOT NULL, "
-                    + "status varchar(30) NOT NULL, "
-                    + "drawBreak int(10) NOT NULL, "
-                    + "visualDraw int(10) NOT NULL, "
+                    + "gameID INTEGER NOT NULL, "
+                    + "drawID INTEGER NOT NULL, "
+                    + "drawTime BIGINT NOT NULL, "
+                    + "status VARCHAR(30) NOT NULL, "
+                    + "drawBreak INTEGER NOT NULL, "
+                    + "visualDraw INTEGER NOT NULL, "
                     + "CONSTRAINT drawID "
-                    + "PRIMARY KEY (gameID, drawID));";    
+                    + "PRIMARY KEY (gameID, drawID))";
             Statement statement = connection.createStatement();
-            statement.executeUpdate(createTableSQL);
+            statement.execute(createTableSQL);
             statement.close();
             connection.close();
         } catch (SQLException ex) {
@@ -39,7 +39,7 @@ public class DrawData {
     public static void dropTable() {
         try {
             Connection connection = DbConnect.connect();
-            String dropTableSQL = "DROP TABLE Draws;";    
+            String dropTableSQL = "DROP TABLE Draws";    
             Statement statement = connection.createStatement();
             statement.executeUpdate(dropTableSQL);
             statement.close();
@@ -74,7 +74,7 @@ public class DrawData {
                     + "status, "
                     + "drawBreak, "
                     + "visualDraw) "
-                    + "VALUES (?, ?, ?, ?, ?, ?);";
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.setInt(2, drawId);
@@ -100,7 +100,7 @@ public class DrawData {
                     + "visualDraw = ? "
                     + "WHERE "
                     + "gameID = ? AND "
-                    + "drawID = ?;";
+                    + "drawID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
             preparedStatement.setLong(1, drawTime);
             preparedStatement.setString(2, status);
@@ -119,7 +119,7 @@ public class DrawData {
     public static void deleteTupple (int gameId, int drawId) {
         try {
             Connection connection = DbConnect.connect();
-            String deleteSQL = "DELETE FROM Draws WHERE gameID = ? AND drawID = ?;";
+            String deleteSQL = "DELETE FROM Draws WHERE gameID = ? AND drawID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.setInt(2, drawId);
@@ -135,7 +135,7 @@ public class DrawData {
     public static void deleteGameData (int gameId) {
         try {
             Connection connection = DbConnect.connect();
-            String deleteSQL = "DELETE FROM Draws WHERE gameID = ?;";
+            String deleteSQL = "DELETE FROM Draws WHERE gameID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.executeUpdate();

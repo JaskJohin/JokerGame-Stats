@@ -18,10 +18,10 @@ public class PricePointsData {
         try {
             Connection connection = DbConnect.connect();
             String createTableSQL = "CREATE TABLE PricePoints ("
-                    + "ammount double NOT NULL, "
-                    +"FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT;";
+                    + "ammount DOUBLE NOT NULL, "
+                    +"FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT";
             Statement statement = connection.createStatement();
-            statement.executeUpdate(createTableSQL);
+            statement.execute(createTableSQL);
             statement.close();
             connection.close();
         } catch (SQLException ex) {
@@ -32,7 +32,7 @@ public class PricePointsData {
     public static void dropTable() {
         try {
             Connection connection = DbConnect.connect();
-            String dropTableSQL = "DROP TABLE PricePoints;";    
+            String dropTableSQL = "DROP TABLE PricePoints";    
             Statement statement = connection.createStatement();
             statement.executeUpdate(dropTableSQL);
             statement.close();
@@ -46,7 +46,7 @@ public class PricePointsData {
         try {
             Connection connection = DbConnect.connect();   
             Statement statement = connection.createStatement();
-            String selectSQL = "(select * from PricePoints)";
+            String selectSQL = "(SELECT * FROM PricePoints)";
             ResultSet resultSet = statement.executeQuery(selectSQL);
             statement.close();
             connection.close();
@@ -64,7 +64,7 @@ public class PricePointsData {
                     + "ammount, "
                     + "gameId, "
                     + "drawId) "
-                    + "VALUES (?, ?, ?);";
+                    + "VALUES (?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
             preparedStatement.setInt(1, ammount);
             preparedStatement.setInt(2, gameId);
@@ -82,7 +82,7 @@ public class PricePointsData {
             Connection connection = DbConnect.connect();
             String updateSQL = "UPDATE PricePoints SET "
                     + "ammount = ?, "
-                    + "WHERE gameID = ? AND drawID = ?;";
+                    + "WHERE gameID = ? AND drawID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
             preparedStatement.setInt(1, ammount);
             preparedStatement.setInt(2, gameId);
@@ -98,7 +98,7 @@ public class PricePointsData {
     public static void deleteTupple (int gameId, int drawId) {
         try {
             Connection connection = DbConnect.connect();
-            String deleteSQL = "DELETE FROM PricePoints WHERE gameID = ? AND drawID = ?;";
+            String deleteSQL = "DELETE FROM PricePoints WHERE gameID = ? AND drawID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.setInt(2, drawId);
@@ -114,7 +114,7 @@ public class PricePointsData {
     public static void deleteGameData (int gameId) {
         try {
             Connection connection = DbConnect.connect();
-            String deleteSQL = "DELETE FROM PricePoints WHERE gameID = ?;";
+            String deleteSQL = "DELETE FROM PricePoints WHERE gameID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.executeUpdate();

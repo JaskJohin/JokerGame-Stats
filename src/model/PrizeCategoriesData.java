@@ -17,20 +17,20 @@ public class PrizeCategoriesData {
     public static void createTable() {
         try {
             Connection connection = DbConnect.connect();
-            String createTableSQL = "CREATE TABLE PrizeCategories ("
-                    + "categoryID int(2) NOT NULL, "
-                    + "divident double DEFAULT 0 NOT NULL, "
-                    + "winners int(32) DEFAULT 0 NOT NULL, "
-                    + "distributed double NOT NULL, "
-                    + "jackpot double NOT NULL, fixed double NOT NULL, "
-                    + "categoryType int(1) NOT NULL, "
-                    + "gameType varchar(30) NOT NULL, "
-                    + "DrawdrawID int(10) NOT NULL, "
-                    + "DrawgameID int(10) NOT NULL, "
+            String createTableSQL = "CREATE TABLE PrizeCategories "
+                    + "(categoryID INTEGER(2) NOT NULL, "
+                    + "divident DOUBLE DEFAULT 0 NOT NULL, "
+                    + "winners INTEGER(32) DEFAULT 0 NOT NULL, "
+                    + "distributed DOUBLE NOT NULL, "
+                    + "jackpot DOUBLE NOT NULL, fixed double NOT NULL, "
+                    + "categoryType INTEGER(1) NOT NULL, "
+                    + "gameType VARCHAR(30) NOT NULL, "
+                    + "DrawdrawID INTEGER(10) NOT NULL, "
+                    + "DrawgameID INTEGER(10) NOT NULL, "
                     + "PRIMARY KEY (categoryID) "
-                    + "FOREIGN KEY (gameID, drawID) REFERENCES Draws (gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT;";
+                    + "FOREIGN KEY (gameID, drawID) REFERENCES Draws (gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT";
             Statement statement = connection.createStatement();
-            statement.executeUpdate(createTableSQL);
+            statement.execute(createTableSQL);
             statement.close();
             connection.close();
         } catch (SQLException ex) {
@@ -41,7 +41,7 @@ public class PrizeCategoriesData {
     public static void dropTable() {
         try {
             Connection connection = DbConnect.connect();
-            String dropTableSQL = "DROP TABLE PrizeCategories;";    
+            String dropTableSQL = "DROP TABLE PrizeCategories";    
             Statement statement = connection.createStatement();
             statement.executeUpdate(dropTableSQL);
             statement.close();
@@ -55,7 +55,7 @@ public class PrizeCategoriesData {
         try {
             Connection connection = DbConnect.connect();   
             Statement statement = connection.createStatement();
-            String selectSQL = "(select * from PrizeCategories)";
+            String selectSQL = "(SELECT * FROM PrizeCategories)";
             ResultSet resultSet = statement.executeQuery(selectSQL);
             statement.close();
             connection.close();
@@ -70,8 +70,8 @@ public class PrizeCategoriesData {
     public static void insertData (int categoryId, double divident, int winners, double distributed, double jackpot, double fixed, int categoryType, String gameType, int gameId, int drawId) {
         try {
             Connection connection = DbConnect.connect();
-            String insertSQL = "INSERT INTO PrizeCategories("
-                    + "categoryID, "
+            String insertSQL = "INSERT INTO PrizeCategories "
+                    + "(categoryID, "
                     + "divident, "
                     + "winners, "
                     + "distributed, "
@@ -81,7 +81,7 @@ public class PrizeCategoriesData {
                     + "gameType, "
                     + "gameId, "
                     + "drawId) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
             preparedStatement.setInt(1, categoryId);
             preparedStatement.setDouble(2, divident);
@@ -112,7 +112,7 @@ public class PrizeCategoriesData {
                     + "fixed = ?, "
                     + "categoryType = ?, "
                     + "gameType = ?, "
-                    + "WHERE gameID = ? AND drawID = ? AND categoryId = ?;";
+                    + "WHERE gameID = ? AND drawID = ? AND categoryId = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
             preparedStatement.setDouble(1, divident);
             preparedStatement.setInt(2, winners);
@@ -135,7 +135,7 @@ public class PrizeCategoriesData {
     public static void deleteTupple (int gameId, int drawId, int categoryId) {
         try {
             Connection connection = DbConnect.connect();
-            String deleteSQL = "DELETE FROM PrizeCategories WHERE gameID = ? AND drawID = ? AND categoryId = ?;";
+            String deleteSQL = "DELETE FROM PrizeCategories WHERE gameID = ? AND drawID = ? AND categoryId = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.setInt(2, drawId);
@@ -152,7 +152,7 @@ public class PrizeCategoriesData {
     public static void deleteGameData (int gameId) {
         try {
             Connection connection = DbConnect.connect();
-            String deleteSQL = "DELETE FROM PrizeCategories WHERE gameID = ?;";
+            String deleteSQL = "DELETE FROM PrizeCategories WHERE gameID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.executeUpdate();

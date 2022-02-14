@@ -11,9 +11,10 @@ import java.util.logging.Logger;
  * @author Thanos Theodoropoulos
  */
 public class DbConnect {
-        //Method to connect to the database
+    
+    //Method to connect to the database
     public static Connection connect() {
-        String connectionString = "jdbc:derby:jokerStatData";
+        String connectionString = "jdbc:derby:jokerStatData;create=true";
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(connectionString);
@@ -21,5 +22,5 @@ public class DbConnect {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);
         }
         return connection;
-    } 
+    }
 }

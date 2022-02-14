@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import model.*;
 
 /**
  * @author Athanasios Theodoropoulos
@@ -160,6 +161,8 @@ public class WindowMain    // MainClass
 
 	public static void main(String[] args)
 	{
-		new WindowMain();
+            DrawData.createTable();	
+            new WindowMain();
+                
 	}
 }

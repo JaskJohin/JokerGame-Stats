@@ -28,7 +28,7 @@ public class WinningNumbersData {
                     + "drawID INTEGER NOT NULL, "
                     + "FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
             Statement statement = connection.createStatement();
-            statement.executeUpdate(createTableSQL);
+            statement.execute(createTableSQL);
             statement.close();
             connection.close();
         } catch (SQLException ex) {
@@ -39,7 +39,7 @@ public class WinningNumbersData {
     public static void dropTable() {
         try {
             Connection connection = DbConnect.connect();
-            String dropTableSQL = "DROP TABLE WinningNumbers;";    
+            String dropTableSQL = "DROP TABLE WinningNumbers";    
             Statement statement = connection.createStatement();
             statement.executeUpdate(dropTableSQL);
             statement.close();
@@ -53,7 +53,7 @@ public class WinningNumbersData {
         try {
             Connection connection = DbConnect.connect();   
             Statement statement = connection.createStatement();
-            String selectSQL = "(select * from WinningNumbers)";
+            String selectSQL = "(SELECT * FROM WinningNumbers)";
             ResultSet resultSet = statement.executeQuery(selectSQL);
             statement.close();
             connection.close();
@@ -68,15 +68,15 @@ public class WinningNumbersData {
         try {
             Connection connection = DbConnect.connect();
             String insertSQL = "INSERT INTO WinningNumbers("
-                    + "number1,"
-                    + "number2,"
-                    + "number3,"
-                    + "number4,"
-                    + "number5,"
-                    + "bonus,"
-                    + "gameId,"
-                    + "drawId)"
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+                    + "number1, "
+                    + "number2, "
+                    + "number3, "
+                    + "number4, "
+                    + "number5, "
+                    + "bonus, "
+                    + "gameId, "
+                    + "drawId) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
             preparedStatement.setInt(1, number1);
             preparedStatement.setInt(2, number2);
@@ -97,14 +97,14 @@ public class WinningNumbersData {
     public static void updateData (int number1, int number2 ,int number3, int number4, int number5, int bonus,  int gameId, int drawId) {
         try {
             Connection connection = DbConnect.connect();
-            String updateSQL = "UPDATE WinningNumbers SET"
-                    + "number1 = ?,"
-                    + "number2 = ?,"
-                    + "number3 = ?,"
-                    + "number4 = ?,"
-                    + "number5 = ?,"
-                    + "bonus = ?,"
-                    + "WHERE gameID = ? AND drawID = ?;";
+            String updateSQL = "UPDATE WinningNumbers SET "
+                    + "number1 = ?, "
+                    + "number2 = ?, "
+                    + "number3 = ?, "
+                    + "number4 = ?, "
+                    + "number5 = ?, "
+                    + "bonus = ?, "
+                    + "WHERE gameID = ? AND drawID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
             preparedStatement.setInt(1, number1);
             preparedStatement.setInt(2, number2);
@@ -125,7 +125,7 @@ public class WinningNumbersData {
     public static void deleteTupple (int gameId, int drawId) {
         try {
             Connection connection = DbConnect.connect();
-            String deleteSQL = "DELETE FROM WinningNumbers WHERE gameID = ? AND drawID = ?;";
+            String deleteSQL = "DELETE FROM WinningNumbers WHERE gameID = ? AND drawID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.setInt(2, drawId);
@@ -141,7 +141,7 @@ public class WinningNumbersData {
     public static void deleteGameData (int gameId) {
         try {
             Connection connection = DbConnect.connect();
-            String deleteSQL = "DELETE FROM WinningNumbers WHERE gameID = ?;";
+            String deleteSQL = "DELETE FROM WinningNumbers WHERE gameID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.executeUpdate();

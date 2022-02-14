@@ -18,12 +18,12 @@ public class WinningNumbersData {
         try {
             Connection connection = DbConnect.connect();
             String createTableSQL = "CREATE TABLE WinningNumbers ("
-                    + "number1 INTEGER NOT NULL,"
-                    + "number2 INTEGER NOT NULL,"
-                    + "number3 INTEGER NOT NULL,"
-                    + "number4 INTEGER NOT NULL,"
-                    + "number5 INTEGER NOT NULL,"
-                    + "bonus INTEGER NOT NULL,"
+                    + "number1 INTEGER NOT NULL, "
+                    + "number2 INTEGER NOT NULL, "
+                    + "number3 INTEGER NOT NULL, "
+                    + "number4 INTEGER NOT NULL, "
+                    + "number5 INTEGER NOT NULL, "
+                    + "bonus INTEGER NOT NULL, "
                     + "gameID INTEGER NOT NULL, "
                     + "drawID INTEGER NOT NULL, "
                     + "FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";

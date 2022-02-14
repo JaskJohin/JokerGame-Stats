@@ -21,7 +21,7 @@ public class PricePointsData {
                     + "ammount DOUBLE NOT NULL, "
                     + "gameID INTEGER NOT NULL, "
                     + "drawID INTEGER NOT NULL, "
-                    + "FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT";
+                    + "FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
             Statement statement = connection.createStatement();
             statement.execute(createTableSQL);
             statement.close();

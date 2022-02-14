@@ -97,9 +97,7 @@ public class DrawData {
                     + "status = ?, "
                     + "drawBreak = ?, "
                     + "visualDraw = ? "
-                    + "WHERE "
-                    + "gameID = ? AND "
-                    + "drawID = ?";
+                    + "WHERE gameID = ? AND drawID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
             preparedStatement.setLong(1, drawTime);
             preparedStatement.setString(2, status);

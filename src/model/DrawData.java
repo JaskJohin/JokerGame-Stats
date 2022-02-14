@@ -53,7 +53,7 @@ public class DrawData {
         try {
             Connection connection = DbConnect.connect();   
             Statement statement = connection.createStatement();
-            String selectSQL = "(select * from Draws)";
+            String selectSQL = "(SELECT * FROM Draws)";
             ResultSet resultSet = statement.executeQuery(selectSQL);
             statement.close();
             connection.close();

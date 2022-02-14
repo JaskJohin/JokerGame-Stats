@@ -30,7 +30,7 @@ public class WinningNumbersData {
             statement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WinningNumbersData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //method to drop existing table
@@ -43,7 +43,7 @@ public class WinningNumbersData {
             statement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WinningNumbersData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //method to select all table contents (for testing purposes)
@@ -57,7 +57,7 @@ public class WinningNumbersData {
             connection.close();
             return resultSet;
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WinningNumbersData.class.getName()).log(Level.SEVERE, null, ex);          
         }
         return null;
     }
@@ -88,7 +88,7 @@ public class WinningNumbersData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WinningNumbersData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //method to update a tuple
@@ -116,7 +116,7 @@ public class WinningNumbersData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WinningNumbersData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //method to delete all tuples for a specific draw, based on the primary key
@@ -131,7 +131,7 @@ public class WinningNumbersData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WinningNumbersData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     
@@ -146,7 +146,7 @@ public class WinningNumbersData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WinningNumbersData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }    
 }

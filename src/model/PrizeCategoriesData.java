@@ -17,24 +17,24 @@ public class PrizeCategoriesData {
     public static void createTable() {
         try {
             Connection connection = DbConnect.connect();
-            String createTableSQL = "CREATE TABLE PrizeCategories "
-                    + "(categoryID INTEGER(2) NOT NULL, "
+            String createTableSQL = "CREATE TABLE PrizeCategories ("
+                    + "categoryID INTEGER(2) PRIMARY KEY, "
                     + "divident DOUBLE DEFAULT 0 NOT NULL, "
-                    + "winners INTEGER(32) DEFAULT 0 NOT NULL, "
+                    + "winners INTEGER DEFAULT 0 NOT NULL, "
                     + "distributed DOUBLE NOT NULL, "
-                    + "jackpot DOUBLE NOT NULL, fixed double NOT NULL, "
+                    + "jackpot DOUBLE NOT NULL, "
+                    + "fixed double NOT NULL, "
                     + "categoryType INTEGER(1) NOT NULL, "
                     + "gameType VARCHAR(30) NOT NULL, "
-                    + "DrawdrawID INTEGER(10) NOT NULL, "
-                    + "DrawgameID INTEGER(10) NOT NULL, "
-                    + "PRIMARY KEY (categoryID) "
-                    + "FOREIGN KEY (gameID, drawID) REFERENCES Draws (gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT";
+                    + "drawID INTEGER(10) NOT NULL, "
+                    + "gameID INTEGER(10) NOT NULL, "
+                    + "FOREIGN KEY (gameID, drawID) REFERENCES Draws (gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
             Statement statement = connection.createStatement();
             statement.execute(createTableSQL);
             statement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PrizeCategoriesData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //method to drop existing table
@@ -47,7 +47,7 @@ public class PrizeCategoriesData {
             statement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PrizeCategoriesData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //method to select all table contents (for testing purposes)
@@ -62,7 +62,7 @@ public class PrizeCategoriesData {
 
             return resultSet;
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PrizeCategoriesData.class.getName()).log(Level.SEVERE, null, ex);          
         }
         return null;
     }
@@ -97,7 +97,7 @@ public class PrizeCategoriesData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PrizeCategoriesData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //method to update a tuple
@@ -128,7 +128,7 @@ public class PrizeCategoriesData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PrizeCategoriesData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //method to delete all tuples for a specific draw, based on the primary key
@@ -144,7 +144,7 @@ public class PrizeCategoriesData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PrizeCategoriesData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     
@@ -159,7 +159,7 @@ public class PrizeCategoriesData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PrizeCategoriesData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }    
 }

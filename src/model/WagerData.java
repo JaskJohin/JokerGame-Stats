@@ -26,7 +26,7 @@ public class WagerData {
             statement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WagerData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //method to drop existing table
@@ -39,7 +39,7 @@ public class WagerData {
             statement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WagerData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //method to select all table contents (for testing purposes)
@@ -53,7 +53,7 @@ public class WagerData {
             connection.close();
             return resultSet;
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WagerData.class.getName()).log(Level.SEVERE, null, ex);          
         }
         return null;
     }
@@ -76,7 +76,7 @@ public class WagerData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WagerData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //method to update a tuple
@@ -96,7 +96,7 @@ public class WagerData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WagerData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //method to delete all tuples for a specific draw, based on the primary key
@@ -111,7 +111,7 @@ public class WagerData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WagerData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     
@@ -126,7 +126,7 @@ public class WagerData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(WagerData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }    
 }

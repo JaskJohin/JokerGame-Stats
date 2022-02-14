@@ -25,7 +25,6 @@ public class DrawData {
                     + "status VARCHAR(30) NOT NULL, "
                     + "drawBreak INTEGER NOT NULL, "
                     + "visualDraw INTEGER NOT NULL, "
-                    + "CONSTRAINT drawID "
                     + "PRIMARY KEY (gameID, drawID))";
             Statement statement = connection.createStatement();
             statement.execute(createTableSQL);

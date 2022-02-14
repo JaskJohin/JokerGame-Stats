@@ -19,7 +19,7 @@ public class DbConnect {
         try {
             connection = DriverManager.getConnection(connectionString);
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DbConnect.class.getName()).log(Level.SEVERE, null, ex);
         }
         return connection;
     }

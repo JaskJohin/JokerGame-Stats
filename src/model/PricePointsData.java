@@ -25,7 +25,7 @@ public class PricePointsData {
             statement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PricePointsData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //Method to drop existing table
@@ -38,7 +38,7 @@ public class PricePointsData {
             statement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PricePointsData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //Method to select all table contents (for testing purposes)
@@ -52,7 +52,7 @@ public class PricePointsData {
             connection.close();
             return resultSet;
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PricePointsData.class.getName()).log(Level.SEVERE, null, ex);          
         }
         return null;
     }
@@ -73,7 +73,7 @@ public class PricePointsData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PricePointsData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //Method to update a tuple
@@ -91,7 +91,7 @@ public class PricePointsData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PricePointsData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     //Method to delete all tuples for a specific draw, based on the primary key
@@ -106,7 +106,7 @@ public class PricePointsData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PricePointsData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
     
@@ -121,7 +121,7 @@ public class PricePointsData {
             preparedStatement.close();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
+            Logger.getLogger(PricePointsData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }    
 }

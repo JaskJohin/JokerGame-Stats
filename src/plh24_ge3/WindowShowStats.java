@@ -17,13 +17,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
 /**
  * @author Athanasios Theodoropoulos
  * @author Alexandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 public class WindowShowStats
 {
 	// Variables declaration
@@ -33,6 +33,12 @@ public class WindowShowStats
 	private void buttonCloseActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		dialog.dispose();
+	}
+        
+        //Print PDF
+        private void buttonPrintPdfActionPerformed(java.awt.event.ActionEvent evt)
+	{
+                dialog.dispose();	
 	}
 
 	private void buttonGraphStatsActionPerformed(java.awt.event.ActionEvent evt)
@@ -45,7 +51,6 @@ public class WindowShowStats
 	{
 		// Background color
 		Color backColor = new java.awt.Color(244, 244, 250);
-
 
 		/*
 		 * Top panel with the window title
@@ -70,7 +75,6 @@ public class WindowShowStats
 		topPanel.add(labelTitle);
 		topPanel.add(labelTitleShadow);
 
-
 		/*
 		 * Middle panel with all the functionality
 		 */
@@ -78,6 +82,11 @@ public class WindowShowStats
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 		middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 		middlePanel.setBackground(backColor);
+                
+                // Button to print stats to PDF file
+                JButton buttonPrintPdf = new JButton("Εκτύπωση σε PDF");
+                buttonPrintPdf.setPreferredSize(new Dimension(206, 20));
+                buttonPrintPdf.addActionListener(this::buttonPrintPdfActionPerformed);
 
 			// Game selection & show graph stats panel
 			JPanel gameSelectPanel = new JPanel();
@@ -91,7 +100,7 @@ public class WindowShowStats
 				JComboBox comboBoxGameSelect = new JComboBox(comboBoxGameSelectItems);
 				comboBoxGameSelect.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 				comboBoxGameSelect.setBackground(backColor);
-                        
+                                
                                 // Show graph stats button
                                 JButton buttonGraphStats = new JButton("Προβολή στατιστικών σε γραφική μορφή");
                                 buttonGraphStats.addActionListener(this::buttonGraphStatsActionPerformed);
@@ -100,10 +109,9 @@ public class WindowShowStats
 			gameSelectPanel.add(comboBoxGameSelect);
                         gameSelectPanel.add(buttonGraphStats);
                   
-
+                middlePanel.add(buttonPrintPdf);
 		middlePanel.add(gameSelectPanel, BorderLayout.CENTER);
 		middlePanel.add(Box.createVerticalGlue(), BorderLayout.CENTER);
-
 
 		/*
 		 * Bottom panel with the Close button
@@ -121,7 +129,6 @@ public class WindowShowStats
 		bottomPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
 		bottomPanel.add(buttonClose);
 
-
 		/*
 		 * Main panel
 		 */
@@ -133,7 +140,6 @@ public class WindowShowStats
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
 		mainPanel.add(bottomPanel);
-
 
 		/*
 		 * Main window

@@ -13,13 +13,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+
 /**
  * @author Athanasios Theodoropoulos
- * @author Aleksandros Dimitrakopoulos
+ * @author Alexandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
-
 public class WindowMain    // MainClass
 {
 	// Button actions

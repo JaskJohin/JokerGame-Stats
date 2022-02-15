@@ -41,11 +41,10 @@ package plh24_ge3;
  * </pre>
  * 
  * @author Athanasios Theodoropoulos
- * @author Aleksandros Dimitrakopoulos
+ * @author Alexandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
-
 public class JokerDrawData
 {
 	// Attributes

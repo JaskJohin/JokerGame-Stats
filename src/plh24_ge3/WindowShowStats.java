@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+
 /**
  * @author Athanasios Theodoropoulos
  * @author Alexandros Dimitrakopoulos
@@ -32,7 +33,8 @@ public class WindowShowStats
 	{
 		dialog.dispose();
 	}
-        private void buttonGraphStatsActionPerformed(java.awt.event.ActionEvent evt)
+
+	private void buttonGraphStatsActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		new WindowShowGraphStats();
 	}

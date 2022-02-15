@@ -36,6 +36,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
+
 /**
  * @author Athanasios Theodoropoulos
  * @author Alexandros Dimitrakopoulos
@@ -66,7 +67,7 @@ public class WindowManageData
 	private final JLabel labelwinNum6Value;
 	private final JLabel labelTotalColumnsValue;
 
-        
+
 	// Methods
 	private void findDateOfFirstDraw()
 	{
@@ -93,6 +94,7 @@ public class WindowManageData
 			case "Extra5":    firstDrawDate = "2002-11-25"; break;
 		}
 	}
+
 
 	private void findIdOfFirstDraw()
 	{
@@ -148,6 +150,7 @@ public class WindowManageData
 			firstDrawId = "1";
 		}
 	}
+
 
 	private void findLastDrawId(boolean populateTextFieldDrawId)
 	{
@@ -217,10 +220,12 @@ public class WindowManageData
 		CompletableFuture.runAsync(() -> findLastDrawId(false));  // Run asynchronously
 	}
 
+
 	private void buttonFindLatestDrawActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		textFieldDrawId.setText(lastDrawId);
 	}
+
 
 	private void comboBoxPredefinedRangeActionPerformed(java.awt.event.ActionEvent evt)
 	{
@@ -324,6 +329,7 @@ public class WindowManageData
 		// Background color
 		Color backColor = new java.awt.Color(244, 244, 250);
 
+
 		/*
 		 * Top panel with the window title
 		 */
@@ -376,6 +382,7 @@ public class WindowManageData
 			gameSelectPanel.add(labelGameSelect);
 			gameSelectPanel.add(comboBoxGameSelect);
 
+
 			// Choose search method label panel
 			JPanel chooseMethodLabelPanel = new JPanel();
 			chooseMethodLabelPanel.setBorder(BorderFactory.createEmptyBorder(12, 0, 0, 0));
@@ -387,6 +394,7 @@ public class WindowManageData
 				JLabel labelChooseMethod = new JLabel("Επιλέξτε τρόπο αναζήτησης κληρώσεων");
 
 			chooseMethodLabelPanel.add(labelChooseMethod);
+
 
 			// Single draw method panel
 			JPanel singleDrawMethodPanel = new JPanel();
@@ -479,6 +487,7 @@ public class WindowManageData
 			dateRangeMethodPanel.add(textFieldDate2);
 			dateRangeMethodPanel.add(labelPredefinedRange);
 			dateRangeMethodPanel.add(comboBoxPredefinedRange);
+
 
 			// Download panel
 			JPanel downloadPanel = new JPanel();

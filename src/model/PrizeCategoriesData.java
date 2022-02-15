@@ -17,7 +17,7 @@ public class PrizeCategoriesData {
     public static void createTable() {
         try {
             Connection connection = DbConnect.connect();
-            if(!DbConnect.tableExists(connection, "PrizeCategories")) {
+            if(!DbConnect.tableExists(connection, "PRIZECATEGORIES")) {
                 String createTableSQL = "CREATE TABLE PrizeCategories ("
                         + "categoryID INTEGER PRIMARY KEY NOT NULL, "
                         + "divident DOUBLE DEFAULT 0 NOT NULL, "

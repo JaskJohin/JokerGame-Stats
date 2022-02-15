@@ -17,7 +17,7 @@ public class WagerData {
     public static void createTable() {
         try {
             Connection connection = DbConnect.connect();
-            if(!DbConnect.tableExists(connection, "Wagers")) {
+            if(!DbConnect.tableExists(connection, "WAGERS")) {
                 String createTableSQL = "CREATE TABLE Wagers ("
                         + "INDEX INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, "
                         + "columns INTEGER DEFAULT 0 NOT NULL, "

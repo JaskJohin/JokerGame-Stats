@@ -39,6 +39,7 @@ public class PrizeCategoriesData {
             Logger.getLogger(PrizeCategoriesData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
+    
     //Method to drop existing table
     public static void dropTable() {
         try {
@@ -52,6 +53,7 @@ public class PrizeCategoriesData {
             Logger.getLogger(PrizeCategoriesData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
+    
     //Method to select all table contents (for testing purposes)
     public static ResultSet selectAll() {
         try {
@@ -68,6 +70,7 @@ public class PrizeCategoriesData {
         }
         return null;
     }
+    
     //Method to insert data to the table (one tuple at a time)
     public static void insertData (int categoryId, double divident, int winners, double distributed, double jackpot, double fixed, int categoryType, String gameType, int gameId, int drawId) {
         try {
@@ -102,6 +105,7 @@ public class PrizeCategoriesData {
             Logger.getLogger(PrizeCategoriesData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
+    
     //Method to update a tuple
     public static void updateData (int categoryId, double divident, int winners, double distributed, double jackpot, double fixed, int categoryType, String gameType, int gameId, int drawId) {
         try {
@@ -133,6 +137,7 @@ public class PrizeCategoriesData {
             Logger.getLogger(PrizeCategoriesData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
+    
     //Method to delete all tuples for a specific draw, based on the primary key
     public static void deleteTupple (int gameId, int drawId, int categoryId) {
         try {

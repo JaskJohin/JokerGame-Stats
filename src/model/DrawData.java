@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 public class DrawData {
     
-  
     //Table constructor
     public static void createTable() {
         try {
@@ -36,6 +35,7 @@ public class DrawData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
+    
     //Method to drop existing table
     public static void dropTable() {
         try {
@@ -49,6 +49,7 @@ public class DrawData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
+    
     //Method to select all table contents (for testing purposes)
     public static ResultSet selectAll() {
         try {
@@ -64,6 +65,7 @@ public class DrawData {
         }
         return null;
     }
+    
     //Method to insert data to the table (one tuple at a time)
     public static void insertData (int gameId, int drawId, long drawTime, String status, int drawBreak, int visualDraw) {
         try {
@@ -90,6 +92,7 @@ public class DrawData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
+    
     //Method to update a tuple
     public static void updateData (int gameId, int drawId, long drawTime, String status, int drawBreak, int visualDraw) {
         try {
@@ -114,6 +117,7 @@ public class DrawData {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
+    
     //Method to delete all tuples for a specific draw, based on the primary key
     public static void deleteTupple (int gameId, int drawId) {
         try {

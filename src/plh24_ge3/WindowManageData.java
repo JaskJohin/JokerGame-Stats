@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -212,12 +213,43 @@ public class WindowManageData
 	}
 
 
+	private void changeCards()
+	{
+		CardLayout cl = (CardLayout)(viewPanelCards.getLayout());
+		if (comboBoxGameSelect.getSelectedItem().equals("Τζόκερ"))
+		{
+			if (radioButtonSingleDraw.isSelected())
+			{
+				cl.show(viewPanelCards, "jokerSingleDraw");
+			}
+			else
+			{
+				cl.show(viewPanelCards, "jokerDateRange");
+			}
+		}
+	}
+
+
+
 	// Button actions
 	private void comboBoxGameSelectActionPerformed(java.awt.event.ActionEvent evt)
 	{
+		changeCards();
 		findDateOfFirstDraw();
 		CompletableFuture.runAsync(() -> findIdOfFirstDraw());    // Run asynchronously
 		CompletableFuture.runAsync(() -> findLastDrawId(false));  // Run asynchronously
+	}
+
+
+	private void radioButtonSingleDrawActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		changeCards();
+	}
+
+
+	private void radioButtonDateRangeActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		changeCards();
 	}
 
 
@@ -407,6 +439,7 @@ public class WindowManageData
 				radioButtonSingleDraw = new JRadioButton();
 				radioButtonSingleDraw.setText("Συγκεκριμένη κλήρωση");
 				radioButtonSingleDraw.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+				radioButtonSingleDraw.addActionListener(this::radioButtonSingleDrawActionPerformed);
 				radioButtonSingleDraw.setBackground(backColor);
 				radioButtonSingleDraw.setSelected(true);
 
@@ -442,6 +475,7 @@ public class WindowManageData
 				JRadioButton radioButtonDateRange = new JRadioButton();
 				radioButtonDateRange.setText("Εύρος ημερομηνιών");
 				radioButtonDateRange.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+				radioButtonDateRange.addActionListener(this::radioButtonDateRangeActionPerformed);
 				radioButtonDateRange.setBackground(backColor);
 
 				// Group radio butttons
@@ -509,7 +543,8 @@ public class WindowManageData
 			viewPanelCards.setLayout(new CardLayout());
 			viewPanelCards.setBackground(backColor);
 
-				JPanel jokerSingleDrawPanel = new JPanel();  // Panel: Joker single draw
+				// Panel: Joker single draw
+				JPanel jokerSingleDrawPanel = new JPanel();
 				jokerSingleDrawPanel.setLayout(new FlowLayout(0, 0, 0));
 				jokerSingleDrawPanel.setBackground(backColor);
 
@@ -663,8 +698,55 @@ public class WindowManageData
 				jokerSingleDrawPanel.add(jokerSDRightPanel);
 
 
+				// Panel: Joker date range
+				JPanel jokerDateRangePanel = new JPanel();
+				jokerDateRangePanel.setLayout(new GridLayout(1,1));
+				jokerDateRangePanel.setBackground(backColor);
 
-			viewPanelCards.add(jokerSingleDrawPanel);
+					// Columns and initial data of the JTable for Joker date range
+					String[] columnsDR = {"<html><center><br>Κλήρωση</center></html>",
+						"<html><center>Ημερο-<br>μηνία</center></html>",
+						"<html><center><br>Στήλες</center></html>",
+						"<html><center>Νικήτρια<br>στήλη</center></html>",
+						"<html><center>'5+1'<br>επιτυχίες</center></html>",
+						"<html><center>'5+1'<br>κέρδη</center></html>",
+						"<html><center>'5'<br>επιτυχίες</center></html>",
+						"<html><center>'5'<br>κέρδη</center></html>",
+						"<html><center>'4+1'<br>επιτυχίες</center></html>",
+						"<html><center>'4+1'<br>κέρδη</center></html>",
+						"<html><center>'4'<br>επιτυχίες</center></html>",
+						"<html><center>'4'<br>κέρδη</center></html>",
+						"<html><center>'3+1'<br>επιτυχίες</center></html>",
+						"<html><center>'3+1'<br>κέρδη</center></html>",
+						"<html><center>'3'<br>επιτυχίες</center></html>",
+						"<html><center>'3'<br>κέρδη</center></html>",
+						"<html><center>'2+1'<br>επιτυχίες</center></html>",
+						"<html><center>'2+1'<br>κέρδη</center></html>",
+						"<html><center>'1+1'<br>επιτυχίες</center></html>",
+						"<html><center>'1+1'<br>κέρδη</center></html>"};
+					String[][] dataDR = {};
+
+					// JTable for Joker date range
+					JTable jokerDRTable = new JTable(dataDR, columnsDR);
+//					jokerDRTable.setPreferredSize(new Dimension(500, 128));
+					jokerDRTable.getColumnModel().getColumn(0).setCellRenderer(centerText);
+
+					// Make table cells unselectable and uneditable
+					jokerDRTable.setEnabled(false);
+
+					// Disable table column re-ordering
+					jokerDRTable.getTableHeader().setReorderingAllowed(false);
+
+					// Make the JScrollPane take the same size as the JTable
+					jokerDRTable.setPreferredScrollableViewportSize(jokerDRTable.getPreferredSize());
+
+					// Make table fill the entire Viewport height
+					jokerDRTable.setFillsViewportHeight(true);
+
+				jokerDateRangePanel.add(new JScrollPane(jokerDRTable));
+
+			viewPanelCards.add(jokerSingleDrawPanel, "jokerSingleDraw");
+			viewPanelCards.add(jokerDateRangePanel, "jokerDateRange");
 
 
 		// Add elements to middle panel
@@ -700,7 +782,7 @@ public class WindowManageData
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new Dimension(796, 582));
+		mainPanel.setPreferredSize(new Dimension(1116, 710));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
@@ -714,10 +796,10 @@ public class WindowManageData
 		dialog.add(mainPanel, BorderLayout.CENTER);
 		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		dialog.setTitle("Manage data");
-		dialog.setModal(true);
+		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new Dimension(800, 586));
+		dialog.setMinimumSize(new Dimension(1120, 720));
 
 		// Find firstDrawDate & lastDrawId in advance, populate textFieldDrawId
 		findDateOfFirstDraw();

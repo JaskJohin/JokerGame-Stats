@@ -17,21 +17,23 @@ public class WinningNumbersData {
     public static void createTable() {
         try {
             Connection connection = DbConnect.connect();
-            String createTableSQL = "CREATE TABLE WinningNumbers ("
-                    + "INDEX INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, "
-                    + "number1 INTEGER NOT NULL, "
-                    + "number2 INTEGER NOT NULL, "
-                    + "number3 INTEGER NOT NULL, "
-                    + "number4 INTEGER NOT NULL, "
-                    + "number5 INTEGER NOT NULL, "
-                    + "bonus INTEGER NOT NULL, "
-                    + "gameID INTEGER NOT NULL, "
-                    + "drawID INTEGER NOT NULL, "
-                    + "FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
-            Statement statement = connection.createStatement();
-            statement.execute(createTableSQL);
-            statement.close();
-            connection.close();
+            if(!DbConnect.tableExists(connection, "WinningNumbers")) {
+                String createTableSQL = "CREATE TABLE WinningNumbers ("
+                        + "INDEX INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, "
+                        + "number1 INTEGER NOT NULL,"
+                        + "number2 INTEGER NOT NULL,"
+                        + "number3 INTEGER NOT NULL,"
+                        + "number4 INTEGER NOT NULL,"
+                        + "number5 INTEGER NOT NULL,"
+                        + "bonus INTEGER NOT NULL,"
+                        + "gameID INTEGER NOT NULL, "
+                        + "drawID INTEGER NOT NULL, "
+                        + "FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
+                Statement statement = connection.createStatement();
+                statement.executeUpdate(createTableSQL);
+                statement.close();
+                connection.close();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(WinningNumbersData.class.getName()).log(Level.SEVERE, null, ex);          
         }

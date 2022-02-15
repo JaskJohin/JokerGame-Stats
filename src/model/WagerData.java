@@ -17,17 +17,19 @@ public class WagerData {
     public static void createTable() {
         try {
             Connection connection = DbConnect.connect();
-            String createTableSQL = "CREATE TABLE Wagers ("
-                    + "INDEX INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, "
-                    + "columns INTEGER DEFAULT 0 NOT NULL, "
-                    + "wagers INTEGER DEFAULT 0 NOT NULL, "
-                    + "gameID INTEGER NOT NULL, "
-                    + "drawID INTEGER NOT NULL, "
-                    + "FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(createTableSQL);
-            statement.close();
-            connection.close();
+            if(!DbConnect.tableExists(connection, "Wagers")) {
+                String createTableSQL = "CREATE TABLE Wagers ("
+                        + "INDEX INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, "
+                        + "columns INTEGER DEFAULT 0 NOT NULL, "
+                        + "wagers INTEGER DEFAULT 0 NOT NULL, "
+                        + "gameID INTEGER NOT NULL, "
+                        + "drawID INTEGER NOT NULL,"
+                        + "FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
+                Statement statement = connection.createStatement();
+                statement.executeUpdate(createTableSQL);
+                statement.close();
+                connection.close();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(WagerData.class.getName()).log(Level.SEVERE, null, ex);          
         }

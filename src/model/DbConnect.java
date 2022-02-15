@@ -24,4 +24,11 @@ public class DbConnect {
         }
         return connection;
     }
+    
+    public static boolean tableExists(Connection connection, String tableName) throws SQLException {
+        DatabaseMetaData dbMeta = connection.getMetaData();
+        ResultSet resultSet = dbMeta.getTables(null, null, tableName, new String[] {"TABLE"});
+
+        return resultSet.next();
+    }
 }

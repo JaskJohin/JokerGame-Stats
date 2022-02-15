@@ -17,16 +17,18 @@ public class PricePointsData {
     public static void createTable() {
         try {
             Connection connection = DbConnect.connect();
-            String createTableSQL = "CREATE TABLE PricePoints ("
-                    + "INDEX INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, "
-                    + "ammount DOUBLE NOT NULL, "
-                    + "gameID INTEGER NOT NULL, "
-                    + "drawID INTEGER NOT NULL, "
-                    + "FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
-            Statement statement = connection.createStatement();
-            statement.execute(createTableSQL);
-            statement.close();
-            connection.close();
+            if(!DbConnect.tableExists(connection, "PRICEPOINTS")) {
+                String createTableSQL = "CREATE TABLE PricePoints ("
+                        + "INDEX INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, "
+                        + "ammount DOUBLE NOT NULL, "
+                        + "gameID INTEGER NOT NULL, "
+                        + "drawID INTEGER NOT NULL, "
+                        + "FOREIGN KEY (gameID, drawID) REFERENCES Draws(gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
+                Statement statement = connection.createStatement();
+                statement.execute(createTableSQL);
+                statement.close();
+                connection.close();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(PricePointsData.class.getName()).log(Level.SEVERE, null, ex);          
         }

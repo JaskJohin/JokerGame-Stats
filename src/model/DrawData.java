@@ -18,18 +18,20 @@ public class DrawData {
     public static void createTable() {
         try {
             Connection connection = DbConnect.connect();
-            String createTableSQL = "CREATE TABLE Draws ("
-                    + "gameID INTEGER NOT NULL, "
-                    + "drawID INTEGER NOT NULL, "
-                    + "drawTime BIGINT NOT NULL, "
-                    + "status VARCHAR(30) NOT NULL, "
-                    + "drawBreak INTEGER NOT NULL, "
-                    + "visualDraw INTEGER NOT NULL, "
-                    + "PRIMARY KEY (gameID, drawID))";
-            Statement statement = connection.createStatement();
-            statement.execute(createTableSQL);
-            statement.close();
-            connection.close();
+            if(!DbConnect.tableExists(connection, "DRAWS")) {
+                String createTableSQL = "CREATE TABLE Draws ("
+                        + "gameID INTEGER NOT NULL, "
+                        + "drawID INTEGER NOT NULL, "
+                        + "drawTime BIGINT NOT NULL, "
+                        + "status VARCHAR(30) NOT NULL, "
+                        + "drawBreak INTEGER NOT NULL, "
+                        + "visualDraw INTEGER NOT NULL, "
+                        + "PRIMARY KEY (gameID, drawID))";
+                Statement statement = connection.createStatement();
+                statement.execute(createTableSQL);
+                statement.close();
+                connection.close();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(DrawData.class.getName()).log(Level.SEVERE, null, ex);          
         }

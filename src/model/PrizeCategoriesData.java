@@ -17,22 +17,24 @@ public class PrizeCategoriesData {
     public static void createTable() {
         try {
             Connection connection = DbConnect.connect();
-            String createTableSQL = "CREATE TABLE PrizeCategories ("
-                    + "categoryID INTEGER PRIMARY KEY NOT NULL, "
-                    + "divident DOUBLE DEFAULT 0 NOT NULL, "
-                    + "winners INTEGER DEFAULT 0 NOT NULL, "
-                    + "distributed DOUBLE NOT NULL, "
-                    + "jackpot DOUBLE NOT NULL, "
-                    + "fixed DOUBLE NOT NULL, "
-                    + "categoryType INTEGER NOT NULL, "
-                    + "gameType VARCHAR(30) NOT NULL, "
-                    + "drawID INTEGER NOT NULL, "
-                    + "gameID INTEGER NOT NULL, "
-                    + "FOREIGN KEY (gameID, drawID) REFERENCES Draws (gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
-            Statement statement = connection.createStatement();
-            statement.execute(createTableSQL);
-            statement.close();
-            connection.close();
+            if(!DbConnect.tableExists(connection, "PrizeCategories")) {
+                String createTableSQL = "CREATE TABLE PrizeCategories ("
+                        + "categoryID INTEGER PRIMARY KEY NOT NULL, "
+                        + "divident DOUBLE DEFAULT 0 NOT NULL, "
+                        + "winners INTEGER DEFAULT 0 NOT NULL, "
+                        + "distributed DOUBLE NOT NULL, "
+                        + "jackpot DOUBLE NOT NULL, "
+                        + "fixed DOUBLE NOT NULL, "
+                        + "categoryType INTEGER NOT NULL, "
+                        + "gameType VARCHAR(30) NOT NULL, "
+                        + "drawID INTEGER NOT NULL, "
+                        + "gameID INTEGER NOT NULL, "
+                        + "FOREIGN KEY (gameID, drawID) REFERENCES Draws (gameID, drawID) ON DELETE CASCADE ON UPDATE RESTRICT)";
+                Statement statement = connection.createStatement();
+                statement.execute(createTableSQL);
+                statement.close();
+                connection.close();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(PrizeCategoriesData.class.getName()).log(Level.SEVERE, null, ex);          
         }

@@ -16,7 +16,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 import javax.swing.BorderFactory;
@@ -67,6 +70,8 @@ public class WindowManageData
 	private final JLabel labelwinNum5Value;
 	private final JLabel labelwinNum6Value;
 	private final JLabel labelTotalColumnsValue;
+	private final JTable jokerSDTable;
+	private final JTable jokerDRTable;
 
 
 	// Methods
@@ -228,6 +233,171 @@ public class WindowManageData
 			}
 		}
 	}
+	
+	
+	private void getJokerSingleDrawData()
+	{
+		// Selected Joker draw
+		String drawStr = textFieldDrawId.getText();
+
+		// Date format
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		// Variables to gather data
+		int drawId = Integer.parseInt(drawStr);
+		String drawDate;
+		int columns;
+		int winningNum1;
+		int winningNum2;
+		int winningNum3;
+		int winningNum4;
+		int winningNum5;
+		int bonusNum;
+		int prizeTier5_1winners;
+		double prizeTier5_1dividend;
+		int prizeTier5winners;
+		double prizeTier5dividend;
+		int prizeTier4_1winners;
+		double prizeTier4_1dividend;
+		int prizeTier4winners;
+		double prizeTier4dividend;
+		int prizeTier3_1winners;
+		double prizeTier3_1dividend;
+		int prizeTier3winners;
+		double prizeTier3dividend;
+		int prizeTier2_1winners;
+		double prizeTier2_1dividend;
+		int prizeTier1_1winners;
+		double prizeTier1_1dividend;
+
+
+		// URL string
+		String urlStr = "https://api.opap.gr/draws/v3.0/5104/" + drawStr;
+
+		try
+		{
+			// URL
+			URL website = new URL(urlStr);
+
+			// Start connection and set timeout to 2 seconds
+			URLConnection connection = website.openConnection();
+			connection.setConnectTimeout(2*1000);
+
+			// Open BufferedReader
+			InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+			BufferedReader in = new BufferedReader(isr);
+
+			// Get json string
+			String jsonStr = in.readLine();
+
+			// Close BufferedReader
+			in.close();
+
+
+			// Parse jsonStr into json element and get an object structure
+			JsonElement jElement = new JsonParser().parse(jsonStr);
+			JsonObject jObject = jElement.getAsJsonObject();
+
+			// Get the drawTime
+			String drawTime = jObject.get("drawTime").toString();
+			LocalDateTime ldt = Instant.ofEpochMilli(Long.parseLong(drawTime)).atZone(ZoneId.systemDefault()).toLocalDateTime();
+			drawDate = formatter.format(ldt);
+
+			// Get the number of columns
+			JsonObject wagerStatistics = jObject.getAsJsonObject("wagerStatistics");
+			columns = Integer.parseInt(wagerStatistics.get("columns").toString());
+
+			// Get the winning numbers
+			JsonObject winningNumbers = jObject.getAsJsonObject("winningNumbers");
+			JsonArray winningNumList = winningNumbers.getAsJsonArray("list");
+			winningNum1 = Integer.parseInt(winningNumList.get(0).toString());
+			winningNum2 = Integer.parseInt(winningNumList.get(1).toString());
+			winningNum3 = Integer.parseInt(winningNumList.get(2).toString());
+			winningNum4 = Integer.parseInt(winningNumList.get(3).toString());
+			winningNum5 = Integer.parseInt(winningNumList.get(4).toString());
+			JsonArray winningNumBonus = winningNumbers.getAsJsonArray("bonus");
+			bonusNum = Integer.parseInt(winningNumBonus.get(0).toString());
+
+			// Prize categories
+			JsonArray prizeCategories = jObject.getAsJsonArray("prizeCategories");
+
+			// Get the prize tier "5+1" winners & dividend
+			JsonObject category0 = prizeCategories.get(0).getAsJsonObject();
+			prizeTier5_1winners = Integer.parseInt(category0.get("winners").toString());
+			prizeTier5_1dividend = Double.parseDouble(category0.get("divident").toString());
+
+			// Get the prize tier "5" winners & dividend
+			JsonObject category1 = prizeCategories.get(1).getAsJsonObject();
+			prizeTier5winners = Integer.parseInt(category1.get("winners").toString());
+			prizeTier5dividend = Double.parseDouble(category1.get("divident").toString());
+
+			// Get the prize tier "4+1" winners & dividend
+			JsonObject category2 = prizeCategories.get(2).getAsJsonObject();
+			prizeTier4_1winners = Integer.parseInt(category2.get("winners").toString());
+			prizeTier4_1dividend = Double.parseDouble(category2.get("divident").toString());
+
+			// Get the prize tier "4" winners & dividend
+			JsonObject category3 = prizeCategories.get(3).getAsJsonObject();
+			prizeTier4winners = Integer.parseInt(category3.get("winners").toString());
+			prizeTier4dividend = Double.parseDouble(category3.get("divident").toString());
+
+			// Get the prize tier "3+1" winners & dividend
+			JsonObject category4 = prizeCategories.get(4).getAsJsonObject();
+			prizeTier3_1winners = Integer.parseInt(category4.get("winners").toString());
+			prizeTier3_1dividend = Double.parseDouble(category4.get("divident").toString());
+
+			// Get the prize tier "3" winners & dividend
+			JsonObject category5 = prizeCategories.get(5).getAsJsonObject();
+			prizeTier3winners = Integer.parseInt(category5.get("winners").toString());
+			prizeTier3dividend = Double.parseDouble(category5.get("divident").toString());
+
+			// Get the prize tier "2+1" winners & dividend
+			JsonObject category6 = prizeCategories.get(6).getAsJsonObject();
+			prizeTier2_1winners = Integer.parseInt(category6.get("winners").toString());
+			prizeTier2_1dividend = Double.parseDouble(category6.get("divident").toString());
+
+			// Get the prize tier "2+1" winners & dividend
+			JsonObject category7 = prizeCategories.get(7).getAsJsonObject();
+			prizeTier1_1winners = Integer.parseInt(category7.get("winners").toString());
+			prizeTier1_1dividend = Double.parseDouble(category7.get("divident").toString());
+
+
+			// Populate GUI foe single draw
+			labelDrawValue.setText(String.valueOf(drawId));
+			labelDateValue.setText(String.valueOf(drawDate));
+			labelTotalColumnsValue.setText(String.valueOf(columns));
+			labelwinNum1Value.setText(String.valueOf(winningNum1));
+			labelwinNum2Value.setText(String.valueOf(winningNum2));
+			labelwinNum3Value.setText(String.valueOf(winningNum3));
+			labelwinNum4Value.setText(String.valueOf(winningNum4));
+			labelwinNum5Value.setText(String.valueOf(winningNum5));
+			labelwinNum6Value.setText(String.valueOf(bonusNum));
+
+			jokerSDTable.setValueAt(String.valueOf(prizeTier5_1winners), 0, 1);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier5_1dividend), 0, 2);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier5winners), 1, 1);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier5dividend), 1, 2);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier4_1winners), 2, 1);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier4_1dividend), 2, 2);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier4winners), 3, 1);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier4dividend), 3, 2);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier3_1winners), 4, 1);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier3_1dividend), 4, 2);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier3winners), 5, 1);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier3dividend), 5, 2);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier2_1winners), 6, 1);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier2_1dividend), 6, 2);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier1_1winners), 7, 1);
+			jokerSDTable.setValueAt(String.valueOf(prizeTier1_1dividend), 7, 2);
+		}
+		catch (Exception ex) { ex.printStackTrace(); /* Silently continue */ }
+	}
+	
+	
+	private void getJokerDateRangeData()
+	{
+		System.out.println("getJokerDateRangeData");
+	}
 
 
 
@@ -315,7 +485,10 @@ public class WindowManageData
 			String dId = textFieldDrawId.getText();
 			if (dId.matches("\\d+") && (Integer.parseInt(dId) >= Integer.parseInt(firstDrawId)) && (Integer.parseInt(dId) <= Integer.parseInt(lastDrawId)))
 			{
-				// TODO
+				if (comboBoxGameSelect.getSelectedItem().equals("Τζόκερ"))
+				{
+					getJokerSingleDrawData();
+				}
 			}
 			else
 			{
@@ -335,7 +508,10 @@ public class WindowManageData
 				LocalDate firstDate = LocalDate.parse(firstDrawDate);
 				if (date1.plusDays(1).isAfter(firstDate) && date2.minusDays(1).isBefore(dateNow) && date1.minusDays(1).isBefore(date2))
 				{
-					// TODO
+					if (comboBoxGameSelect.getSelectedItem().equals("Τζόκερ"))
+					{
+						getJokerDateRangeData();
+					}
 				}
 				else
 				{
@@ -506,7 +682,8 @@ public class WindowManageData
 				labelPredefinedRange.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 6));
 
 				// ComboBox quick select
-				String dateRanges[] = {"Τελευταία εβδομάδα", "Τελευταίος μήνας", "Τελευταίο 3μηνο", "Τελευταίο έτος", "Πρώτο έτος"};
+				String dateRanges[] = {"Τελευταία εβδομάδα", "Τελευταίος μήνας",
+					"Τελευταίο 3μηνο", "Τελευταίο έτος", "Πρώτο έτος"};
 				comboBoxPredefinedRange = new JComboBox(dateRanges);
 				comboBoxPredefinedRange.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
 				comboBoxPredefinedRange.setPreferredSize(new Dimension(152, 20));
@@ -575,6 +752,7 @@ public class WindowManageData
 
 							labelDateValue = new JLabel("");
 							labelDateValue.setBorder(BorderFactory.createEmptyBorder(4, 78, 0, 0));
+							labelDateValue.setPreferredSize(new Dimension(180, 16));
 							labelDateValue.setFont(new Font("Arial", 0, 14));
 							labelDateValue.setForeground(Color.DARK_GRAY);
 
@@ -662,7 +840,8 @@ public class WindowManageData
 					jokerSDRightPanel.setBackground(backColor);
 
 						// Columns and initial data of the JTable for Joker single draw
-						String[] columnsSD = {"Κατηγορίες επιτυχιών", "Επιτυχίες", "Κέρδη ανά επιτυχία"};
+						String[] columnsSD = {"Κατηγορίες επιτυχιών", "Επιτυχίες",
+							"Κέρδη ανά επιτυχία"};
 						String[][] dataSD = {
 							{"5+1", "", ""},
 							{"5", "", ""},
@@ -679,9 +858,11 @@ public class WindowManageData
 						centerText.setHorizontalAlignment(SwingConstants.CENTER);
 						
 						// JTable for Joker single draw
-						JTable jokerSDTable = new JTable(dataSD, columnsSD);
+						jokerSDTable = new JTable(dataSD, columnsSD);
 						jokerSDTable.setPreferredSize(new Dimension(500, 128));
 						jokerSDTable.getColumnModel().getColumn(0).setCellRenderer(centerText);
+						jokerSDTable.getColumnModel().getColumn(1).setCellRenderer(centerText);
+						jokerSDTable.getColumnModel().getColumn(2).setCellRenderer(centerText);
 
 						// Make table cells unselectable and uneditable
 						jokerSDTable.setEnabled(false);
@@ -727,9 +908,27 @@ public class WindowManageData
 					String[][] dataDR = {};
 
 					// JTable for Joker date range
-					JTable jokerDRTable = new JTable(dataDR, columnsDR);
-//					jokerDRTable.setPreferredSize(new Dimension(500, 128));
+					jokerDRTable = new JTable(dataDR, columnsDR);
 					jokerDRTable.getColumnModel().getColumn(0).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(1).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(2).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(3).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(4).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(5).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(6).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(7).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(8).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(9).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(10).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(11).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(12).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(13).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(14).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(15).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(16).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(17).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(18).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(19).setCellRenderer(centerText);
 
 					// Make table cells unselectable and uneditable
 					jokerDRTable.setEnabled(false);
@@ -743,7 +942,11 @@ public class WindowManageData
 					// Make table fill the entire Viewport height
 					jokerDRTable.setFillsViewportHeight(true);
 
-				jokerDateRangePanel.add(new JScrollPane(jokerDRTable));
+					// Scrollpane for the jokerDRTable
+					JScrollPane spDR = new JScrollPane(jokerDRTable);
+					spDR.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+				jokerDateRangePanel.add(spDR);
 
 			viewPanelCards.add(jokerSingleDrawPanel, "jokerSingleDraw");
 			viewPanelCards.add(jokerDateRangePanel, "jokerDateRange");
@@ -782,7 +985,7 @@ public class WindowManageData
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new Dimension(1116, 710));
+		mainPanel.setPreferredSize(new Dimension(1116, 510));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
@@ -799,7 +1002,7 @@ public class WindowManageData
 		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new Dimension(1120, 720));
+		dialog.setMinimumSize(new Dimension(1120, 520));
 
 		// Find firstDrawDate & lastDrawId in advance, populate textFieldDrawId
 		findDateOfFirstDraw();

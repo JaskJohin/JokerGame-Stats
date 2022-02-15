@@ -18,6 +18,7 @@ public class WinningNumbersData {
         try {
             Connection connection = DbConnect.connect();
             String createTableSQL = "CREATE TABLE WinningNumbers ("
+                    + "INDEX INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, "
                     + "number1 INTEGER NOT NULL, "
                     + "number2 INTEGER NOT NULL, "
                     + "number3 INTEGER NOT NULL, "

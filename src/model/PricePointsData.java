@@ -18,6 +18,7 @@ public class PricePointsData {
         try {
             Connection connection = DbConnect.connect();
             String createTableSQL = "CREATE TABLE PricePoints ("
+                    + "INDEX INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY, "
                     + "ammount DOUBLE NOT NULL, "
                     + "gameID INTEGER NOT NULL, "
                     + "drawID INTEGER NOT NULL, "

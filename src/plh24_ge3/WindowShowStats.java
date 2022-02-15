@@ -2,6 +2,7 @@ package plh24_ge3;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -141,7 +142,7 @@ public class WindowShowStats
 		dialog.add(mainPanel, BorderLayout.CENTER);
 		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		dialog.setTitle("Show stats");
-		dialog.setModal(true);
+		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
 		dialog.setMinimumSize(new Dimension(590, 360));

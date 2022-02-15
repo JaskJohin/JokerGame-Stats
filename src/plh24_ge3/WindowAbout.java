@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -199,7 +200,7 @@ public class WindowAbout
 		dialog.add(mainPanel, BorderLayout.CENTER);
 		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		dialog.setTitle("About");
-		dialog.setModal(true);
+		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
 		dialog.setResizable(false);

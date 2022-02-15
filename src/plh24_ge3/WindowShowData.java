@@ -16,20 +16,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
 /**
  * @author Athanasios Theodoropoulos
  * @author Alexandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 public class WindowShowData
 {
 	// Variables declaration
 	private final JDialog dialog;
-
-
-
 
 	// Button actions
 	private void buttonCloseActionPerformed(java.awt.event.ActionEvent evt)
@@ -37,16 +34,11 @@ public class WindowShowData
 		dialog.dispose();
 	}
 
-
-
-
-
 	// Constructor
 	public WindowShowData()
 	{
 		// Background color
 		Color backColor = new java.awt.Color(244, 244, 250);
-
 
 		/*
 		 * Top panel with the window title
@@ -88,7 +80,6 @@ public class WindowShowData
 			gameSelectPanel.setBackground(backColor);
 
 				JLabel labelGameSelect = new JLabel("Επιλέξτε τυχερό παιχνίδι");
-
 				String comboBoxGameSelectItems[] = {"Τζόκερ (id: 5104)"};
 				JComboBox comboBoxGameSelect = new JComboBox(comboBoxGameSelectItems);
 				comboBoxGameSelect.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));

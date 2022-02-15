@@ -16,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
 /**
  * @author Athanasios Theodoropoulos
  * @author Alexandros Dimitrakopoulos
@@ -28,18 +27,15 @@ public class WindowShowStats
 	// Variables declaration
 	private final JDialog dialog;
 
-
-
-
 	// Button actions
 	private void buttonCloseActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		dialog.dispose();
 	}
-
-
-
-
+        private void buttonGraphStatsActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		new WindowShowGraphStats();
+	}
 
 	// Constructor
 	public WindowShowStats()
@@ -80,22 +76,27 @@ public class WindowShowStats
 		middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 		middlePanel.setBackground(backColor);
 
-			// Game selection panel
+			// Game selection & show graph stats panel
 			JPanel gameSelectPanel = new JPanel();
 			gameSelectPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-			gameSelectPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
+			gameSelectPanel.setLayout(new FlowLayout(1, 5, 5));  // align,hgap,vgap (1,5,5)
 			gameSelectPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameSelectPanel.getMinimumSize().height));
 			gameSelectPanel.setBackground(backColor);
 
 				JLabel labelGameSelect = new JLabel("Επιλέξτε τυχερό παιχνίδι");
-
 				String comboBoxGameSelectItems[] = {"Τζόκερ (id: 5104)"};
 				JComboBox comboBoxGameSelect = new JComboBox(comboBoxGameSelectItems);
 				comboBoxGameSelect.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 				comboBoxGameSelect.setBackground(backColor);
+                        
+                                // Show graph stats button
+                                JButton buttonGraphStats = new JButton("Προβολή στατιστικών σε γραφική μορφή");
+                                buttonGraphStats.addActionListener(this::buttonGraphStatsActionPerformed);
 
 			gameSelectPanel.add(labelGameSelect);
 			gameSelectPanel.add(comboBoxGameSelect);
+                        gameSelectPanel.add(buttonGraphStats);
+                  
 
 		middlePanel.add(gameSelectPanel, BorderLayout.CENTER);
 		middlePanel.add(Box.createVerticalGlue(), BorderLayout.CENTER);

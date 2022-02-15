@@ -20,20 +20,19 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-
 /**
  * @author Athanasios Theodoropoulos
  * @author Alexandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 public class WindowAbout
 {
 	// Variables declaration
 	private final JPanel middlePanelCards;
 	private final JButton buttonLicense;
 	private final JDialog dialog;
-
 
 	// Button actions
 	private void buttonLicenseActionPerformed(java.awt.event.ActionEvent evt)
@@ -56,7 +55,6 @@ public class WindowAbout
 		dialog.dispose();
 	}
 
-
 	// Constructor
 	public WindowAbout()
 	{
@@ -67,11 +65,9 @@ public class WindowAbout
 		authorList.add("Οδυσσέας Ραυτόπουλος");
 		authorList.add("Χριστόφορος Αμπελάς");
 		Collections.shuffle(authorList);
-
 	
 		// Background color
 		Color backColor = new java.awt.Color(244, 244, 250);
-
 
 		// Labels
 		JLabel labelName = new JLabel("Joker stats");
@@ -102,13 +98,12 @@ public class WindowAbout
 		JLabel labelLicense = new JLabel("Αυτό το πρόγραμμα διατείθεται υπό την άδεια FreeBSD.");
 		labelLicense.setFont(new Font("Arial", 0, 12));
 
-
 		// Text area with the license
 		JTextArea textAreaLicense = new JTextArea();
 		textAreaLicense.setLineWrap(true);
 		textAreaLicense.setWrapStyleWord(true);
 		textAreaLicense.setEditable(false);
-		String lisenceText = "Copyright 2022, Athanasios Theodoropoulos, Aleksandros Dimitrakopoulos, Odysseas Raftopoulos, Xristoforos Ampelas\n" +
+		String lisenceText = "Copyright 2022, Athanasios Theodoropoulos, Alexandros Dimitrakopoulos, Odysseas Raftopoulos, Xristoforos Ampelas\n" +
 		"All rights reserved.\n" +
 		"\n" +
 		"Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n" +
@@ -123,11 +118,9 @@ public class WindowAbout
 		textAreaLicense.setText(lisenceText);
 		textAreaLicense.setCaretPosition(0);
 
-
 		// Scroll pane to enclose the textAreaLicense
 		JScrollPane scrollPane = new JScrollPane(textAreaLicense);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
 
 		// Buttons
 		JButton buttonClose = new JButton("Κλείσιμο");
@@ -137,7 +130,6 @@ public class WindowAbout
 		buttonLicense = new JButton("Άδεια");
 		buttonLicense.setPreferredSize(new java.awt.Dimension(116, 26));
 		buttonLicense.addActionListener(this::buttonLicenseActionPerformed);
-
 
 		// Panels
 		JPanel topPanel = new JPanel();    // Panel with the window title label
@@ -193,7 +185,6 @@ public class WindowAbout
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanelCards);
 		mainPanel.add(bottomPanel);
-
 
 		// Main window
 		dialog = new JDialog();

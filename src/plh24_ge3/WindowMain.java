@@ -162,7 +162,6 @@ public class WindowMain    // MainClass
 
 	public static void main(String[] args)
 	{
-		DrawData.createTable();
 		new WindowMain();
 	}
 }

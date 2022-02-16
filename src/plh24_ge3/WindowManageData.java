@@ -79,6 +79,11 @@ public class WindowManageData
 
 
 	// Methods
+	/** 
+	 * Stores the date of the 1st draw of the selected game to the variable firstDrawDate.
+	 * firstDrawDate is used for checking if the dates are valid. This method is called
+	 * when the window is first opened and every time a different game is selected.
+	 */
 	private void findDateOfFirstDraw()
 	{
 		// The 1st draw can be found from: "https://api.opap.gr/draws/v3.0/{gameId}/1";
@@ -106,6 +111,12 @@ public class WindowManageData
 	}
 
 
+	/** 
+	 * Stores the id of the 1st draw of the selected game to the variable firstDrawId.
+	 * firstDrawId is used for checking if the drawId is valid. For every game it is
+	 * equal to 1, except for Kino. This method is called when the window is first opened
+	 * and every time a different game is selected.
+	 */
 	private void findIdOfFirstDraw()
 	{
 		// Kino's earliest data are from about 3 years in the past.
@@ -162,6 +173,15 @@ public class WindowManageData
 	}
 
 
+	/** 
+	 * Uses the API "https://api.opap.gr/draws/v3.0/{gameId}/last-result-and-active" to
+	 * find the id of the latest draw of the selected game and stores it in the variable
+	 * lastDrawId. Optionally it populates the textFieldDrawId. This method is called when
+	 * the window is first opened and every time a different game is selected. It is also
+	 * called when trying to use the API, if lastDrawId == null, and is basically used
+	 * to check the internet connection to the API.
+	 * @param populateTextFieldDrawId   When true, it populates the textFieldDrawId.
+	 */
 	private void findLastDrawId(boolean populateTextFieldDrawId)
 	{
 		// Get selected game id
@@ -222,6 +242,10 @@ public class WindowManageData
 	}
 
 
+	/** 
+	 * Changes the GUI accordingly, when selecting a different game and when selecting
+	 * single draw or date range.
+	 */
 	private void changeCards()
 	{
 		CardLayout cl = (CardLayout)(viewPanelCards.getLayout());
@@ -239,6 +263,12 @@ public class WindowManageData
 	}
 
 
+	/** 
+	 * Gets a JsonObject with data of a single draw of the game Joker and returns a
+	 * JokerDrawData object with all the extracted data.
+	 * @param jObject   A JsonObject with data of a single draw of the game Joker.
+	 * @return          A JokerDrawData object with all the extracted data.
+	 */
 	private JokerDrawData jokerJsonSingleDrawToObject(JsonObject jObject)
 	{
 		// Date format
@@ -355,6 +385,10 @@ public class WindowManageData
 	}
 
 
+	/**
+	 * Connects to the "https://api.opap.gr/draws/v3.0/5104/{drawId}" API, gets the data
+	 * of a single draw of the game Joker and shows them in the GUI.
+	 */
 	private void getJokerSingleDrawData()
 	{
 		// Selected Joker draw
@@ -421,8 +455,12 @@ public class WindowManageData
 		}
 		catch (Exception ex) { ex.printStackTrace(); }
 	}
-	
-	
+
+
+	/**
+	 * Connects to the "https://api.opap.gr/draws/v3.0/5104/draw-date/{fromDate}/{toDate}"
+	 * API, gets the data for a date range of the game Joker and shows them in the GUI.
+	 */
 	private void getJokerDateRangeData()
 	{
 		System.out.println("getJokerDateRangeData");
@@ -431,6 +469,10 @@ public class WindowManageData
 
 
 	// Button actions
+	/**
+	 * Action of the comboBoxGameSelect.
+	 * @param evt 
+	 */
 	private void comboBoxGameSelectActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		changeCards();
@@ -440,24 +482,40 @@ public class WindowManageData
 	}
 
 
+	/**
+	 * Action of the radioButtonSingleDraw.
+	 * @param evt 
+	 */
 	private void radioButtonSingleDrawActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		changeCards();
 	}
 
 
+	/**
+	 * Action of the radioButtonDateRange.
+	 * @param evt 
+	 */
 	private void radioButtonDateRangeActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		changeCards();
 	}
 
 
+	/**
+	 * Action of the buttonFindLatestDraw.
+	 * @param evt 
+	 */
 	private void buttonFindLatestDrawActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		textFieldDrawId.setText(lastDrawId);
 	}
 
 
+	/**
+	 * Action of the comboBoxPredefinedRange.
+	 * @param evt 
+	 */
 	private void comboBoxPredefinedRangeActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		// Current local date
@@ -494,6 +552,10 @@ public class WindowManageData
 	}
 
 
+	/**
+	 * Action of the buttonDownload.
+	 * @param evt 
+	 */
 	private void buttonDownloadActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		// If lastDrawId is null, there was a connection error when the window was openned.
@@ -554,6 +616,11 @@ public class WindowManageData
 		}
 	}
 
+
+	/**
+	 * Action of the buttonClose.
+	 * @param evt 
+	 */
 	private void buttonCloseActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		dialog.dispose();

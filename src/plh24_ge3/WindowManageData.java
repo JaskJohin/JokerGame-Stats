@@ -237,18 +237,15 @@ public class WindowManageData
 			}
 		}
 	}
-	
-	
-	private void getJokerSingleDrawData()
-	{
-		// Selected Joker draw
-		String drawStr = textFieldDrawId.getText();
 
+
+	private JokerDrawData jokerJsonSingleDrawToObject(JsonObject jObject)
+	{
 		// Date format
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 		// Variables to gather data
-		int drawId = Integer.parseInt(drawStr);
+		int drawId;
 		String drawDate;
 		int columns;
 		int winningNum1;
@@ -274,6 +271,94 @@ public class WindowManageData
 		int prizeTier1_1winners;
 		double prizeTier1_1dividend;
 
+
+		// Get the drawId
+		drawId = jObject.get("drawId").getAsInt();
+
+		// Get the drawTime
+		Long drawTime = jObject.get("drawTime").getAsLong();
+		LocalDateTime ldt = Instant.ofEpochMilli(drawTime).atZone(ZoneId.systemDefault()).toLocalDateTime();
+		drawDate = formatter.format(ldt);
+
+		// Get the number of columns
+		JsonObject wagerStatistics = jObject.getAsJsonObject("wagerStatistics");
+		columns = wagerStatistics.get("columns").getAsInt();
+
+		// Get the winning numbers
+		JsonObject winningNumbers = jObject.getAsJsonObject("winningNumbers");
+		JsonArray winningNumList = winningNumbers.getAsJsonArray("list");
+		winningNum1 = winningNumList.get(0).getAsInt();
+		winningNum2 = winningNumList.get(1).getAsInt();
+		winningNum3 = winningNumList.get(2).getAsInt();
+		winningNum4 = winningNumList.get(3).getAsInt();
+		winningNum5 = winningNumList.get(4).getAsInt();
+		JsonArray winningNumBonus = winningNumbers.getAsJsonArray("bonus");
+		bonusNum = winningNumBonus.get(0).getAsInt();
+
+		// Prize categories
+		JsonArray prizeCategories = jObject.getAsJsonArray("prizeCategories");
+
+		// Get the prize tier "5+1" winners & dividend
+		JsonObject category0 = prizeCategories.get(0).getAsJsonObject();
+		prizeTier5_1winners = category0.get("winners").getAsInt();
+		prizeTier5_1dividend = category0.get("divident").getAsDouble();
+
+		// Get the prize tier "5" winners & dividend
+		JsonObject category1 = prizeCategories.get(1).getAsJsonObject();
+		prizeTier5winners = category1.get("winners").getAsInt();
+		prizeTier5dividend = category1.get("divident").getAsDouble();
+
+		// Get the prize tier "4+1" winners & dividend
+		JsonObject category2 = prizeCategories.get(2).getAsJsonObject();
+		prizeTier4_1winners = category2.get("winners").getAsInt();
+		prizeTier4_1dividend = category2.get("divident").getAsDouble();
+
+		// Get the prize tier "4" winners & dividend
+		JsonObject category3 = prizeCategories.get(3).getAsJsonObject();
+		prizeTier4winners = category3.get("winners").getAsInt();
+		prizeTier4dividend = category3.get("divident").getAsDouble();
+
+		// Get the prize tier "3+1" winners & dividend
+		JsonObject category4 = prizeCategories.get(4).getAsJsonObject();
+		prizeTier3_1winners = category4.get("winners").getAsInt();
+		prizeTier3_1dividend = category4.get("divident").getAsDouble();
+
+		// Get the prize tier "3" winners & dividend
+		JsonObject category5 = prizeCategories.get(5).getAsJsonObject();
+		prizeTier3winners = category5.get("winners").getAsInt();
+		prizeTier3dividend = category5.get("divident").getAsDouble();
+
+		// Get the prize tier "2+1" winners & dividend
+		JsonObject category6 = prizeCategories.get(6).getAsJsonObject();
+		prizeTier2_1winners = category6.get("winners").getAsInt();
+		prizeTier2_1dividend = category6.get("divident").getAsDouble();
+
+		// Get the prize tier "2+1" winners & dividend
+		JsonObject category7 = prizeCategories.get(7).getAsJsonObject();
+		prizeTier1_1winners = category7.get("winners").getAsInt();
+		prizeTier1_1dividend = category7.get("divident").getAsDouble();
+
+
+		// Create JokerDrawData object
+		JokerDrawData jokerDraw = new JokerDrawData(drawId, drawDate, columns,
+			winningNum1, winningNum2, winningNum3, winningNum4, winningNum5, bonusNum,
+			prizeTier5_1winners, prizeTier5_1dividend,
+			prizeTier5winners, prizeTier5dividend,
+			prizeTier4_1winners, prizeTier4_1dividend,
+			prizeTier4winners, prizeTier4dividend,
+			prizeTier3_1winners, prizeTier3_1dividend,
+			prizeTier3winners, prizeTier3dividend,
+			prizeTier2_1winners, prizeTier2_1dividend,
+			prizeTier1_1winners, prizeTier1_1dividend);
+
+		return jokerDraw;
+	}
+
+
+	private void getJokerSingleDrawData()
+	{
+		// Selected Joker draw
+		String drawStr = textFieldDrawId.getText();
 
 		// URL string
 		String urlStr = "https://api.opap.gr/draws/v3.0/5104/" + drawStr;
@@ -302,99 +387,39 @@ public class WindowManageData
 			JsonElement jElement = new JsonParser().parse(jsonStr);
 			JsonObject jObject = jElement.getAsJsonObject();
 
-			// Get the drawTime
-			Long drawTime = jObject.get("drawTime").getAsLong();
-			LocalDateTime ldt = Instant.ofEpochMilli(drawTime).atZone(ZoneId.systemDefault()).toLocalDateTime();
-			drawDate = formatter.format(ldt);
-
-			// Get the number of columns
-			JsonObject wagerStatistics = jObject.getAsJsonObject("wagerStatistics");
-			columns = wagerStatistics.get("columns").getAsInt();
-
-			// Get the winning numbers
-			JsonObject winningNumbers = jObject.getAsJsonObject("winningNumbers");
-			JsonArray winningNumList = winningNumbers.getAsJsonArray("list");
-			winningNum1 = winningNumList.get(0).getAsInt();
-			winningNum2 = winningNumList.get(1).getAsInt();
-			winningNum3 = winningNumList.get(2).getAsInt();
-			winningNum4 = winningNumList.get(3).getAsInt();
-			winningNum5 = winningNumList.get(4).getAsInt();
-			JsonArray winningNumBonus = winningNumbers.getAsJsonArray("bonus");
-			bonusNum = winningNumBonus.get(0).getAsInt();
-
-			// Prize categories
-			JsonArray prizeCategories = jObject.getAsJsonArray("prizeCategories");
-
-			// Get the prize tier "5+1" winners & dividend
-			JsonObject category0 = prizeCategories.get(0).getAsJsonObject();
-			prizeTier5_1winners = category0.get("winners").getAsInt();
-			prizeTier5_1dividend = category0.get("divident").getAsDouble();
-
-			// Get the prize tier "5" winners & dividend
-			JsonObject category1 = prizeCategories.get(1).getAsJsonObject();
-			prizeTier5winners = category1.get("winners").getAsInt();
-			prizeTier5dividend = category1.get("divident").getAsDouble();
-
-			// Get the prize tier "4+1" winners & dividend
-			JsonObject category2 = prizeCategories.get(2).getAsJsonObject();
-			prizeTier4_1winners = category2.get("winners").getAsInt();
-			prizeTier4_1dividend = category2.get("divident").getAsDouble();
-
-			// Get the prize tier "4" winners & dividend
-			JsonObject category3 = prizeCategories.get(3).getAsJsonObject();
-			prizeTier4winners = category3.get("winners").getAsInt();
-			prizeTier4dividend = category3.get("divident").getAsDouble();
-
-			// Get the prize tier "3+1" winners & dividend
-			JsonObject category4 = prizeCategories.get(4).getAsJsonObject();
-			prizeTier3_1winners = category4.get("winners").getAsInt();
-			prizeTier3_1dividend = category4.get("divident").getAsDouble();
-
-			// Get the prize tier "3" winners & dividend
-			JsonObject category5 = prizeCategories.get(5).getAsJsonObject();
-			prizeTier3winners = category5.get("winners").getAsInt();
-			prizeTier3dividend = category5.get("divident").getAsDouble();
-
-			// Get the prize tier "2+1" winners & dividend
-			JsonObject category6 = prizeCategories.get(6).getAsJsonObject();
-			prizeTier2_1winners = category6.get("winners").getAsInt();
-			prizeTier2_1dividend = category6.get("divident").getAsDouble();
-
-			// Get the prize tier "2+1" winners & dividend
-			JsonObject category7 = prizeCategories.get(7).getAsJsonObject();
-			prizeTier1_1winners = category7.get("winners").getAsInt();
-			prizeTier1_1dividend = category7.get("divident").getAsDouble();
+			// Create a JokerDrawData object from the json
+			JokerDrawData jokerDraw = jokerJsonSingleDrawToObject(jObject);
 
 
-			// Populate GUI foe single draw
-			labelDrawValue.setText(String.valueOf(drawId));
-			labelDateValue.setText(String.valueOf(drawDate));
-			labelTotalColumnsValue.setText(String.valueOf(columns));
-			labelwinNum1Value.setText(String.valueOf(winningNum1));
-			labelwinNum2Value.setText(String.valueOf(winningNum2));
-			labelwinNum3Value.setText(String.valueOf(winningNum3));
-			labelwinNum4Value.setText(String.valueOf(winningNum4));
-			labelwinNum5Value.setText(String.valueOf(winningNum5));
-			labelwinNum6Value.setText(String.valueOf(bonusNum));
+			// Populate GUI for single draw
+			labelDrawValue.setText(String.valueOf(jokerDraw.getDrawId()));
+			labelDateValue.setText(String.valueOf(jokerDraw.getDrawDate()));
+			labelTotalColumnsValue.setText(String.valueOf(jokerDraw.getColumns()));
+			labelwinNum1Value.setText(String.valueOf(jokerDraw.getWinningNum1()));
+			labelwinNum2Value.setText(String.valueOf(jokerDraw.getWinningNum2()));
+			labelwinNum3Value.setText(String.valueOf(jokerDraw.getWinningNum3()));
+			labelwinNum4Value.setText(String.valueOf(jokerDraw.getWinningNum4()));
+			labelwinNum5Value.setText(String.valueOf(jokerDraw.getWinningNum5()));
+			labelwinNum6Value.setText(String.valueOf(jokerDraw.getBonusNum()));
 
-			jokerSDTable.setValueAt(prizeTier5_1winners, 0, 1);
-			jokerSDTable.setValueAt(prizeTier5_1dividend, 0, 2);
-			jokerSDTable.setValueAt(prizeTier5winners, 1, 1);
-			jokerSDTable.setValueAt(prizeTier5dividend, 1, 2);
-			jokerSDTable.setValueAt(prizeTier4_1winners, 2, 1);
-			jokerSDTable.setValueAt(prizeTier4_1dividend, 2, 2);
-			jokerSDTable.setValueAt(prizeTier4winners, 3, 1);
-			jokerSDTable.setValueAt(prizeTier4dividend, 3, 2);
-			jokerSDTable.setValueAt(prizeTier3_1winners, 4, 1);
-			jokerSDTable.setValueAt(prizeTier3_1dividend, 4, 2);
-			jokerSDTable.setValueAt(prizeTier3winners, 5, 1);
-			jokerSDTable.setValueAt(prizeTier3dividend, 5, 2);
-			jokerSDTable.setValueAt(prizeTier2_1winners, 6, 1);
-			jokerSDTable.setValueAt(prizeTier2_1dividend, 6, 2);
-			jokerSDTable.setValueAt(prizeTier1_1winners, 7, 1);
-			jokerSDTable.setValueAt(prizeTier1_1dividend, 7, 2);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier5_1winners(),  0, 1);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier5_1dividend(), 0, 2);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier5winners(),    1, 1);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier5dividend(),   1, 2);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier4_1winners(),  2, 1);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier4_1dividend(), 2, 2);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier4winners(),    3, 1);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier4dividend(),   3, 2);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier3_1winners(),  4, 1);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier3_1dividend(), 4, 2);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier3winners(),    5, 1);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier3dividend(),   5, 2);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier2_1winners(),  6, 1);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier2_1dividend(), 6, 2);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier1_1winners(),  7, 1);
+			jokerSDTable.setValueAt(jokerDraw.getPrizeTier1_1dividend(), 7, 2);
 		}
-		catch (Exception ex) { ex.printStackTrace(); /* Silently continue */ }
+		catch (Exception ex) { ex.printStackTrace(); }
 	}
 	
 	

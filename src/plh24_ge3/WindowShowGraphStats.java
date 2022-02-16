@@ -7,6 +7,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -24,11 +28,12 @@ import javax.swing.JTextField;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+public class WindowShowGraphStats
+{
 
-public class WindowShowGraphStats {
-        // Variables declaration
+	// Variables declaration
 	private final JDialog dialog;
-        private final JTextField textFieldDate1;
+	private final JTextField textFieldDate1;
 	private final JTextField textFieldDate2;
 
 	// Button actions
@@ -36,16 +41,36 @@ public class WindowShowGraphStats {
 	{
 		dialog.dispose();
 	}
-        
-        //Print PDF
-        private void buttonPrintPdfActionPerformed(java.awt.event.ActionEvent evt)
+
+	//Print PDF
+	private void buttonPrintPdfActionPerformed(java.awt.event.ActionEvent evt)
 	{
-	//	
+		// 
 	}
 
 	// Constructor
 	public WindowShowGraphStats()
 	{
+		// Icons list
+		final List<Image> icons = new ArrayList<>();
+		try
+		{
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_16.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_20.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_24.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_28.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_32.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_40.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_48.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_56.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_64.png")));
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+
+
 		// Background color
 		Color backColor = new java.awt.Color(244, 244, 250);
 
@@ -98,12 +123,12 @@ public class WindowShowGraphStats {
 			gameSelectPanel.add(labelGameSelect);
 			gameSelectPanel.add(comboBoxGameSelect);
                         
-                        // Button to print stats to PDF file
-                        JButton buttonPrintPdf = new JButton("Εκτύπωση σε PDF");
+			// Button to print stats to PDF file
+			JButton buttonPrintPdf = new JButton("Εκτύπωση σε PDF");
 			buttonPrintPdf.setPreferredSize(new Dimension(206, 20));
 			buttonPrintPdf.addActionListener(this::buttonPrintPdfActionPerformed);
                         
-                       // Date range method panel
+			// Date range method panel
 			JPanel dateRangeMethodPanel = new JPanel();
 			dateRangeMethodPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
 			dateRangeMethodPanel.setLayout(new FlowLayout(0, 0, 0));
@@ -129,13 +154,13 @@ public class WindowShowGraphStats {
 				textFieldDate2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
 				textFieldDate2.setPreferredSize(new Dimension(74, 20)); 
                                 
-                        dateRangeMethodPanel.add(labelFrom);
+			dateRangeMethodPanel.add(labelFrom);
 			dateRangeMethodPanel.add(textFieldDate1);
 			dateRangeMethodPanel.add(labelUpTo);
 			dateRangeMethodPanel.add(textFieldDate2);
-                        dateRangeMethodPanel.add(buttonPrintPdf);
+			dateRangeMethodPanel.add(buttonPrintPdf);
                                     
-                middlePanel.add(dateRangeMethodPanel, BorderLayout.CENTER);
+		middlePanel.add(dateRangeMethodPanel, BorderLayout.CENTER);
 		//dateRangeMethodPanel.add(Box.createVerticalGlue(), BorderLayout.CENTER);        
 		middlePanel.add(gameSelectPanel, BorderLayout.CENTER);
 		middlePanel.add(Box.createVerticalGlue(), BorderLayout.CENTER);
@@ -182,6 +207,7 @@ public class WindowShowGraphStats {
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
 		dialog.setMinimumSize(new Dimension(590, 360));
 //		dialog.setResizable(false);
+		dialog.setIconImages(icons);
 		dialog.setVisible(true);
 	}
 }

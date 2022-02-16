@@ -7,6 +7,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -38,6 +42,26 @@ public class WindowShowData
 	// Constructor
 	public WindowShowData()
 	{
+		// Icons list
+		final List<Image> icons = new ArrayList<>();
+		try
+		{
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_16.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_20.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_24.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_28.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_32.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_40.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_48.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_56.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_64.png")));
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+
+
 		// Background color
 		Color backColor = new java.awt.Color(244, 244, 250);
 
@@ -137,6 +161,7 @@ public class WindowShowData
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
 		dialog.setMinimumSize(new Dimension(590, 360));
 //		dialog.setResizable(false);
+		dialog.setIconImages(icons);
 		dialog.setVisible(true);
 	}
 }

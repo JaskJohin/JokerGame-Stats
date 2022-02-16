@@ -5,6 +5,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -53,6 +57,26 @@ public class WindowMain    // MainClass
 	// Constructor
 	public WindowMain()
 	{
+		// Icons list
+		final List<Image> icons = new ArrayList<>();
+		try
+		{
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_16.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_20.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_24.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_28.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_32.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_40.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_48.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_56.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_64.png")));
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+
+
 		// Background color
 		Color backColor = new java.awt.Color(244, 244, 250);
 
@@ -157,6 +181,7 @@ public class WindowMain    // MainClass
 		frame.pack();
 		frame.setLocationRelativeTo(null);   // Appear in the center of screen
 		frame.setResizable(false);
+		frame.setIconImages(icons);
 		frame.setVisible(true);
 	}
 

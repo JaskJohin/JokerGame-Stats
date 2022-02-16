@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -21,7 +22,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -538,6 +542,26 @@ public class WindowManageData
 		Color backColor = new java.awt.Color(244, 244, 250);
 
 
+		// Icons list
+		final List<Image> icons = new ArrayList<>();
+		try
+		{
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_16.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_20.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_24.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_28.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_32.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_40.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_48.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_56.png")));
+			icons.add(ImageIO.read(getClass().getResource("/resources/icon_64.png")));
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+
+
 		/*
 		 * Top panel with the window title
 		 */
@@ -1003,6 +1027,7 @@ public class WindowManageData
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
 		dialog.setMinimumSize(new Dimension(1120, 520));
+		dialog.setIconImages(icons);
 
 		// Find firstDrawDate & lastDrawId in advance, populate textFieldDrawId
 		findDateOfFirstDraw();

@@ -303,67 +303,67 @@ public class WindowManageData
 			JsonObject jObject = jElement.getAsJsonObject();
 
 			// Get the drawTime
-			String drawTime = jObject.get("drawTime").toString();
-			LocalDateTime ldt = Instant.ofEpochMilli(Long.parseLong(drawTime)).atZone(ZoneId.systemDefault()).toLocalDateTime();
+			Long drawTime = jObject.get("drawTime").getAsLong();
+			LocalDateTime ldt = Instant.ofEpochMilli(drawTime).atZone(ZoneId.systemDefault()).toLocalDateTime();
 			drawDate = formatter.format(ldt);
 
 			// Get the number of columns
 			JsonObject wagerStatistics = jObject.getAsJsonObject("wagerStatistics");
-			columns = Integer.parseInt(wagerStatistics.get("columns").toString());
+			columns = wagerStatistics.get("columns").getAsInt();
 
 			// Get the winning numbers
 			JsonObject winningNumbers = jObject.getAsJsonObject("winningNumbers");
 			JsonArray winningNumList = winningNumbers.getAsJsonArray("list");
-			winningNum1 = Integer.parseInt(winningNumList.get(0).toString());
-			winningNum2 = Integer.parseInt(winningNumList.get(1).toString());
-			winningNum3 = Integer.parseInt(winningNumList.get(2).toString());
-			winningNum4 = Integer.parseInt(winningNumList.get(3).toString());
-			winningNum5 = Integer.parseInt(winningNumList.get(4).toString());
+			winningNum1 = winningNumList.get(0).getAsInt();
+			winningNum2 = winningNumList.get(1).getAsInt();
+			winningNum3 = winningNumList.get(2).getAsInt();
+			winningNum4 = winningNumList.get(3).getAsInt();
+			winningNum5 = winningNumList.get(4).getAsInt();
 			JsonArray winningNumBonus = winningNumbers.getAsJsonArray("bonus");
-			bonusNum = Integer.parseInt(winningNumBonus.get(0).toString());
+			bonusNum = winningNumBonus.get(0).getAsInt();
 
 			// Prize categories
 			JsonArray prizeCategories = jObject.getAsJsonArray("prizeCategories");
 
 			// Get the prize tier "5+1" winners & dividend
 			JsonObject category0 = prizeCategories.get(0).getAsJsonObject();
-			prizeTier5_1winners = Integer.parseInt(category0.get("winners").toString());
-			prizeTier5_1dividend = Double.parseDouble(category0.get("divident").toString());
+			prizeTier5_1winners = category0.get("winners").getAsInt();
+			prizeTier5_1dividend = category0.get("divident").getAsDouble();
 
 			// Get the prize tier "5" winners & dividend
 			JsonObject category1 = prizeCategories.get(1).getAsJsonObject();
-			prizeTier5winners = Integer.parseInt(category1.get("winners").toString());
-			prizeTier5dividend = Double.parseDouble(category1.get("divident").toString());
+			prizeTier5winners = category1.get("winners").getAsInt();
+			prizeTier5dividend = category1.get("divident").getAsDouble();
 
 			// Get the prize tier "4+1" winners & dividend
 			JsonObject category2 = prizeCategories.get(2).getAsJsonObject();
-			prizeTier4_1winners = Integer.parseInt(category2.get("winners").toString());
-			prizeTier4_1dividend = Double.parseDouble(category2.get("divident").toString());
+			prizeTier4_1winners = category2.get("winners").getAsInt();
+			prizeTier4_1dividend = category2.get("divident").getAsDouble();
 
 			// Get the prize tier "4" winners & dividend
 			JsonObject category3 = prizeCategories.get(3).getAsJsonObject();
-			prizeTier4winners = Integer.parseInt(category3.get("winners").toString());
-			prizeTier4dividend = Double.parseDouble(category3.get("divident").toString());
+			prizeTier4winners = category3.get("winners").getAsInt();
+			prizeTier4dividend = category3.get("divident").getAsDouble();
 
 			// Get the prize tier "3+1" winners & dividend
 			JsonObject category4 = prizeCategories.get(4).getAsJsonObject();
-			prizeTier3_1winners = Integer.parseInt(category4.get("winners").toString());
-			prizeTier3_1dividend = Double.parseDouble(category4.get("divident").toString());
+			prizeTier3_1winners = category4.get("winners").getAsInt();
+			prizeTier3_1dividend = category4.get("divident").getAsDouble();
 
 			// Get the prize tier "3" winners & dividend
 			JsonObject category5 = prizeCategories.get(5).getAsJsonObject();
-			prizeTier3winners = Integer.parseInt(category5.get("winners").toString());
-			prizeTier3dividend = Double.parseDouble(category5.get("divident").toString());
+			prizeTier3winners = category5.get("winners").getAsInt();
+			prizeTier3dividend = category5.get("divident").getAsDouble();
 
 			// Get the prize tier "2+1" winners & dividend
 			JsonObject category6 = prizeCategories.get(6).getAsJsonObject();
-			prizeTier2_1winners = Integer.parseInt(category6.get("winners").toString());
-			prizeTier2_1dividend = Double.parseDouble(category6.get("divident").toString());
+			prizeTier2_1winners = category6.get("winners").getAsInt();
+			prizeTier2_1dividend = category6.get("divident").getAsDouble();
 
 			// Get the prize tier "2+1" winners & dividend
 			JsonObject category7 = prizeCategories.get(7).getAsJsonObject();
-			prizeTier1_1winners = Integer.parseInt(category7.get("winners").toString());
-			prizeTier1_1dividend = Double.parseDouble(category7.get("divident").toString());
+			prizeTier1_1winners = category7.get("winners").getAsInt();
+			prizeTier1_1dividend = category7.get("divident").getAsDouble();
 
 
 			// Populate GUI foe single draw
@@ -377,22 +377,22 @@ public class WindowManageData
 			labelwinNum5Value.setText(String.valueOf(winningNum5));
 			labelwinNum6Value.setText(String.valueOf(bonusNum));
 
-			jokerSDTable.setValueAt(String.valueOf(prizeTier5_1winners), 0, 1);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier5_1dividend), 0, 2);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier5winners), 1, 1);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier5dividend), 1, 2);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier4_1winners), 2, 1);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier4_1dividend), 2, 2);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier4winners), 3, 1);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier4dividend), 3, 2);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier3_1winners), 4, 1);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier3_1dividend), 4, 2);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier3winners), 5, 1);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier3dividend), 5, 2);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier2_1winners), 6, 1);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier2_1dividend), 6, 2);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier1_1winners), 7, 1);
-			jokerSDTable.setValueAt(String.valueOf(prizeTier1_1dividend), 7, 2);
+			jokerSDTable.setValueAt(prizeTier5_1winners, 0, 1);
+			jokerSDTable.setValueAt(prizeTier5_1dividend, 0, 2);
+			jokerSDTable.setValueAt(prizeTier5winners, 1, 1);
+			jokerSDTable.setValueAt(prizeTier5dividend, 1, 2);
+			jokerSDTable.setValueAt(prizeTier4_1winners, 2, 1);
+			jokerSDTable.setValueAt(prizeTier4_1dividend, 2, 2);
+			jokerSDTable.setValueAt(prizeTier4winners, 3, 1);
+			jokerSDTable.setValueAt(prizeTier4dividend, 3, 2);
+			jokerSDTable.setValueAt(prizeTier3_1winners, 4, 1);
+			jokerSDTable.setValueAt(prizeTier3_1dividend, 4, 2);
+			jokerSDTable.setValueAt(prizeTier3winners, 5, 1);
+			jokerSDTable.setValueAt(prizeTier3dividend, 5, 2);
+			jokerSDTable.setValueAt(prizeTier2_1winners, 6, 1);
+			jokerSDTable.setValueAt(prizeTier2_1dividend, 6, 2);
+			jokerSDTable.setValueAt(prizeTier1_1winners, 7, 1);
+			jokerSDTable.setValueAt(prizeTier1_1dividend, 7, 2);
 		}
 		catch (Exception ex) { ex.printStackTrace(); /* Silently continue */ }
 	}
@@ -866,7 +866,7 @@ public class WindowManageData
 						// Columns and initial data of the JTable for Joker single draw
 						String[] columnsSD = {"Κατηγορίες επιτυχιών", "Επιτυχίες",
 							"Κέρδη ανά επιτυχία"};
-						String[][] dataSD = {
+						Object[][] dataSD = {
 							{"5+1", "", ""},
 							{"5", "", ""},
 							{"4+1", "", ""},
@@ -929,7 +929,7 @@ public class WindowManageData
 						"<html><center>'2+1'<br>κέρδη</center></html>",
 						"<html><center>'1+1'<br>επιτυχίες</center></html>",
 						"<html><center>'1+1'<br>κέρδη</center></html>"};
-					String[][] dataDR = {};
+					Object[][] dataDR = {};
 
 					// JTable for Joker date range
 					jokerDRTable = new JTable(dataDR, columnsDR);

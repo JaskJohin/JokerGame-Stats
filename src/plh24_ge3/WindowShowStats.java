@@ -42,7 +42,7 @@ public class WindowShowStats
         //Print PDF
         private void buttonPrintPdfActionPerformed(java.awt.event.ActionEvent evt)
 	{
-                dialog.dispose();	
+                //	
 	}
 
 	private void buttonGraphStatsActionPerformed(java.awt.event.ActionEvent evt)

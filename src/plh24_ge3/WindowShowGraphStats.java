@@ -28,6 +28,7 @@ import javax.swing.JTextField;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 public class WindowShowGraphStats
 {
 
@@ -40,12 +41,6 @@ public class WindowShowGraphStats
 	private void buttonCloseActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		dialog.dispose();
-	}
-
-	//Print PDF
-	private void buttonPrintPdfActionPerformed(java.awt.event.ActionEvent evt)
-	{
-		// 
 	}
 
 	// Constructor
@@ -70,10 +65,8 @@ public class WindowShowGraphStats
 			ex.printStackTrace();
 		}
 
-
 		// Background color
 		Color backColor = new java.awt.Color(244, 244, 250);
-
 
 		/*
 		 * Top panel with the window title
@@ -123,11 +116,6 @@ public class WindowShowGraphStats
 			gameSelectPanel.add(labelGameSelect);
 			gameSelectPanel.add(comboBoxGameSelect);
                         
-			// Button to print stats to PDF file
-			JButton buttonPrintPdf = new JButton("Εκτύπωση σε PDF");
-			buttonPrintPdf.setPreferredSize(new Dimension(206, 20));
-			buttonPrintPdf.addActionListener(this::buttonPrintPdfActionPerformed);
-                        
 			// Date range method panel
 			JPanel dateRangeMethodPanel = new JPanel();
 			dateRangeMethodPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
@@ -158,7 +146,6 @@ public class WindowShowGraphStats
 			dateRangeMethodPanel.add(textFieldDate1);
 			dateRangeMethodPanel.add(labelUpTo);
 			dateRangeMethodPanel.add(textFieldDate2);
-			dateRangeMethodPanel.add(buttonPrintPdf);
                                     
 		middlePanel.add(dateRangeMethodPanel, BorderLayout.CENTER);
 		//dateRangeMethodPanel.add(Box.createVerticalGlue(), BorderLayout.CENTER);        

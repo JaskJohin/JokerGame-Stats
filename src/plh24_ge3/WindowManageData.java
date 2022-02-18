@@ -808,29 +808,45 @@ public class WindowManageData
 		// Date format
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+		// First draw date
+		LocalDate first;
+
 		// Change the text in textFieldDate1 and textFieldDate2
 		switch (comboBoxPredefinedRange.getSelectedIndex())
 		{
 			case 0:    // Last week
-				textFieldDate1.setText(formatter.format(dateNow.minusDays(7)));
+				textFieldDate1.setText(formatter.format(dateNow.minusDays(6)));
 				textFieldDate2.setText(formatter.format(dateNow));
 				break;
 			case 1:    // Last month
-				textFieldDate1.setText(formatter.format(dateNow.minusMonths(1)));
+				textFieldDate1.setText(formatter.format(dateNow.minusMonths(1).plusDays(1)));
 				textFieldDate2.setText(formatter.format(dateNow));
 				break;
 			case 2:    // Last 3 months
-				textFieldDate1.setText(formatter.format(dateNow.minusMonths(3)));
+				textFieldDate1.setText(formatter.format(dateNow.minusMonths(3).plusDays(1)));
 				textFieldDate2.setText(formatter.format(dateNow));
 				break;
 			case 3:    // Last year
-				textFieldDate1.setText(formatter.format(dateNow.minusYears(1)));
+				textFieldDate1.setText(formatter.format(dateNow.minusYears(1).plusDays(1)));
 				textFieldDate2.setText(formatter.format(dateNow));
 				break;
-			case 4:    // First year
+			case 4:    // Last 5 years
+				textFieldDate1.setText(formatter.format(dateNow.minusYears(5).plusDays(1)));
+				textFieldDate2.setText(formatter.format(dateNow));
+				break;
+			case 5:    // First year
 				textFieldDate1.setText(firstDrawDate);
-				LocalDate date = LocalDate.parse(firstDrawDate);
-				textFieldDate2.setText(formatter.format(date.plusYears(1)));
+				first = LocalDate.parse(firstDrawDate);
+				textFieldDate2.setText(formatter.format(first.plusYears(1).minusDays(1)));
+				break;
+			case 6:    // First 5 years
+				textFieldDate1.setText(firstDrawDate);
+				first = LocalDate.parse(firstDrawDate);
+				textFieldDate2.setText(formatter.format(first.plusYears(5).minusDays(1)));
+				break;
+			case 7:    // All
+				textFieldDate1.setText(firstDrawDate);
+				textFieldDate2.setText(formatter.format(dateNow));
 				break;
 		}
 	}
@@ -1082,7 +1098,8 @@ public class WindowManageData
 
 				// ComboBox quick select
 				String dateRanges[] = {"Τελευταία εβδομάδα", "Τελευταίος μήνας",
-					"Τελευταίο 3μηνο", "Τελευταίο έτος", "Πρώτο έτος"};
+					"Τελευταίο 3μηνο", "Τελευταίο έτος", "Τελευταία 5ετία",
+					"Πρώτο έτος", "Πρώτη 5ετία", "Όλες οι κληρώσεις"};
 				comboBoxPredefinedRange = new JComboBox(dateRanges);
 				comboBoxPredefinedRange.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
 				comboBoxPredefinedRange.setPreferredSize(new Dimension(152, 20));

@@ -1015,7 +1015,7 @@ public class WindowManageData
 				radioButtonSingleDraw.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 				radioButtonSingleDraw.addActionListener(this::radioButtonSingleDrawActionPerformed);
 				radioButtonSingleDraw.setBackground(backColor);
-				radioButtonSingleDraw.setSelected(true);
+				radioButtonSingleDraw.setSelected(false);
 
 				// Label draw id
 				JLabel labelDrawId = new JLabel("Αριθμός κλήρωσης");
@@ -1051,6 +1051,7 @@ public class WindowManageData
 				radioButtonDateRange.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 				radioButtonDateRange.addActionListener(this::radioButtonDateRangeActionPerformed);
 				radioButtonDateRange.setBackground(backColor);
+				radioButtonDateRange.setSelected(true);
 
 				// Group radio butttons
 				ButtonGroup groupChooseMethod = new ButtonGroup();
@@ -1391,8 +1392,8 @@ public class WindowManageData
 
 				jokerDateRangePanel.add(spDR);
 
-			viewPanelCards.add(jokerSingleDrawPanel, "jokerSingleDraw");
 			viewPanelCards.add(jokerDateRangePanel, "jokerDateRange");
+			viewPanelCards.add(jokerSingleDrawPanel, "jokerSingleDraw");
 
 
 		// Add elements to middle panel

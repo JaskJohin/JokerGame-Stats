@@ -43,6 +43,82 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
+
+/**
+ * Connect to API "https://api.opap.gr/draws/v3.0/{gameId}/draw-date/{fromDate}/{toDate}"
+ * and get the json strings that the API returns.
+ * Each thread handles a specified range of urlStrList elements.
+ * @author Athanasios Theodoropoulos
+ * @author Alexandros Dimitrakopoulos
+ * @author Odysseas Raftopoulos
+ * @author Xristoforos Ampelas
+ */
+class getJsonStrListFromUrlStrListMT extends Thread
+{
+	// Variables declaration
+	private int index1 = 0;
+	private int index2 = 0;
+	private final List<String> urlStrList;
+	private final List<String> jsonStrList = new ArrayList<>();
+
+
+	// Constructor
+	/**
+	 * Creates a thread that connects to the URL strings from a range of urlStrList
+	 * from index1 to index2 - 1, and gets the respective json strings.
+	 * @param index1         Start index.
+	 * @param index2         End index.
+	 * @param urlStrList     Input List that contains the URL strings.
+	 */
+	public getJsonStrListFromUrlStrListMT(int index1, int index2, List<String> urlStrList)
+	{
+		this.index1 = index1;    // Start index. In single thread it would be = 0.
+		this.index2 = index2;    // End index. In ST it would be = urlStrList.size().
+		this.urlStrList = urlStrList;
+	}
+
+
+	// Methods
+	public List<String> getJsonStrList() {return jsonStrList;}
+
+	@Override
+	public void run()
+	{
+		// Call the API urls and get the respective json strings
+		for (int i = index1; i < index2; i++)
+		{
+			// URL string
+			String urlStr = urlStrList.get(i);
+
+			try
+			{
+				// URL
+				URL website = new URL(urlStr);
+
+				// Start connection and set timeout to 2 seconds
+				URLConnection connection = website.openConnection();
+				connection.setConnectTimeout(2*1000);
+
+				// Open BufferedReader
+				InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+				BufferedReader in = new BufferedReader(isr);
+
+				// Get json string
+				String jsonStr = in.readLine();
+
+				// Add jsonStr to jsonStrList
+				jsonStrList.add(jsonStr);
+
+				// Close BufferedReader
+				in.close();
+			}
+			catch (Exception ex) { /* Silently continue */ }
+		}
+	}
+}
+
 
 
 /**
@@ -55,8 +131,8 @@ public class WindowManageData
 {
 	// Variables declaration
 	private String firstDrawDate;
-	private String firstDrawId;
-	private String lastDrawId;
+	private int firstDrawId;
+	private int lastDrawId = 0;
 	private final JDialog dialog;
 	private final JComboBox comboBoxGameSelect;
 	private final JRadioButton radioButtonSingleDraw;
@@ -75,6 +151,7 @@ public class WindowManageData
 	private final JLabel labelwinNum6Value;
 	private final JLabel labelTotalColumnsValue;
 	private final JTable jokerSDTable;
+	private final DefaultTableModel modeljokerDRTable;
 	private final JTable jokerDRTable;
 
 
@@ -161,14 +238,14 @@ public class WindowManageData
 				// Get the last draw object
 				JsonArray content = jObject.getAsJsonArray("content");
 
-				// Get the drawId from the last draw
-				firstDrawId = content.get(0).getAsJsonObject().get("drawId").toString();
+				// Get the drawId
+				firstDrawId = content.get(0).getAsJsonObject().get("drawId").getAsInt();
 			}
 			catch (Exception ex) { /* Silently continue */ }
 		}
 		else
 		{
-			firstDrawId = "1";
+			firstDrawId = 1;
 		}
 	}
 
@@ -230,12 +307,12 @@ public class WindowManageData
 			JsonObject lastDraw = jObject.getAsJsonObject("last");
 
 			// Get the drawId from the last draw
-			lastDrawId = lastDraw.get("drawId").toString();
+			lastDrawId = lastDraw.get("drawId").getAsInt();
 
 			// Populate textFieldDrawId
 			if (populateTextFieldDrawId)
 			{
-				textFieldDrawId.setText(lastDrawId);
+				textFieldDrawId.setText(String.valueOf(lastDrawId));
 			}
 		}
 		catch (Exception ex) { /* Silently continue */ }
@@ -264,8 +341,8 @@ public class WindowManageData
 
 
 	/** 
-	 * Gets a JsonObject with data of a single draw of the game Joker and returns a
-	 * JokerDrawData object with all the extracted data.
+	 * Accepts as parameter a JsonObject with data of a single draw of the game Joker
+	 * and returns a JokerDrawData object with all the extracted data.
 	 * @param jObject   A JsonObject with data of a single draw of the game Joker.
 	 * @return          A JokerDrawData object with all the extracted data.
 	 */
@@ -421,7 +498,7 @@ public class WindowManageData
 			JsonElement jElement = new JsonParser().parse(jsonStr);
 			JsonObject jObject = jElement.getAsJsonObject();
 
-			// Create a JokerDrawData object from the json
+			// Create a JokerDrawData object from the json object
 			JokerDrawData jokerDraw = jokerJsonSingleDrawToObject(jObject);
 
 
@@ -458,12 +535,170 @@ public class WindowManageData
 
 
 	/**
+	 * Accepts the gameId and a date range as parameters, breaks the date range to periods
+	 * of up to 92 days and creates a list with the appropriate URL strings of the api
+	 * "https://api.opap.gr/draws/v3.0/{gameId}/draw-date/{fromDate}/{toDate}".
+	 * @param gameId    The game id.
+	 * @param fromDate  The start date.
+	 * @param toDate    The end date.
+	 * @return  A list with the URL strings.
+	 */
+	private List<String> getUrlStrForDateRange(int gameId, String fromDate, String toDate)
+	{
+		// Variables
+		String urlStr;
+		List<String> urlStrList = new ArrayList<>();  // List with all the url we'll call
+
+		// Date format
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		// Convert the two selected "yyyy-MM-dd" dates to LocalDate
+		LocalDate ld1 = LocalDate.parse(fromDate, formatter);
+		LocalDate ld2 = LocalDate.parse(toDate, formatter);
+
+		// Max date range to call the API
+		int max = 92;
+
+
+		// Create the list with all the API urls we'll need to call
+		LocalDate start = ld1;
+		boolean finished = false;
+		while (finished == false)
+		{
+			// Start date
+			String date1 = formatter.format(start);
+
+			// End date
+			LocalDate end = start.plusDays(max);
+			long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(end, ld2);
+
+			// Fix end date if it overshoots the selected date range
+			if (daysBetween <= 0)
+			{
+				end = ld2;
+				finished = true;  // Exit the loop after this
+			}
+			String date2 = formatter.format(end);
+
+			// Create the url string
+			urlStr = "https://api.opap.gr/draws/v3.0/" + gameId + "/draw-date/" + date1 + "/" + date2 + "/?limit=180";
+
+			// Add url to urlStrList
+			urlStrList.add(urlStr);
+
+			// New start date
+			start = end.plusDays(1);
+		}
+
+		// Return the list with the url strings
+		return urlStrList;
+	}
+
+
+	/**
 	 * Connects to the "https://api.opap.gr/draws/v3.0/5104/draw-date/{fromDate}/{toDate}"
 	 * API, gets the data for a date range of the game Joker and shows them in the GUI.
 	 */
 	private void getJokerDateRangeData()
 	{
-		System.out.println("getJokerDateRangeData");
+		// First remove the old data from the jokerDRTable
+		modeljokerDRTable.setRowCount(0);
+
+
+		// Variables
+		int maxSimConnections = 50;  // Max number of simultaneous calls to the API
+		int threadNum;               // Number of threads (simultaneous calls to the API)
+		List<String> urlStrList;     // List with all the urls we will call
+		List<String> jsonStrList = new ArrayList<>();  // List with the json strings
+
+		// List with the API urls
+		urlStrList = getUrlStrForDateRange(5104, textFieldDate1.getText(), textFieldDate2.getText());
+
+
+		// Set number of threads = urlStrList.size(), but not more that maxSimConnections
+		threadNum = urlStrList.size();
+		if (threadNum > maxSimConnections) {threadNum = maxSimConnections;}
+
+		// --- Create the threads to do the job ---
+		getJsonStrListFromUrlStrListMT[] threadArray = new getJsonStrListFromUrlStrListMT[threadNum];
+		int taskNum = urlStrList.size();    // Total number of tasks to do
+		for (int i=0; i<threadNum; i++)
+		{
+			int index1 = i*taskNum/threadNum;      // Each thread does index2-index1
+			int index2 = (i+1)*taskNum/threadNum;  // tasks, from index1 to index2-1
+			threadArray[i] = new getJsonStrListFromUrlStrListMT(index1, index2, urlStrList);
+			threadArray[i].start();
+		}
+
+		// Wait for all threads to finish
+		for (int i=0; i<threadNum; i++)
+		{
+			try
+			{
+				threadArray[i].join();
+			}
+			catch (InterruptedException ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+
+		// Merge results from all threads
+		for (getJsonStrListFromUrlStrListMT thread : threadArray)
+		{
+			// Merge jsonStrList
+			thread.getJsonStrList().forEach((jsonStr) ->
+			{
+				jsonStrList.add(jsonStr);
+			});
+		}
+
+
+		// Parce all json strings in jsonStrList
+		for (int i = jsonStrList.size()-1; i >= 0; i--)
+		{
+			String jsonStr = jsonStrList.get(i);
+
+			// Parse jsonStr into json element and get an object structure
+			JsonElement jElement = new JsonParser().parse(jsonStr);
+			JsonObject jObject = jElement.getAsJsonObject();
+
+			// Get the totalElements
+			int totalElements = jObject.get("totalElements").getAsInt();
+			System.out.println("totalElements = " + totalElements);
+
+			// If there are no draw data, go to the next jsonStrList element
+			if (totalElements == 0) {continue;}
+
+			// Get the "content" json array
+			JsonArray content = jObject.getAsJsonArray("content");
+			System.out.println("content = " + content);
+
+			for (JsonElement drawElement : content)
+			{
+				// Get the json object from this content json element
+				JsonObject drawObject = drawElement.getAsJsonObject();
+
+				// Create a JokerDrawData object from the json object
+				JokerDrawData jokerDraw = jokerJsonSingleDrawToObject(drawObject);
+
+				// Add a row to jokerDRTable
+				modeljokerDRTable.addRow(new Object[] {
+					jokerDraw.getDrawId(), jokerDraw.getDrawDate(), jokerDraw.getColumns(),
+					jokerDraw.getWinningNum1() + ", " + jokerDraw.getWinningNum2() + ", " +
+					  jokerDraw.getWinningNum3() + ", " + jokerDraw.getWinningNum4() + ", " +
+					  jokerDraw.getWinningNum5() + ", " + jokerDraw.getBonusNum(),
+					jokerDraw.getPrizeTier5_1winners(), jokerDraw.getPrizeTier5_1dividend(),
+					jokerDraw.getPrizeTier5winners(),   jokerDraw.getPrizeTier5dividend(),
+					jokerDraw.getPrizeTier4_1winners(), jokerDraw.getPrizeTier4_1dividend(),
+					jokerDraw.getPrizeTier4winners(),   jokerDraw.getPrizeTier4dividend(),
+					jokerDraw.getPrizeTier3_1winners(), jokerDraw.getPrizeTier3_1dividend(),
+					jokerDraw.getPrizeTier3winners(),   jokerDraw.getPrizeTier3dividend(),
+					jokerDraw.getPrizeTier2_1winners(), jokerDraw.getPrizeTier2_1dividend(),
+					jokerDraw.getPrizeTier1_1winners(), jokerDraw.getPrizeTier1_1dividend()
+				});
+			}
+		}
 	}
 
 
@@ -508,7 +743,7 @@ public class WindowManageData
 	 */
 	private void buttonFindLatestDrawActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		textFieldDrawId.setText(lastDrawId);
+		textFieldDrawId.setText(String.valueOf(lastDrawId));
 	}
 
 
@@ -558,23 +793,21 @@ public class WindowManageData
 	 */
 	private void buttonDownloadActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		// If lastDrawId is null, there was a connection error when the window was openned.
-		// Try again and show appropriate message.
-		if (lastDrawId == null)
+		// If lastDrawId remains 0, there's a connection error. So, show appropriate message.
+		lastDrawId = 0;
+		findLastDrawId(true);
+		if (lastDrawId == 0)
 		{
-			findLastDrawId(false);
-			if (lastDrawId == null)
-			{
-				String message = "Σφάλμα σύνδεσης στο API του ΟΠΑΠ.";
-				JOptionPane.showMessageDialog(null, message, "Σφάλμα σύνδεσης", 0);
-				return;
-			}
+			String message = "Σφάλμα σύνδεσης στο API του ΟΠΑΠ.";
+			JOptionPane.showMessageDialog(null, message, "Σφάλμα σύνδεσης", 0);
+			return;
 		}
+
 
 		if (radioButtonSingleDraw.isSelected())
 		{
 			String dId = textFieldDrawId.getText();
-			if (dId.matches("\\d+") && (Integer.parseInt(dId) >= Integer.parseInt(firstDrawId)) && (Integer.parseInt(dId) <= Integer.parseInt(lastDrawId)))
+			if (dId.matches("\\d+") && (Integer.parseInt(dId) >= firstDrawId) && (Integer.parseInt(dId) <= lastDrawId))
 			{
 				if (comboBoxGameSelect.getSelectedItem().equals("Τζόκερ"))
 				{
@@ -611,7 +844,7 @@ public class WindowManageData
 			}
 			catch (Exception ex)
 			{
-				JOptionPane.showMessageDialog(null, errorMsg, "Λάθος είσοδος", 0);
+				JOptionPane.showMessageDialog(null, "Σφάλμα κλήσης στο API.", "Σφάλμα", 0);
 			}
 		}
 	}
@@ -1021,10 +1254,12 @@ public class WindowManageData
 						"<html><center>'2+1'<br>κέρδη</center></html>",
 						"<html><center>'1+1'<br>επιτυχίες</center></html>",
 						"<html><center>'1+1'<br>κέρδη</center></html>"};
-					Object[][] dataDR = {};
+
+					// Table model
+					modeljokerDRTable = new DefaultTableModel(columnsDR, 0);
 
 					// JTable for Joker date range
-					jokerDRTable = new JTable(dataDR, columnsDR);
+					jokerDRTable = new JTable(modeljokerDRTable);
 					jokerDRTable.getColumnModel().getColumn(0).setCellRenderer(centerText);
 					jokerDRTable.getColumnModel().getColumn(1).setCellRenderer(centerText);
 					jokerDRTable.getColumnModel().getColumn(2).setCellRenderer(centerText);

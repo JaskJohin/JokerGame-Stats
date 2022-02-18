@@ -15,6 +15,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.Instant;
@@ -348,6 +350,9 @@ public class WindowManageData
 	 */
 	private JokerDrawData jokerJsonSingleDrawToObject(JsonObject jObject)
 	{
+		// BigDecimal - used for rounding
+		BigDecimal bd;
+
 		// Date format
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -408,43 +413,79 @@ public class WindowManageData
 		// Get the prize tier "5+1" winners & dividend
 		JsonObject category0 = prizeCategories.get(0).getAsJsonObject();
 		prizeTier5_1winners = category0.get("winners").getAsInt();
-		prizeTier5_1dividend = category0.get("divident").getAsDouble();
+		bd = BigDecimal.valueOf(category0.get("divident").getAsDouble());
+		prizeTier5_1dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
 
 		// Get the prize tier "5" winners & dividend
 		JsonObject category1 = prizeCategories.get(1).getAsJsonObject();
 		prizeTier5winners = category1.get("winners").getAsInt();
-		prizeTier5dividend = category1.get("divident").getAsDouble();
+		bd = BigDecimal.valueOf(category1.get("divident").getAsDouble());
+		prizeTier5dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
 
 		// Get the prize tier "4+1" winners & dividend
 		JsonObject category2 = prizeCategories.get(2).getAsJsonObject();
 		prizeTier4_1winners = category2.get("winners").getAsInt();
-		prizeTier4_1dividend = category2.get("divident").getAsDouble();
+		bd = BigDecimal.valueOf(category2.get("divident").getAsDouble());
+		prizeTier4_1dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
 
 		// Get the prize tier "4" winners & dividend
 		JsonObject category3 = prizeCategories.get(3).getAsJsonObject();
 		prizeTier4winners = category3.get("winners").getAsInt();
-		prizeTier4dividend = category3.get("divident").getAsDouble();
+		bd = BigDecimal.valueOf(category3.get("divident").getAsDouble());
+		prizeTier4dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
 
 		// Get the prize tier "3+1" winners & dividend
 		JsonObject category4 = prizeCategories.get(4).getAsJsonObject();
 		prizeTier3_1winners = category4.get("winners").getAsInt();
-		prizeTier3_1dividend = category4.get("divident").getAsDouble();
+		bd = BigDecimal.valueOf(category4.get("divident").getAsDouble());
+		prizeTier3_1dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
 
 		// Get the prize tier "3" winners & dividend
 		JsonObject category5 = prizeCategories.get(5).getAsJsonObject();
 		prizeTier3winners = category5.get("winners").getAsInt();
-		prizeTier3dividend = category5.get("divident").getAsDouble();
+		bd = BigDecimal.valueOf(category5.get("divident").getAsDouble());
+		prizeTier3dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
 
 		// Get the prize tier "2+1" winners & dividend
 		JsonObject category6 = prizeCategories.get(6).getAsJsonObject();
 		prizeTier2_1winners = category6.get("winners").getAsInt();
-		prizeTier2_1dividend = category6.get("divident").getAsDouble();
+		bd = BigDecimal.valueOf(category6.get("divident").getAsDouble());
+		prizeTier2_1dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
 
 		// Get the prize tier "2+1" winners & dividend
 		JsonObject category7 = prizeCategories.get(7).getAsJsonObject();
 		prizeTier1_1winners = category7.get("winners").getAsInt();
-		prizeTier1_1dividend = category7.get("divident").getAsDouble();
+		bd = BigDecimal.valueOf(category7.get("divident").getAsDouble());
+		prizeTier1_1dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
 
+
+		// Convert the first 209 divident from drachma to euro
+		if (drawId <= 209 && prizeTier1_1dividend > 100)
+		{
+			bd = BigDecimal.valueOf(prizeTier5_1dividend/340.75);
+			prizeTier5_1dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+			bd = BigDecimal.valueOf(prizeTier5dividend/340.75);
+			prizeTier5dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+			bd = BigDecimal.valueOf(prizeTier4_1dividend/340.75);
+			prizeTier4_1dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+			bd = BigDecimal.valueOf(prizeTier4dividend/340.75);
+			prizeTier4dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+			bd = BigDecimal.valueOf(prizeTier3_1dividend/340.75);
+			prizeTier3_1dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+			bd = BigDecimal.valueOf(prizeTier3dividend/340.75);
+			prizeTier3dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+			bd = BigDecimal.valueOf(prizeTier2_1dividend/340.75);
+			prizeTier2_1dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+			bd = BigDecimal.valueOf(prizeTier1_1dividend/340.75);
+			prizeTier1_1dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
+		}
 
 		// Create JokerDrawData object
 		JokerDrawData jokerDraw = new JokerDrawData(drawId, drawDate, columns,
@@ -665,14 +706,12 @@ public class WindowManageData
 
 			// Get the totalElements
 			int totalElements = jObject.get("totalElements").getAsInt();
-			System.out.println("totalElements = " + totalElements);
 
 			// If there are no draw data, go to the next jsonStrList element
 			if (totalElements == 0) {continue;}
 
 			// Get the "content" json array
 			JsonArray content = jObject.getAsJsonArray("content");
-			System.out.println("content = " + content);
 
 			for (JsonElement drawElement : content)
 			{
@@ -682,12 +721,22 @@ public class WindowManageData
 				// Create a JokerDrawData object from the json object
 				JokerDrawData jokerDraw = jokerJsonSingleDrawToObject(drawObject);
 
+				// Create the text for winning column
+				int n1 = jokerDraw.getWinningNum1();
+				int n2 = jokerDraw.getWinningNum2();
+				int n3 = jokerDraw.getWinningNum3();
+				int n4 = jokerDraw.getWinningNum4();
+				int n5 = jokerDraw.getWinningNum5();
+				int n6 = jokerDraw.getBonusNum();
+				String winCol = "<html><pre><font face=\"arial\" color=\"rgb(32,32,192)\">" +
+					n1 + "  " + n2 + "  " + n3 + "  " + n4 + "  " + n5 + "</font>" +
+					"<font face=\"arial\" color=\"rgb(210,105,0)\">  " + n6 +
+					"</font></pre></html>";
+
 				// Add a row to jokerDRTable
 				modeljokerDRTable.addRow(new Object[] {
-					jokerDraw.getDrawId(), jokerDraw.getDrawDate(), jokerDraw.getColumns(),
-					jokerDraw.getWinningNum1() + ", " + jokerDraw.getWinningNum2() + ", " +
-					  jokerDraw.getWinningNum3() + ", " + jokerDraw.getWinningNum4() + ", " +
-					  jokerDraw.getWinningNum5() + ", " + jokerDraw.getBonusNum(),
+					jokerDraw.getDrawId(), jokerDraw.getDrawDate(),
+					jokerDraw.getColumns(), winCol,
 					jokerDraw.getPrizeTier5_1winners(), jokerDraw.getPrizeTier5_1dividend(),
 					jokerDraw.getPrizeTier5winners(),   jokerDraw.getPrizeTier5dividend(),
 					jokerDraw.getPrizeTier4_1winners(), jokerDraw.getPrizeTier4_1dividend(),
@@ -1058,7 +1107,10 @@ public class WindowManageData
 
 				// Button download
 				JButton buttonDownload = new JButton("Αναζήτηση και προβολή δεδομένων");
-				buttonDownload.addActionListener(this::buttonDownloadActionPerformed);
+				buttonDownload.addActionListener((evt) ->
+				{
+					CompletableFuture.runAsync(() -> this.buttonDownloadActionPerformed(evt));
+				});
 
 			downloadPanel.add(buttonDownload);
 
@@ -1234,10 +1286,10 @@ public class WindowManageData
 				jokerDateRangePanel.setBackground(backColor);
 
 					// Columns and initial data of the JTable for Joker date range
-					String[] columnsDR = {"<html><center><br>Κλήρωση</center></html>",
-						"<html><center>Ημερο-<br>μηνία</center></html>",
-						"<html><center><br>Στήλες</center></html>",
-						"<html><center>Νικήτρια<br>στήλη</center></html>",
+					String[] columnsDR = {"<html><center>Αριθμός<br>κλήρωσης</center></html>",
+						"<html><center>Ημερομηνία</center></html>",
+						"<html><center>Στήλες</center></html>",
+						"<html><center>Νικήτρια στήλη</center></html>",
 						"<html><center>'5+1'<br>επιτυχίες</center></html>",
 						"<html><center>'5+1'<br>κέρδη</center></html>",
 						"<html><center>'5'<br>επιτυχίες</center></html>",
@@ -1261,25 +1313,65 @@ public class WindowManageData
 					// JTable for Joker date range
 					jokerDRTable = new JTable(modeljokerDRTable);
 					jokerDRTable.getColumnModel().getColumn(0).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(0).setMinWidth(61);
+					jokerDRTable.getColumnModel().getColumn(0).setMaxWidth(61);
 					jokerDRTable.getColumnModel().getColumn(1).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(1).setMinWidth(71);
+					jokerDRTable.getColumnModel().getColumn(1).setMaxWidth(71);
 					jokerDRTable.getColumnModel().getColumn(2).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(2).setMinWidth(63);
+					jokerDRTable.getColumnModel().getColumn(2).setMaxWidth(63);
 					jokerDRTable.getColumnModel().getColumn(3).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(3).setMinWidth(118);
+					jokerDRTable.getColumnModel().getColumn(3).setMaxWidth(118);
 					jokerDRTable.getColumnModel().getColumn(4).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(4).setMinWidth(53);
+					jokerDRTable.getColumnModel().getColumn(4).setMaxWidth(53);
 					jokerDRTable.getColumnModel().getColumn(5).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(5).setMinWidth(92);
+					jokerDRTable.getColumnModel().getColumn(5).setMaxWidth(92);
 					jokerDRTable.getColumnModel().getColumn(6).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(6).setMinWidth(53);
+					jokerDRTable.getColumnModel().getColumn(6).setMaxWidth(53);
 					jokerDRTable.getColumnModel().getColumn(7).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(7).setMinWidth(64);
+					jokerDRTable.getColumnModel().getColumn(7).setMaxWidth(64);
 					jokerDRTable.getColumnModel().getColumn(8).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(8).setMinWidth(53);
+					jokerDRTable.getColumnModel().getColumn(8).setMaxWidth(53);
 					jokerDRTable.getColumnModel().getColumn(9).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(9).setMinWidth(50);
+					jokerDRTable.getColumnModel().getColumn(9).setMaxWidth(50);
 					jokerDRTable.getColumnModel().getColumn(10).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(10).setMinWidth(53);
+					jokerDRTable.getColumnModel().getColumn(10).setMaxWidth(53);
 					jokerDRTable.getColumnModel().getColumn(11).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(11).setMinWidth(39);
+					jokerDRTable.getColumnModel().getColumn(11).setMaxWidth(39);
 					jokerDRTable.getColumnModel().getColumn(12).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(12).setMinWidth(53);
+					jokerDRTable.getColumnModel().getColumn(12).setMaxWidth(53);
 					jokerDRTable.getColumnModel().getColumn(13).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(13).setMinWidth(39);
+					jokerDRTable.getColumnModel().getColumn(13).setMaxWidth(39);
 					jokerDRTable.getColumnModel().getColumn(14).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(14).setMinWidth(53);
+					jokerDRTable.getColumnModel().getColumn(14).setMaxWidth(53);
 					jokerDRTable.getColumnModel().getColumn(15).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(15).setMinWidth(39);
+					jokerDRTable.getColumnModel().getColumn(15).setMaxWidth(39);
 					jokerDRTable.getColumnModel().getColumn(16).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(16).setMinWidth(53);
+					jokerDRTable.getColumnModel().getColumn(16).setMaxWidth(53);
 					jokerDRTable.getColumnModel().getColumn(17).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(17).setMinWidth(39);
+					jokerDRTable.getColumnModel().getColumn(17).setMaxWidth(39);
 					jokerDRTable.getColumnModel().getColumn(18).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(18).setMinWidth(53);
+					jokerDRTable.getColumnModel().getColumn(18).setMaxWidth(53);
 					jokerDRTable.getColumnModel().getColumn(19).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(19).setMinWidth(39);
+					jokerDRTable.getColumnModel().getColumn(19).setMaxWidth(39);
 
 					// Make table cells unselectable and uneditable
 					jokerDRTable.setEnabled(false);
@@ -1336,7 +1428,7 @@ public class WindowManageData
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new Dimension(1116, 510));
+		mainPanel.setPreferredSize(new Dimension(1198, 630));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
@@ -1353,7 +1445,7 @@ public class WindowManageData
 		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new Dimension(1120, 520));
+		dialog.setMinimumSize(new Dimension(1206, 650));
 		dialog.setIconImages(icons);
 
 		// Find firstDrawDate & lastDrawId in advance, populate textFieldDrawId

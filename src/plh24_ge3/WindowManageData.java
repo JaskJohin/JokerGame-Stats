@@ -158,6 +158,36 @@ public class WindowManageData
 
 
 	// Methods
+	/**
+	 * Connects to the API url and gets the json string that the API returns.
+	 * @param urlStr   The API url.
+	 * @return         The json string that the API returns.
+	 */
+	private String getJsonStrFromApiURL(String urlStr) throws Exception
+	{
+		String jsonStr;
+
+		// URL
+		URL website = new URL(urlStr);
+
+		// Start connection and set timeout to 2 seconds
+		URLConnection connection = website.openConnection();
+		connection.setConnectTimeout(2*1000);
+
+		// Open BufferedReader
+		InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+		BufferedReader in = new BufferedReader(isr);
+
+		// Get json string
+		jsonStr = in.readLine();
+
+		// Close BufferedReader
+		in.close();
+
+		return jsonStr;
+	}
+
+
 	/** 
 	 * Stores the date of the 1st draw of the selected game to the variable firstDrawDate.
 	 * firstDrawDate is used for checking if the dates are valid. This method is called
@@ -215,23 +245,8 @@ public class WindowManageData
 
 			try
 			{
-				// URL
-				URL website = new URL(urlStr);
-
-				// Start connection and set timeout to 2 seconds
-				URLConnection connection = website.openConnection();
-				connection.setConnectTimeout(2*1000);
-
-				// Open BufferedReader
-				InputStreamReader isr = new InputStreamReader(connection.getInputStream());
-				BufferedReader in = new BufferedReader(isr);
-
-				// Get json string
-				String jsonStr = in.readLine();
-
-				// Close BufferedReader
-				in.close();
-
+				// Get json string from the API
+				String jsonStr = getJsonStrFromApiURL(urlStr);
 
 				// Parse jsonStr into json element and get an object structure
 				JsonElement jElement = new JsonParser().parse(jsonStr);
@@ -283,23 +298,8 @@ public class WindowManageData
 
 		try
 		{
-			// URL
-			URL website = new URL(urlStr);
-
-			// Start connection and set timeout to 2 seconds
-			URLConnection connection = website.openConnection();
-			connection.setConnectTimeout(2*1000);
-
-			// Open BufferedReader
-			InputStreamReader isr = new InputStreamReader(connection.getInputStream());
-			BufferedReader in = new BufferedReader(isr);
-
-			// Get json string
-			String jsonStr = in.readLine();
-
-			// Close BufferedReader
-			in.close();
-
+			// Get json string from the API
+			String jsonStr = getJsonStrFromApiURL(urlStr);
 
 			// Parse jsonStr into json element and get an object structure
 			JsonElement jElement = new JsonParser().parse(jsonStr);
@@ -517,23 +517,8 @@ public class WindowManageData
 
 		try
 		{
-			// URL
-			URL website = new URL(urlStr);
-
-			// Start connection and set timeout to 2 seconds
-			URLConnection connection = website.openConnection();
-			connection.setConnectTimeout(2*1000);
-
-			// Open BufferedReader
-			InputStreamReader isr = new InputStreamReader(connection.getInputStream());
-			BufferedReader in = new BufferedReader(isr);
-
-			// Get json string
-			String jsonStr = in.readLine();
-
-			// Close BufferedReader
-			in.close();
-
+			// Get json string from the API
+			String jsonStr = getJsonStrFromApiURL(urlStr);
 
 			// Parse jsonStr into json element and get an object structure
 			JsonElement jElement = new JsonParser().parse(jsonStr);

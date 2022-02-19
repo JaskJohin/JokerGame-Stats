@@ -115,6 +115,8 @@ public class WindowManageData
 	private String firstDrawDate;
 	private int firstDrawId;
 	private int lastDrawId = 0;
+	private String lastSearchjsonStr;
+	private List<String> lastSearchjsonStrList = new ArrayList<>();
 	private final JDialog dialog;
 	private final JComboBox comboBoxGameSelect;
 	private final JRadioButton radioButtonSingleDraw;
@@ -122,6 +124,8 @@ public class WindowManageData
 	private final JTextField textFieldDate1;
 	private final JTextField textFieldDate2;
 	private final JComboBox comboBoxPredefinedRange;
+	private final JTextField textFieldDBDate1;
+	private final JTextField textFieldDBDate2;
 	private final JPanel viewPanelCards;
 	private final JLabel labelDrawValue;
 	private final JLabel labelDateValue;
@@ -309,6 +313,9 @@ public class WindowManageData
 			// Get json string from the API
 			String jsonStr = getJsonStrFromApiURL(urlStr);
 
+			// Store json string to attribute lastSearchjsonStr (for later use in DB)
+			lastSearchjsonStr = jsonStr;
+
 			// Parse jsonStr into json element and get an object structure
 			JsonElement jElement = new JsonParser().parse(jsonStr);
 			JsonObject jObject = jElement.getAsJsonObject();
@@ -397,6 +404,11 @@ public class WindowManageData
 			}
 		}
 
+
+		// Clear attribute lastSearchjsonStrList
+		lastSearchjsonStrList.clear();
+
+
 		// Merge results from all threads
 		for (getJsonStrListFromUrlStrListMT thread : threadArray)
 		{
@@ -404,6 +416,7 @@ public class WindowManageData
 			thread.getJsonStrList().forEach((jsonStr) ->
 			{
 				jsonStrList.add(jsonStr);
+				lastSearchjsonStrList.add(jsonStr);  // Add here too (for later use in DB)
 			});
 		}
 
@@ -573,7 +586,7 @@ public class WindowManageData
 	{
 		// If lastDrawId remains 0, there's a connection error. So, show appropriate message.
 		lastDrawId = 0;
-		findLastDrawId(true);
+		findLastDrawId(false);
 		if (lastDrawId == 0)
 		{
 			String message = "Σφάλμα σύνδεσης στο API του ΟΠΑΠ.";
@@ -622,9 +635,114 @@ public class WindowManageData
 			}
 			catch (Exception ex)
 			{
+				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Σφάλμα κλήσης στο API.", "Σφάλμα", 0);
 			}
 		}
+	}
+
+
+	/**
+	 * Action of the buttonStoreInDB.
+	 * @param evt 
+	 */
+	private void buttonStoreInDBActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		if (radioButtonSingleDraw.isSelected())
+		{
+			// Αν είναι ενεργοποιημένη η επιλογή "Συγκεκριμένη κλήρωση", το json string
+			// της τελευταίας αναζήτησης είναι αποθηκευμένο στο attribute lastSearchjsonStr
+
+			// Json string from the last single draw search
+			String jsonStr = lastSearchjsonStr;
+
+			// Parse jsonStr into json element and get an object structure
+			JsonElement jElement = new JsonParser().parse(jsonStr);
+			JsonObject jObject = jElement.getAsJsonObject();
+
+
+			// TODO   Έλεγχος αν υπάρχει ήδη η συγκεκριμένη κλήρωση στη βάση
+
+			// TODO   Αποθήκευση κλήρωσης στη βάση (αν δεν υπάρχει ήδη)
+
+
+		}
+		else
+		{
+			// Αν είναι ενεργοποιημένη η επιλογή "Εύρος ημερομηνιών", τα json strings
+			// της τελευταίας αναζήτησης είναι αποθηκευμένα στο attribute lastSearchjsonStrList
+
+			// Parce all json strings in lastSearchjsonStrList
+			for (int i = lastSearchjsonStrList.size()-1; i >= 0; i--)
+			{
+				String jsonStr = lastSearchjsonStrList.get(i);
+
+				// Parse jsonStr into json element and get an object structure
+				JsonElement jElement = new JsonParser().parse(jsonStr);
+				JsonObject jObject = jElement.getAsJsonObject();
+
+				// Get the totalElements
+				int totalElements = jObject.get("totalElements").getAsInt();
+
+				// If there are no draw data, go to the next jsonStrList element
+				if (totalElements == 0) {continue;}
+
+				// Get the "content" json array
+				JsonArray content = jObject.getAsJsonArray("content");
+
+				for (JsonElement drawElement : content)
+				{
+					// Get the json object from this content json element
+					JsonObject drawObject = drawElement.getAsJsonObject();
+					
+					
+					// TODO   Έλεγχος αν υπάρχουν ήδη (κάποια από) τα δεδομένα στη βάση
+
+					// TODO   Αποθήκευση δεδομένων στη βάση (όσων δεν υπάρχουν ήδη)
+
+
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * Action of the buttonDelDRInDB.
+	 * @param evt 
+	 */
+	private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		LocalDate fromDate = LocalDate.parse(textFieldDBDate1.getText());
+		LocalDate toDate = LocalDate.parse(textFieldDBDate2.getText());
+
+		// TODO   Διαγραφή δεδομένων από τη βάση με εύρος ημερομηνιών
+
+	}
+
+
+	/**
+	 * Action of the buttonDelAllForSelGameInDB.
+	 * @param evt 
+	 */
+	private void buttonDelAllForSelGameInDBActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		// Get selected game id
+		String gId = null;
+
+		switch (comboBoxGameSelect.getSelectedItem().toString())
+		{
+			case "Κίνο":      gId = "1100"; break;
+			case "Powerspin": gId = "1110"; break;
+			case "Super3":    gId = "2100"; break;
+			case "Πρότο":     gId = "2101"; break;
+			case "Λόττο":     gId = "5103"; break;
+			case "Τζόκερ":    gId = "5104"; break;
+			case "Extra5":    gId = "5106"; break;
+		}
+
+		// TODO   Διαγραφή όλων των δεδομένων από τη βάση για το επιλεγμένο παιχνίδι
+
 	}
 
 
@@ -697,12 +815,12 @@ public class WindowManageData
 		middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 		middlePanel.setBackground(backColor);
 
-			// Game selection panel
-			JPanel gameSelectPanel = new JPanel();
-			gameSelectPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-			gameSelectPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
-			gameSelectPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameSelectPanel.getMinimumSize().height));
-			gameSelectPanel.setBackground(backColor);
+			// Game selection & download panel
+			JPanel gameSelectAndDLPanel = new JPanel();
+			gameSelectAndDLPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			gameSelectAndDLPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
+			gameSelectAndDLPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameSelectAndDLPanel.getMinimumSize().height));
+			gameSelectAndDLPanel.setBackground(backColor);
 
 				// Label game select
 				JLabel labelGameSelect = new JLabel("Επιλέξτε τυχερό παιχνίδι");
@@ -710,12 +828,20 @@ public class WindowManageData
 				// ComboBox game select
 				String opapGames[] = {"Τζόκερ"};
 				comboBoxGameSelect = new JComboBox(opapGames);
-				comboBoxGameSelect.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+				comboBoxGameSelect.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 70));
 				comboBoxGameSelect.addActionListener(this::comboBoxGameSelectActionPerformed);
 				comboBoxGameSelect.setBackground(backColor);
 
-			gameSelectPanel.add(labelGameSelect);
-			gameSelectPanel.add(comboBoxGameSelect);
+				// Button download
+				JButton buttonDownload = new JButton("Αναζήτηση και προβολή δεδομένων");
+				buttonDownload.addActionListener((evt) ->
+				{
+					CompletableFuture.runAsync(() -> this.buttonDownloadActionPerformed(evt));
+				});
+
+			gameSelectAndDLPanel.add(labelGameSelect);
+			gameSelectAndDLPanel.add(comboBoxGameSelect);
+			gameSelectAndDLPanel.add(buttonDownload);
 
 
 			// Choose search method label panel
@@ -829,21 +955,57 @@ public class WindowManageData
 			dateRangeMethodPanel.add(comboBoxPredefinedRange);
 
 
-			// Download panel
-			JPanel downloadPanel = new JPanel();
-			downloadPanel.setBorder(BorderFactory.createEmptyBorder(18, 0, 0, 0));
-			downloadPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
-			downloadPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, downloadPanel.getMinimumSize().height));
-			downloadPanel.setBackground(backColor);
+			// Data base panel
+			JPanel dbPanel = new JPanel();
+			dbPanel.setBorder(BorderFactory.createEmptyBorder(18, 0, 0, 0));
+			dbPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
+			dbPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, dbPanel.getMinimumSize().height));
+			dbPanel.setBackground(backColor);
 
-				// Button download
-				JButton buttonDownload = new JButton("Αναζήτηση και προβολή δεδομένων");
-				buttonDownload.addActionListener((evt) ->
-				{
-					CompletableFuture.runAsync(() -> this.buttonDownloadActionPerformed(evt));
-				});
+				// Label DB management
+				JLabel labelDBManagement = new JLabel("Διαχείρηση βάσης δεδομένων");
+				labelDBManagement.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 16));
 
-			downloadPanel.add(buttonDownload);
+				// Button store in DB
+				JButton buttonStoreInDB = new JButton("Αποθήκευση δεδομένων");
+				buttonStoreInDB.addActionListener(this::buttonStoreInDBActionPerformed);
+
+				// Button delete all in date range
+				JButton buttonDelDRInDB = new JButton("Διαγραφή των κληρώσεων στο εύρος");
+				buttonDelDRInDB.addActionListener(this::buttonDelDRInDBActionPerformed);
+
+				// Label from
+				JLabel labelDBFrom = new JLabel("Από");
+				labelDBFrom.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
+
+				// Text field for date 1
+				textFieldDBDate1 = new JTextField();
+				textFieldDBDate1.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+				textFieldDBDate1.setPreferredSize(new Dimension(74, 20));
+
+				// Label up to
+				JLabel labelDBUpTo = new JLabel("Έως");
+				labelDBUpTo.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
+
+				// Text field for date 2
+				textFieldDBDate2 = new JTextField();
+				textFieldDBDate2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+				textFieldDBDate2.setPreferredSize(new Dimension(74, 20));
+
+				// Button delete all for selected game
+				JButton buttonDelAllForSelGameInDB = new JButton("Διαγραφή όλων για το επιλεγμένο παιχνίδι");
+				buttonDelAllForSelGameInDB.addActionListener(this::buttonDelAllForSelGameInDBActionPerformed);
+
+			dbPanel.add(labelDBManagement);
+			dbPanel.add(buttonStoreInDB);
+			dbPanel.add(Box.createRigidArea(new Dimension(20,0)));
+			dbPanel.add(buttonDelDRInDB);
+			dbPanel.add(labelDBFrom);
+			dbPanel.add(textFieldDBDate1);
+			dbPanel.add(labelDBUpTo);
+			dbPanel.add(textFieldDBDate2);
+			dbPanel.add(Box.createRigidArea(new Dimension(20,0)));
+			dbPanel.add(buttonDelAllForSelGameInDB);
 
 
 			// Data view panel
@@ -1107,11 +1269,11 @@ public class WindowManageData
 
 
 		// Add elements to middle panel
-		middlePanel.add(gameSelectPanel);
+		middlePanel.add(gameSelectAndDLPanel);
 		middlePanel.add(chooseMethodLabelPanel);
 		middlePanel.add(singleDrawMethodPanel);
 		middlePanel.add(dateRangeMethodPanel);
-		middlePanel.add(downloadPanel);
+		middlePanel.add(dbPanel);
 		middlePanel.add(viewPanelCards);
 		middlePanel.add(Box.createVerticalGlue());
 

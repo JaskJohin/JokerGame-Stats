@@ -744,8 +744,30 @@ public class WindowManageData
 	 */
 	private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		LocalDate fromDate = LocalDate.parse(textFieldDBDate1.getText());
-		LocalDate toDate = LocalDate.parse(textFieldDBDate2.getText());
+		LocalDate date1;
+		LocalDate date2;
+
+		// Check if given dates are valid
+		String errorMsgDates = "Οι ημερομηνίες πρέπει να είναι της μορφής YYYY-MM-DD.";
+		try
+		{
+			date1 = LocalDate.parse(textFieldDBDate1.getText());
+			date2 = LocalDate.parse(textFieldDBDate2.getText());
+		}
+		catch (Exception ex)
+		{
+			JOptionPane.showMessageDialog(null, errorMsgDates, "Λάθος είσοδος", 0);
+			return;
+		}
+
+		// Chech if the date range is valid
+		String errorMsgRange = "Η αρχική ημερομηνία πρέπει να είναι πριν την τελική.";
+		if (!date1.minusDays(1).isBefore(date2))
+		{
+			JOptionPane.showMessageDialog(null, errorMsgRange, "Λάθος είσοδος", 0);
+			return;
+		}
+
 
 		// TODO   Διαγραφή δεδομένων από τη βάση με εύρος ημερομηνιών
 
@@ -1010,7 +1032,7 @@ public class WindowManageData
 				labelDBFrom.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
 
 				// Text field for date 1
-				textFieldDBDate1 = new JTextField();
+				textFieldDBDate1 = new JTextField("2000-01-01");
 				textFieldDBDate1.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
 				textFieldDBDate1.setPreferredSize(new Dimension(74, 20));
 
@@ -1019,7 +1041,7 @@ public class WindowManageData
 				labelDBUpTo.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
 
 				// Text field for date 2
-				textFieldDBDate2 = new JTextField();
+				textFieldDBDate2 = new JTextField(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now()));
 				textFieldDBDate2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
 				textFieldDBDate2.setPreferredSize(new Dimension(74, 20));
 

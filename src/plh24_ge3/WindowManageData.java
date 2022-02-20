@@ -13,7 +13,10 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,6 +122,7 @@ public class WindowManageData
 	private List<String> lastSearchjsonStrList = new ArrayList<>();
 	private final JDialog dialog;
 	private final JComboBox comboBoxGameSelect;
+	private final JLabel labelDrawInfo;
 	private final JRadioButton radioButtonSingleDraw;
 	private final JTextField textFieldDrawId;
 	private final JTextField textFieldDate1;
@@ -226,7 +230,7 @@ public class WindowManageData
 	 * find the id of the latest draw of the selected game and stores it in the variable
 	 * lastDrawId. Optionally it populates the textFieldDrawId. This method is called when
 	 * the window is first opened and every time a different game is selected. It is also
-	 * called when trying to use the API, if lastDrawId == null, and is basically used
+	 * called when trying to use the API, if lastDrawId == 0, and is basically used
 	 * to check the internet connection to the API.
 	 * @param populateTextFieldDrawId   When true, it populates the textFieldDrawId.
 	 */
@@ -272,6 +276,80 @@ public class WindowManageData
 			}
 		}
 		catch (Exception ex) { /* Silently continue */ }
+	}
+
+
+	/** 
+	 * Uses the API "https://api.opap.gr/draws/v3.0/{gameId}/last-result-and-active" to
+	 * find the dates of the last and next draws of the selected game and shows it in
+	 * labelDrawInfo. This method is called when the window is first opened and every time
+	 * a different game is selected.
+	 */
+	private void showDrawInfo()
+	{
+		// Date format
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+		// Variables to gather data
+		String gName;
+		String lastDrawDate;
+		String nextDrawDate;
+
+		// Get selected game id
+		String gId = null;
+
+		switch (comboBoxGameSelect.getSelectedItem().toString())
+		{
+			case "Κίνο":      gId = "1100"; break;
+			case "Powerspin": gId = "1110"; break;
+			case "Super3":    gId = "2100"; break;
+			case "Πρότο":     gId = "2101"; break;
+			case "Λόττο":     gId = "5103"; break;
+			case "Τζόκερ":    gId = "5104"; break;
+			case "Extra5":    gId = "5106"; break;
+		}
+
+		// Selected game name
+		gName = comboBoxGameSelect.getSelectedItem().toString();
+
+
+		// URL string
+		String urlStr = "https://api.opap.gr/draws/v3.0/"+gId+"/last-result-and-active";
+
+		try
+		{
+			// Get json string from the API
+			String jsonStr = getJsonStrFromApiURL(urlStr);
+
+			// Parse jsonStr into json element and get an object structure
+			JsonElement jElement = new JsonParser().parse(jsonStr);
+			JsonObject jObject = jElement.getAsJsonObject();
+
+
+			// Get the last draw object
+			JsonObject lastDraw = jObject.getAsJsonObject("last");
+
+			// Get the drawTime from the last draw
+			Long lastDrawTime = lastDraw.get("drawTime").getAsLong();
+			LocalDateTime lastLdt = Instant.ofEpochMilli(lastDrawTime).atZone(ZoneId.systemDefault()).toLocalDateTime();
+			lastDrawDate = formatter.format(lastLdt);
+
+
+			// Get the active draw object
+			JsonObject nextDraw = jObject.getAsJsonObject("active");
+
+			// Get the drawTime from the next draw
+			Long nextDrawTime = nextDraw.get("drawTime").getAsLong();
+			LocalDateTime nextLdt = Instant.ofEpochMilli(nextDrawTime).atZone(ZoneId.systemDefault()).toLocalDateTime();
+			nextDrawDate = formatter.format(nextLdt);
+
+
+			// Populate labelDrawInfo
+			String text = "Η τελευταία κλήρωση για το " + gName + " έγινε " + lastDrawDate +
+				". Η επόμενη θα γίνει " + nextDrawDate + ".";
+			labelDrawInfo.setText(text);
+		}
+		catch (Exception ex) { ex.printStackTrace(); /* Silently continue */ }
 	}
 
 
@@ -489,6 +567,7 @@ public class WindowManageData
 		findDateOfFirstDraw();
 		CompletableFuture.runAsync(() -> findIdOfFirstDraw());    // Run asynchronously
 		CompletableFuture.runAsync(() -> findLastDrawId(false));  // Run asynchronously
+		CompletableFuture.runAsync(() -> showDrawInfo());         // Run asynchronously
 	}
 
 
@@ -897,7 +976,6 @@ public class WindowManageData
 				// ComboBox game select
 				String opapGames[] = {"Τζόκερ"};
 				comboBoxGameSelect = new JComboBox(opapGames);
-				comboBoxGameSelect.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 70));
 				comboBoxGameSelect.addActionListener(this::comboBoxGameSelectActionPerformed);
 				comboBoxGameSelect.setBackground(backColor);
 
@@ -908,9 +986,18 @@ public class WindowManageData
 					CompletableFuture.runAsync(() -> this.buttonDownloadActionPerformed(evt));
 				});
 
+				// Label with info of the last and next draw
+				labelDrawInfo = new JLabel();
+				labelDrawInfo.setBorder(BorderFactory.createEmptyBorder(0, 68, 0, 0));
+				labelDrawInfo.setFont(new Font("Arial", 0, 12));
+				labelDrawInfo.setForeground(Color.DARK_GRAY);
+
 			gameSelectAndDLPanel.add(labelGameSelect);
+			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(10,0)));
 			gameSelectAndDLPanel.add(comboBoxGameSelect);
+			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(70,0)));
 			gameSelectAndDLPanel.add(buttonDownload);
+			gameSelectAndDLPanel.add(labelDrawInfo);
 
 
 			// Choose search method label panel
@@ -1009,7 +1096,6 @@ public class WindowManageData
 					"Τελευταίο 3μηνο", "Τελευταίο έτος", "Τελευταία 5ετία",
 					"Πρώτο έτος", "Πρώτη 5ετία", "Όλες οι κληρώσεις"};
 				comboBoxPredefinedRange = new JComboBox(dateRanges);
-				comboBoxPredefinedRange.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
 				comboBoxPredefinedRange.setPreferredSize(new Dimension(152, 20));
 				comboBoxPredefinedRange.addActionListener(this::comboBoxPredefinedRangeActionPerformed);
 				comboBoxPredefinedRange.setSelectedIndex(0);
@@ -1021,6 +1107,7 @@ public class WindowManageData
 			dateRangeMethodPanel.add(labelUpTo);
 			dateRangeMethodPanel.add(textFieldDate2);
 			dateRangeMethodPanel.add(labelPredefinedRange);
+			dateRangeMethodPanel.add(Box.createRigidArea(new Dimension(4,0)));
 			dateRangeMethodPanel.add(comboBoxPredefinedRange);
 
 
@@ -1394,6 +1481,7 @@ public class WindowManageData
 		findDateOfFirstDraw();
 		CompletableFuture.runAsync(() -> findIdOfFirstDraw());    // Run asynchronously
 		CompletableFuture.runAsync(() -> findLastDrawId(true));   // Run asynchronously
+		CompletableFuture.runAsync(() -> showDrawInfo());         // Run asynchronously
 
 		dialog.setVisible(true);
 	}

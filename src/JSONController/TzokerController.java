@@ -22,7 +22,7 @@ public class TzokerController {
     
     //method to create Entity Manager and Factory for the database
     public static void createEMandEMF() {
-        emf = Persistence.createEntityManagerFactory("JokerDbTestPU");
+        emf = Persistence.createEntityManagerFactory("PLH24_GE3PU");
         em = emf.createEntityManager();
     }
     //method to store data in table Content

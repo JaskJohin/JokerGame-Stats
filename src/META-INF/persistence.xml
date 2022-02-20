@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="PLH24_GE3PU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>POJOs.Content</class>
+    <class>POJOs.Wagerstatistics</class>
+    <class>POJOs.Prizecategories</class>
+    <class>POJOs.Winningnumberslist</class>
+    <class>POJOs.Draws</class>
+    <class>POJOs.Pricepoints</class>
+    <class>POJOs.Winningnumbersbonus</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby:G:\Documents\NetBeansProjects\JokerGame-Stats\jokerStatData"/>
+      <property name="javax.persistence.jdbc.user" value="APP"/>
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+      <property name="javax.persistence.jdbc.password" value="APP"/>
+    </properties>
+  </persistence-unit>
+</persistence>

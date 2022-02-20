@@ -615,22 +615,55 @@ public class WindowManageData
 		{
 			LocalDate dateNow = LocalDate.now();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			String errorMsg = "Η αρχική ημερομηνία πρέπει να είναι από " + firstDrawDate + " και η τελική έως " + formatter.format(dateNow) + ".";
+			
+			// Check if given dates are valid
+			String regexDate = "\\d\\d\\d\\d-\\d\\d-\\d\\d";
+			String errorMsgDates = "Οι ημερομηνίες πρέπει να είναι της μορφής YYYY-MM-DD.";
+
+			if (textFieldDate1.getText().matches(regexDate) || !textFieldDate2.getText().matches(regexDate))
+			{
+				try
+				{
+					LocalDate date1 = LocalDate.parse(textFieldDate1.getText());
+					LocalDate date2 = LocalDate.parse(textFieldDate2.getText());
+				}
+				catch (Exception ex)
+				{
+					JOptionPane.showMessageDialog(null, errorMsgDates, "Λάθος είσοδος", 0);
+					return;
+				}
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, errorMsgDates, "Λάθος είσοδος", 0);
+				return;
+			}
+
+			// Chech if the date range is valid
+			LocalDate date1 = LocalDate.parse(textFieldDate1.getText());
+			LocalDate date2 = LocalDate.parse(textFieldDate2.getText());
+			LocalDate firstDate = LocalDate.parse(firstDrawDate);
+
+			String errorMsgRange1 = "Η αρχική ημερομηνία πρέπει να είναι από " + firstDrawDate + " και η τελική έως " + formatter.format(dateNow) + ".";
+			if (!date1.plusDays(1).isAfter(firstDate) || !date2.minusDays(1).isBefore(dateNow))
+			{
+				JOptionPane.showMessageDialog(null, errorMsgRange1, "Λάθος είσοδος", 0);
+				return;
+			}
+
+			String errorMsgRange2 = "Η αρχική ημερομηνία πρέπει να είναι πριν την τελική.";
+			if (!date1.minusDays(1).isBefore(date2))
+			{
+				JOptionPane.showMessageDialog(null, errorMsgRange2, "Λάθος είσοδος", 0);
+				return;
+			}
+
+			// Get the date for the selected date range
 			try
 			{
-				LocalDate date1 = LocalDate.parse(textFieldDate1.getText());
-				LocalDate date2 = LocalDate.parse(textFieldDate2.getText());
-				LocalDate firstDate = LocalDate.parse(firstDrawDate);
-				if (date1.plusDays(1).isAfter(firstDate) && date2.minusDays(1).isBefore(dateNow) && date1.minusDays(1).isBefore(date2))
+				if (comboBoxGameSelect.getSelectedItem().equals("Τζόκερ"))
 				{
-					if (comboBoxGameSelect.getSelectedItem().equals("Τζόκερ"))
-					{
-						getJokerDateRangeData();
-					}
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(null, errorMsg, "Λάθος είσοδος", 0);
+					getJokerDateRangeData();
 				}
 			}
 			catch (Exception ex)

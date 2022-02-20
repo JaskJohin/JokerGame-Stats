@@ -600,9 +600,18 @@ public class WindowManageData
 			String dId = textFieldDrawId.getText();
 			if (dId.matches("\\d+") && (Integer.parseInt(dId) >= firstDrawId) && (Integer.parseInt(dId) <= lastDrawId))
 			{
-				if (comboBoxGameSelect.getSelectedItem().equals("Τζόκερ"))
+				// Get the data for the selected draw
+				try
 				{
-					getJokerSingleDrawData();
+					if (comboBoxGameSelect.getSelectedItem().equals("Τζόκερ"))
+					{
+						getJokerSingleDrawData();
+					}
+				}
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Σφάλμα κλήσης στο API.", "Σφάλμα", 0);
 				}
 			}
 			else
@@ -613,37 +622,26 @@ public class WindowManageData
 		}
 		else
 		{
+			LocalDate firstDate = LocalDate.parse(firstDrawDate);
 			LocalDate dateNow = LocalDate.now();
+			LocalDate date1;
+			LocalDate date2;
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			
 			// Check if given dates are valid
-			String regexDate = "\\d\\d\\d\\d-\\d\\d-\\d\\d";
 			String errorMsgDates = "Οι ημερομηνίες πρέπει να είναι της μορφής YYYY-MM-DD.";
-
-			if (textFieldDate1.getText().matches(regexDate) || !textFieldDate2.getText().matches(regexDate))
+			try
 			{
-				try
-				{
-					LocalDate date1 = LocalDate.parse(textFieldDate1.getText());
-					LocalDate date2 = LocalDate.parse(textFieldDate2.getText());
-				}
-				catch (Exception ex)
-				{
-					JOptionPane.showMessageDialog(null, errorMsgDates, "Λάθος είσοδος", 0);
-					return;
-				}
+				date1 = LocalDate.parse(textFieldDate1.getText());
+				date2 = LocalDate.parse(textFieldDate2.getText());
 			}
-			else
+			catch (Exception ex)
 			{
 				JOptionPane.showMessageDialog(null, errorMsgDates, "Λάθος είσοδος", 0);
 				return;
 			}
 
 			// Chech if the date range is valid
-			LocalDate date1 = LocalDate.parse(textFieldDate1.getText());
-			LocalDate date2 = LocalDate.parse(textFieldDate2.getText());
-			LocalDate firstDate = LocalDate.parse(firstDrawDate);
-
 			String errorMsgRange1 = "Η αρχική ημερομηνία πρέπει να είναι από " + firstDrawDate + " και η τελική έως " + formatter.format(dateNow) + ".";
 			if (!date1.plusDays(1).isAfter(firstDate) || !date2.minusDays(1).isBefore(dateNow))
 			{
@@ -658,7 +656,7 @@ public class WindowManageData
 				return;
 			}
 
-			// Get the date for the selected date range
+			// Get the data for the selected date range
 			try
 			{
 				if (comboBoxGameSelect.getSelectedItem().equals("Τζόκερ"))

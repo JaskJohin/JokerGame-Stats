@@ -684,6 +684,14 @@ public class WindowManageData
 			// Αν είναι ενεργοποιημένη η επιλογή "Συγκεκριμένη κλήρωση", το json string
 			// της τελευταίας αναζήτησης είναι αποθηκευμένο στο attribute lastSearchjsonStr
 
+			// Check if a search has been performed
+			String errorMsg = "Δεν έχει γίνει αναζήτηση για συγκεκριμένη κλήρωση!";
+			if (lastSearchjsonStr == null)
+			{
+				JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
+				return;
+			}
+
 			// Json string from the last single draw search
 			String jsonStr = lastSearchjsonStr;
 
@@ -702,6 +710,14 @@ public class WindowManageData
 		{
 			// Αν είναι ενεργοποιημένη η επιλογή "Εύρος ημερομηνιών", τα json strings
 			// της τελευταίας αναζήτησης είναι αποθηκευμένα στο attribute lastSearchjsonStrList
+
+			// Check if a search has been performed
+			String errorMsg = "Δεν έχει γίνει αναζήτηση για εύρος ημερομηνιών!";
+			if (lastSearchjsonStrList.size() == 0)
+			{
+				JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
+				return;
+			}
 
 			// Parce all json strings in lastSearchjsonStrList
 			for (int i = lastSearchjsonStrList.size()-1; i >= 0; i--)

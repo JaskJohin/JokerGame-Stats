@@ -39,24 +39,24 @@ public class TzokerController {
             JsonArray wnListArray = winningNumbers.getAsJsonArray("list");
             JsonArray bonusArray = winningNumbers.getAsJsonArray("bonus");
             
-            /*---------PARSING JSON ELEMENTS FROM JSON STRING-----------*/
-            /*==========================================================================*/
+            /*-----------------PARSING JSON ELEMENTS FROM JSON STRING-------------------*/
+            /*..........................................................................*/
             //parsing pricePoints Json Object
             JsonObject pricePointsObj = contentDetails.get(i).getAsJsonObject().get("pricePoints").getAsJsonObject();
             
-            /*==========================================================================*/
+            /*..........................................................................*/
             //parsing prize categories Json Array
             JsonArray prizeCatArray = contentDetails.get(i).getAsJsonObject().get("prizeCategories").getAsJsonArray();
                         
-            /*==========================================================================*/
+            /*..........................................................................*/
             //parsing wager statistics Json Object
             JsonObject wagerObg = contentDetails.get(i).getAsJsonObject().get("wagerStatistics").getAsJsonObject();
 
-            /*==========================================================================*/
+            /*..........................................................................*/
             //Entity Manager & Entity Manager Factory creation
             TzokerController.createEMandEMF();
             
-            /*---------SETTING FIELDS OF CONTENT TABLE-----------*/
+            /*----------------------SETTING FIELDS OF CONTENT TABLE---------------------*/
             //create new Content & ContentPK objects
             Content content = new Content();
             ContentPK contentPK = new ContentPK();
@@ -72,14 +72,14 @@ public class TzokerController {
             content.setDrawbreak(contentDetails.get(i).getAsJsonObject().get("drawBreak").getAsInt());
             content.setVisualdraw(contentDetails.get(i).getAsJsonObject().get("visualDraw").getAsInt());
             
-            /*---------SETTING FIELDS OF PRICEPOINTS TABLE-----------*/
+            /*--------------------SETTING FIELDS OF PRICEPOINTS TABLE--------------------*/
             //set values for pricePoints Element
             Pricepoints pricePoints = new Pricepoints();
             pricePoints.setIndex(i);
             pricePoints.setAmount(pricePointsObj.get("amount").getAsDouble());
             pricePoints.setContent(content);
             
-            /*---------SETTING FIELDS OF WINNINGNUMBERSLIST TABLE-----------*/
+            /*-----------------SETTING FIELDS OF WINNINGNUMBERSLIST TABLE----------------*/
             //array list to store all the winning numbers
             List<Winningnumberslist> quintet = new ArrayList<>();
             //loop to parse numbers and add to the List
@@ -90,7 +90,7 @@ public class TzokerController {
                 wnList.setContent(content);
                 quintet.add(wnList);
             }
-            /*---------SETTING FIELDS OF WINNINGNUMBERSBONUS TABLE-----------*/
+            /*----------------SETTING FIELDS OF WINNINGNUMBERSBONUS TABLE-----------------*/
             //ArrayList to store bonus numbers (for Tzoker is 1 but bonus is defined as Array in JSON
             List<Winningnumbersbonus> bonuses = new ArrayList<>();
             for(int k = 0; k < bonusArray.size(); k++) {
@@ -100,7 +100,7 @@ public class TzokerController {
                 bonusList.setContent(content);
                 bonuses.add(bonusList);
             }
-            /*---------SETTING FIELDS OF PRIZECATEGORIES TABLE-----------*/
+            /*------------------SETTING FIELDS OF PRIZECATEGORIES TABLE-------------------*/
             //ArrayList to store values for subsequent prize categories
             List<Prizecategories> pkList = new ArrayList<>();
             for(int l = 0; l < prizeCatArray.size(); l++){
@@ -118,14 +118,14 @@ public class TzokerController {
                 pkList.add(prizeCategory);
             }
             
-            /*---------SETTING FIELDS OF WAGERSTATISTICS TABLE-----------*/
+            /*--------------------SETTING FIELDS OF WAGERSTATISTICS TABLE------------------*/
             Wagerstatistics wagerStats = new Wagerstatistics();
             wagerStats.setIndex(i);
             wagerStats.setColumns(wagerObg.get("columns").getAsInt());
             wagerStats.setWagers(wagerObg.get("wagers").getAsInt());
             wagerStats.setContent(content);
             
-            /*---------JPA SECTION FOR THE INSERTION OF DATA TO THE TALBES-----------*/
+            /*-------------JPA SECTION FOR THE INSERTION OF DATA TO THE TALBES--------------*/
             //create & execute Entity Transaction to commit the data to the DB table
             EntityTransaction entityTransaction = null;
             try {

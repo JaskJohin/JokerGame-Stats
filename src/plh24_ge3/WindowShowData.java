@@ -1,5 +1,9 @@
 package plh24_ge3;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
@@ -8,18 +12,30 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import static plh24_ge3.Helper.jokerJsonSingleDrawToObject;
 
 
 /**
@@ -32,12 +48,265 @@ public class WindowShowData
 {
 	// Variables declaration
 	private final JDialog dialog;
+	private final JComboBox comboBoxGameSelect;
+	private final JComboBox comboBoxYearSelect;
+	private final JRadioButton radioButtonApi;
+	private final JTable dataViewTable;
+
+
+	// Methods
+	/**
+	 * Populates comboBoxYearSelect with the years the selected game is active.
+	 * This method is called when the window is first opened and every time a different
+	 * game is selected.
+	 */
+	private void populateComboBoxYearSelect()
+	{
+		// Remove all items from comboBoxYearSelect
+		comboBoxYearSelect.removeAllItems();
+
+		// Current local date
+		int yearNow = LocalDate.now().getYear();
+
+		// First year of the selected game
+		int firstYear = 1999;
+		switch (comboBoxGameSelect.getSelectedItem().toString())
+		{
+			case "Κίνο":      firstYear = yearNow-2; break;
+			case "Powerspin": firstYear = 2020; break;
+			case "Super3":    firstYear = 2002; break;
+			case "Πρότο":     firstYear = 2000; break;
+			case "Λόττο":     firstYear = 2000; break;
+			case "Τζόκερ":    firstYear = 2000; break;
+			case "Extra5":    firstYear = 2002; break;
+		}
+
+		// Populate combobox
+		for (int i = yearNow; i >= firstYear; i--)
+		{
+			comboBoxYearSelect.addItem(i);
+		}
+	}
+
+
+	/**
+	 * Gather data for the selected game and year using the api.
+	 */
+	private void getDataFromApi(String gameId, String year)
+	{
+		// Variables
+		String date1;
+		String date2;
+		List<String> urlStrList = new ArrayList<>();  // List with all the url we'll call
+		List<String> jsonStrList = new ArrayList<>();  // List with the json strings
+		BigDecimal bd;   // BigDecimal - used for rounding
+		int drawCount;
+		double moneySum;
+		int jackpotCount;
+
+		// Date format
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+
+		// Create the 12 date pairs and the urlStrList
+		date1 = year + "-01-01";
+		date2 = year + "-01-31";
+		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
+		date1 = year + "-02-01";
+		date2 = formatter.format(LocalDate.parse(date1, formatter).plusMonths(1).minusDays(1));
+		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
+		date1 = year + "-03-01";
+		date2 = year + "-03-31";
+		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
+		date1 = year + "-04-01";
+		date2 = year + "-04-30";
+		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
+		date1 = year + "-05-01";
+		date2 = year + "-05-31";
+		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
+		date1 = year + "-06-01";
+		date2 = year + "-06-30";
+		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
+		date1 = year + "-07-01";
+		date2 = year + "-07-31";
+		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
+		date1 = year + "-08-01";
+		date2 = year + "-08-31";
+		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
+		date1 = year + "-09-01";
+		date2 = year + "-09-30";
+		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
+		date1 = year + "-10-01";
+		date2 = year + "-10-31";
+		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
+		date1 = year + "-11-01";
+		date2 = year + "-11-30";
+		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
+		date1 = year + "-12-01";
+		date2 = year + "-12-31";
+		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
+
+
+		// Number of threads (simultaneous calls to the API)
+		int threadNum = 12;
+
+		// --- Create the threads to do the job ---
+		GetJsonStrListFromUrlStrListMT[] threadArray = new GetJsonStrListFromUrlStrListMT[threadNum];
+		int taskNum = urlStrList.size();    // Total number of tasks to do
+		for (int i=0; i<threadNum; i++)
+		{
+			int index1 = i*taskNum/threadNum;      // Each thread does index2-index1
+			int index2 = (i+1)*taskNum/threadNum;  // tasks, from index1 to index2-1
+			threadArray[i] = new GetJsonStrListFromUrlStrListMT(index1, index2, urlStrList);
+			threadArray[i].start();
+		}
+
+		// Wait for all threads to finish
+		for (int i=0; i<threadNum; i++)
+		{
+			try
+			{
+				threadArray[i].join();
+			}
+			catch (InterruptedException ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+
+		// Merge results from all threads
+		for (GetJsonStrListFromUrlStrListMT thread : threadArray)
+		{
+			// Merge jsonStrList
+			thread.getJsonStrList().forEach((jsonStr) ->
+			{
+				jsonStrList.add(jsonStr);
+			});
+		}
+
+
+		// Parce all json strings in jsonStrList
+		for (int i = 0; i < jsonStrList.size(); i++)
+		{
+			// Set the counters and sum to 0
+			drawCount = 0;
+			moneySum = 0;
+			jackpotCount = 0;
+
+			// Json string
+			String jsonStr = jsonStrList.get(i);
+
+			// First empty the table cells for this month.
+			// They'll remain empty if json has no draw data.
+			dataViewTable.setValueAt("", i, 1);
+			dataViewTable.setValueAt("", i, 2);
+			dataViewTable.setValueAt("", i, 3);
+
+			// Parse jsonStr into json element and get an object structure
+			JsonElement jElement = new JsonParser().parse(jsonStr);
+			JsonObject jObject = jElement.getAsJsonObject();
+
+			// Get the totalElements
+			int totalElements = jObject.get("totalElements").getAsInt();
+
+			// If there are no draw data, go to the next jsonStrList element
+			if (totalElements == 0) {continue;}
+
+			// Get the "content" json array
+			JsonArray content = jObject.getAsJsonArray("content");
+
+			for (JsonElement drawElement : content)
+			{
+				// Get the json object from this content json element
+				JsonObject drawObject = drawElement.getAsJsonObject();
+
+				// Create a JokerDrawData object from the json object
+				JokerDrawData jokerDraw = jokerJsonSingleDrawToObject(drawObject);
+
+				// Update the counters and sum
+				drawCount++;
+				moneySum += jokerDraw.getPrizeTier5_1dividend() + jokerDraw.getPrizeTier5dividend() +
+					jokerDraw.getPrizeTier4_1dividend() + jokerDraw.getPrizeTier4dividend() +
+					jokerDraw.getPrizeTier3_1dividend() + jokerDraw.getPrizeTier3dividend() +
+					jokerDraw.getPrizeTier2_1dividend() + jokerDraw.getPrizeTier1_1dividend();
+				if (jokerDraw.getPrizeTier5_1winners() == 0) {jackpotCount++;}
+			}
+
+			// Round the moneySum and make it BigDecimal
+			bd = BigDecimal.valueOf(moneySum);
+			BigDecimal moneySumBD = bd.setScale(2, RoundingMode.HALF_UP);
+
+			// Put the data for this month to dataViewTable
+			dataViewTable.setValueAt(drawCount, i, 1);
+			dataViewTable.setValueAt(moneySumBD, i, 2);
+			dataViewTable.setValueAt(jackpotCount, i, 3);
+		}
+	}
+
+
+	/**
+	 * Gather data for the selected game and year using the DB.
+	 */
+	private void getDataFromDB(String gameId, String year)
+	{
+		// TODO
+	}
+
 
 	// Button actions
+	/**
+	 * Action of the comboBoxGameSelect.
+	 * @param evt 
+	 */
+	private void comboBoxGameSelectActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		populateComboBoxYearSelect();
+	}
+
+
+	/**
+	 * Action of the buttonDownload.
+	 * @param evt 
+	 */
+	private void buttonDownloadActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		// Get selected game id
+		String gameId = null;
+		switch (comboBoxGameSelect.getSelectedItem().toString())
+		{
+			case "Κίνο":      gameId = "1100"; break;
+			case "Powerspin": gameId = "1110"; break;
+			case "Super3":    gameId = "2100"; break;
+			case "Πρότο":     gameId = "2101"; break;
+			case "Λόττο":     gameId = "5103"; break;
+			case "Τζόκερ":    gameId = "5104"; break;
+			case "Extra5":    gameId = "5106"; break;
+		}
+
+		// Get selected year
+		String year = comboBoxYearSelect.getSelectedItem().toString();
+
+		// Get the data
+		if (radioButtonApi.isSelected())
+		{
+			getDataFromApi(gameId, year);
+		}
+		else
+		{
+			getDataFromDB(gameId, year);
+		}
+	}
+
+
+	/**
+	 * Action of the buttonClose.
+	 * @param evt 
+	 */
 	private void buttonCloseActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		dialog.dispose();
 	}
+
 
 	// Constructor
 	public WindowShowData()
@@ -98,25 +367,161 @@ public class WindowShowData
 		middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 		middlePanel.setBackground(backColor);
 
-			// Game selection panel
-			JPanel gameSelectPanel = new JPanel();
-			gameSelectPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-			gameSelectPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
-			gameSelectPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameSelectPanel.getMinimumSize().height));
-			gameSelectPanel.setBackground(backColor);
+			// Game selection & download panel
+			JPanel gameSelectAndDLPanel = new JPanel();
+			gameSelectAndDLPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			gameSelectAndDLPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
+			gameSelectAndDLPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameSelectAndDLPanel.getMinimumSize().height));
+			gameSelectAndDLPanel.setBackground(backColor);
 
+				// Label game select
 				JLabel labelGameSelect = new JLabel("Επιλέξτε τυχερό παιχνίδι");
 
-				String comboBoxGameSelectItems[] = {"Τζόκερ (id: 5104)"};
-				JComboBox comboBoxGameSelect = new JComboBox(comboBoxGameSelectItems);
-				comboBoxGameSelect.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+				// ComboBox game select
+				String opapGames[] = {"Τζόκερ"};
+				comboBoxGameSelect = new JComboBox(opapGames);
+				comboBoxGameSelect.addActionListener(this::comboBoxGameSelectActionPerformed);
 				comboBoxGameSelect.setBackground(backColor);
 
-			gameSelectPanel.add(labelGameSelect);
-			gameSelectPanel.add(comboBoxGameSelect);
+				// Button download
+				JButton buttonDownload = new JButton("Προβολή συγκεντρωτικών δεδομένων ανά μήνα για το έτος");
+				buttonDownload.addActionListener((evt) ->
+				{
+					CompletableFuture.runAsync(() -> this.buttonDownloadActionPerformed(evt));
+				});
 
-		middlePanel.add(gameSelectPanel, BorderLayout.CENTER);
-		middlePanel.add(Box.createVerticalGlue(), BorderLayout.CENTER);
+				// ComboBox year select
+				comboBoxYearSelect = new JComboBox();
+				comboBoxYearSelect.setBackground(backColor);
+
+			gameSelectAndDLPanel.add(labelGameSelect);
+			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(10,0)));
+			gameSelectAndDLPanel.add(comboBoxGameSelect);
+			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(70,0)));
+			gameSelectAndDLPanel.add(buttonDownload);
+			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(6,0)));
+			gameSelectAndDLPanel.add(comboBoxYearSelect);
+
+			// Choose search method label panel
+			JPanel chooseMethodLabelPanel = new JPanel();
+			chooseMethodLabelPanel.setBorder(BorderFactory.createEmptyBorder(12, 0, 0, 0));
+			chooseMethodLabelPanel.setLayout(new FlowLayout(0, 0, 0));
+			chooseMethodLabelPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, chooseMethodLabelPanel.getMinimumSize().height));
+			chooseMethodLabelPanel.setBackground(backColor);
+
+				// Label choose method
+				JLabel labelChooseMethod = new JLabel("Επιλέξτε από που θέλετε να αντληθούν τα δεδομένα");
+
+			chooseMethodLabelPanel.add(labelChooseMethod);
+
+
+			// API method panel
+			JPanel apiMethodPanel = new JPanel();
+			apiMethodPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+			apiMethodPanel.setLayout(new FlowLayout(0, 0, 0));
+			apiMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, apiMethodPanel.getMinimumSize().height));
+			apiMethodPanel.setBackground(backColor);
+
+				// Radio button for API method
+				radioButtonApi = new JRadioButton();
+				radioButtonApi.setText("API");
+				radioButtonApi.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+				radioButtonApi.setBackground(backColor);
+				radioButtonApi.setSelected(true);
+
+				// Label API method info
+				JLabel labelApiInfo = new JLabel("(Η βάση δεδομένων δε θα πειραχθεί)");
+				labelApiInfo.setBorder(BorderFactory.createEmptyBorder(1, 107, 0, 0));
+				labelApiInfo.setFont(new Font("Arial", 0, 12));
+				labelApiInfo.setForeground(Color.DARK_GRAY);
+
+			apiMethodPanel.add(radioButtonApi);
+			apiMethodPanel.add(labelApiInfo);
+			apiMethodPanel.add(Box.createRigidArea(new Dimension(79,0)));
+
+
+			// DB method panel
+			JPanel DBMethodPanel = new JPanel();
+			DBMethodPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+			DBMethodPanel.setLayout(new FlowLayout(0, 0, 0));
+			DBMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, DBMethodPanel.getMinimumSize().height));
+			DBMethodPanel.setBackground(backColor);
+
+				// Radio button for DB method
+				JRadioButton radioButtonDB = new JRadioButton();
+				radioButtonDB.setText("Βάση δεδομένων");
+				radioButtonDB.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+				radioButtonDB.setBackground(backColor);
+				radioButtonDB.setSelected(false);
+
+				// Group radio butttons
+				ButtonGroup groupChooseMethod = new ButtonGroup();
+				groupChooseMethod.add(radioButtonApi);
+				groupChooseMethod.add(radioButtonDB);
+
+				// Label DB method info
+				JLabel labelDBInfo = new JLabel("(Αν τα δεδομένα δεν υπάρχουν ήδη, τότε θα προστεθούν στη βάση δεδομένων)");
+				labelDBInfo.setBorder(BorderFactory.createEmptyBorder(1, 30, 0, 0));
+				labelDBInfo.setFont(new Font("Arial", 0, 12));
+				labelDBInfo.setForeground(Color.DARK_GRAY);
+
+			DBMethodPanel.add(radioButtonDB);
+			DBMethodPanel.add(labelDBInfo);
+			DBMethodPanel.add(Box.createRigidArea(new Dimension(79,0)));
+
+
+			// Data view panel
+					JPanel dataViewPanel = new JPanel();
+					dataViewPanel.setBorder(BorderFactory.createEmptyBorder(18, 0, 0, 0));
+					dataViewPanel.setLayout(new BorderLayout());
+					dataViewPanel.setBackground(backColor);
+
+						// Columns and initial data of the JTable for data per month
+						String[] columns = {"Μήνας", "Πλήθος κληρώσεων",
+							"Χρήματα που διανεμήθηκαν (€)", "Τζακ-ποτ"};
+						Object[][] data = {
+							{"Ιανουάριος", "", "", ""},
+							{"Φεβρουάριος", "", "", ""},
+							{"Μάρτιος", "", "", ""},
+							{"Απρίλιος", "", "", ""},
+							{"Μάιος", "", "", ""},
+							{"Ιούνιος", "", "", ""},
+							{"Ιούλιος", "", "", ""},
+							{"Αύγουστος", "", "", ""},
+							{"Σεπτέμβριος", "", "", ""},
+							{"Οκτώβριος", "", "", ""},
+							{"Νοέμβριος", "", "", ""},
+							{"Δεκέμβριος", "", "", ""},
+						};
+
+						// Center renderer for table columns
+						DefaultTableCellRenderer centerText = new DefaultTableCellRenderer();
+						centerText.setHorizontalAlignment(SwingConstants.CENTER);
+						
+						// JTable for Joker single draw
+						dataViewTable = new JTable(data, columns);
+						dataViewTable.getColumnModel().getColumn(0).setCellRenderer(centerText);
+						dataViewTable.getColumnModel().getColumn(1).setCellRenderer(centerText);
+						dataViewTable.getColumnModel().getColumn(2).setCellRenderer(centerText);
+						dataViewTable.getColumnModel().getColumn(3).setCellRenderer(centerText);
+
+						// Make table cells unselectable and uneditable
+						dataViewTable.setEnabled(false);
+
+						// Disable table column re-ordering
+						dataViewTable.getTableHeader().setReorderingAllowed(false);
+
+						// Make the JScrollPane take the same size as the JTable
+						dataViewTable.setPreferredScrollableViewportSize(dataViewTable.getPreferredSize());
+
+					dataViewPanel.add(new JScrollPane(dataViewTable), BorderLayout.NORTH);
+
+		middlePanel.add(gameSelectAndDLPanel);
+		middlePanel.add(chooseMethodLabelPanel);
+		middlePanel.add(apiMethodPanel);
+		middlePanel.add(DBMethodPanel);
+		middlePanel.add(dataViewPanel);
+		middlePanel.add(Box.createVerticalGlue());
 
 
 		/*
@@ -142,7 +547,7 @@ public class WindowShowData
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new Dimension(596, 362));
+		mainPanel.setPreferredSize(new Dimension(772, 520));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
@@ -159,9 +564,13 @@ public class WindowShowData
 		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new Dimension(590, 360));
-//		dialog.setResizable(false);
+		dialog.setMinimumSize(new Dimension(780, 550));
+		dialog.setResizable(false);
 		dialog.setIconImages(icons);
+
+		// Populate comboBoxYearSelect
+		populateComboBoxYearSelect();
+
 		dialog.setVisible(true);
 	}
 }

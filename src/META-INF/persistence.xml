@@ -3,16 +3,15 @@
   <persistence-unit name="PLH24_GE3PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>POJOs.Content</class>
-    <class>POJOs.Wagerstatistics</class>
+    <class>POJOs.Winningnumbersbonus</class>
+    <class>POJOs.Pricepoints</class>
     <class>POJOs.Prizecategories</class>
     <class>POJOs.Winningnumberslist</class>
-    <class>POJOs.Draws</class>
-    <class>POJOs.Pricepoints</class>
-    <class>POJOs.Winningnumbersbonus</class>
+    <class>POJOs.Wagerstatistics</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby:G:\Documents\NetBeansProjects\JokerGame-Stats\jokerStatData"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost/jokerStatData"/>
       <property name="javax.persistence.jdbc.user" value="APP"/>
-      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
       <property name="javax.persistence.jdbc.password" value="APP"/>
     </properties>
   </persistence-unit>

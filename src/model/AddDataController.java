@@ -1,4 +1,4 @@
-package JSONController;
+package model;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -6,7 +6,7 @@ import POJOs.*;
 import javax.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
-import model.ContentTable;
+import model.QueriesSQL;
 
 /**
  * @author Alexandros Dimitrakopoulos
@@ -15,7 +15,7 @@ import model.ContentTable;
  * @author Thanos Theodoropoulos
  */
 
-public class TzokerController {
+public class AddDataController {
     
     //variables declaration
     private static  EntityManagerFactory emf;
@@ -55,7 +55,7 @@ public class TzokerController {
 
             /*..........................................................................*/
             //Entity Manager & Entity Manager Factory creation
-            TzokerController.createEMandEMF();
+            AddDataController.createEMandEMF();
             
             /*----------------------SETTING FIELDS OF CONTENT TABLE---------------------*/
             //create new Content & ContentPK objects
@@ -74,7 +74,7 @@ public class TzokerController {
             content.setVisualdraw(contentDetails.get(i).getAsJsonObject().get("visualDraw").getAsInt());
             
             //checking if record exists in database
-            boolean control = ContentTable.checkIfRecordExists(content);
+            boolean control = QueriesSQL.checkIfRecordExists(content);
             if(!control) {
                 /*--------------------SETTING FIELDS OF PRICEPOINTS TABLE--------------------*/
                 //set values for pricePoints Element
@@ -190,7 +190,7 @@ public class TzokerController {
 
         /*..........................................................................*/
         //Entity Manager & Entity Manager Factory creation
-        TzokerController.createEMandEMF();
+        AddDataController.createEMandEMF();
 
         /*----------------------SETTING FIELDS OF CONTENT TABLE---------------------*/
         //create new Content & ContentPK objects
@@ -209,7 +209,7 @@ public class TzokerController {
         content.setVisualdraw(contentDetails.get("visualDraw").getAsInt());
 
         //checking if record exists in database
-        boolean control = ContentTable.checkIfRecordExists(content);
+        boolean control = QueriesSQL.checkIfRecordExists(content);
         if(!control) {
 
             /*--------------------SETTING FIELDS OF PRICEPOINTS TABLE--------------------*/

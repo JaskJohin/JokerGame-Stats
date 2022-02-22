@@ -11,17 +11,17 @@ public class CreateDB {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ContentTable.createTable();
-        PricePointsTable.createTable();
-        PrizeCategoriesTable.createTable();
-        WagerStatsTable.createTable();
-        WinningNumbersListTable.createTable();
-        WinningNumbersBonusTable.createTable();
-//        WinningNumbersListTable.dropTable();
- //       WinningNumbersBonusTable.dropTable();
-  //      WagerStatsTable.dropTable();
-   //     PrizeCategoriesTable.dropTable();
-    //    PricePointsTable.dropTable();
-     //   ContentTable.dropTable();
+        DBTablesManager.createContentTable();
+        DBTablesManager.createPPTable();
+        DBTablesManager.createPCTable();
+        DBTablesManager.createWSTable();
+        DBTablesManager.createWNLTable();
+        DBTablesManager.createWNBTable();
+//        DBTablesManager.dropWNLTable();
+ //       DBTablesManager.dropWNBTable();
+  //      DBTablesManager.dropWSTable();
+   //     DBTablesManager.dropPCTable();
+    //    DBTablesManager.dropPPTable();
+     //   DBTablesManager.dropContentTable();
     }  
 }

@@ -178,13 +178,17 @@ public class ContentTable {
     }
     //method to delete data from the database providing a date range
     public static void deleteDataByDateRange (String fromDateStr, String toDateStr) throws ParseException {
+        //format the input String
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //parse the formatted String to Date class
         Date fromDate = dateFormat.parse(fromDateStr);
         Date toDate = dateFormat.parse(toDateStr);
+        //get the long representation of Epoch which is stored in the database
         long fromEpoch = fromDate.getTime();
         long toEpoch = toDate.getTime();
-        
+        //connect to the database
         Connection connection = DbConnect.connect();
+        //compile the SQL query for the deletion of data for the requested date range
         String deleteRecordsByDR = "DELETE FROM CONTENT WHERE DRAWTIME >=? AND DRAWTIME<=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteRecordsByDR);

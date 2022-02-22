@@ -34,7 +34,8 @@ public class WagerStatsTable {
             Logger.getLogger(WagerStatsTable.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    //method to drop existing table
+    
+    //Method to drop existing table
     public static void dropTable() {
         try {
             Connection connection = DbConnect.connect();
@@ -47,7 +48,8 @@ public class WagerStatsTable {
             Logger.getLogger(WagerStatsTable.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    //method to select all table contents (for testing purposes)
+    
+    //Method to select all table contents (for testing purposes)
     public static ResultSet selectAll() {
         try {
             Connection connection = DbConnect.connect();   
@@ -62,7 +64,8 @@ public class WagerStatsTable {
         }
         return null;
     }
-    //method to insert data to the table (one tuple at a time)
+    
+    //Method to insert data to the table (one tuple at a time)
     public static void insertData (int column,int wagers,  int gameId, int drawId) {
         try {
             Connection connection = DbConnect.connect();
@@ -84,7 +87,8 @@ public class WagerStatsTable {
             Logger.getLogger(WagerStatsTable.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    //method to update a tuple
+    
+    //Method to update a tuple
     public static void updateData (int column, int wagers ,  int gameId, int drawId) {
         try {
             Connection connection = DbConnect.connect();
@@ -104,7 +108,8 @@ public class WagerStatsTable {
             Logger.getLogger(WagerStatsTable.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-    //method to delete all tuples for a specific draw, based on the primary key
+    
+    //Method to delete all tuples for a specific draw, based on the primary key
     public static void deleteTupple (int gameId, int drawId) {
         try {
             Connection connection = DbConnect.connect();
@@ -120,7 +125,7 @@ public class WagerStatsTable {
         }
     }
     
-    //method to delete all data for a specific game
+    //Method to delete all data for a specific game
     public static void deleteGameData (int gameId) {
         try {
             Connection connection = DbConnect.connect();

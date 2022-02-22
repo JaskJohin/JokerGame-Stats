@@ -44,12 +44,13 @@ public class WindowShowStats
 	{
                 //	
 	}
-
+        
+        //Show stats in graph form
 	private void buttonGraphStatsActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		new WindowShowGraphStats();
 	}
-
+            
 	// Constructor
 	public WindowShowStats()
 	{

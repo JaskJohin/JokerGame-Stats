@@ -17,14 +17,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
 /**
  * @author Athanasios Theodoropoulos
  * @author Alexandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
-public class WindowMain    // MainClass
+
+public class WindowMain
 {
 	// Button actions
 	private void button1ActionPerformed(java.awt.event.ActionEvent evt)
@@ -52,7 +52,6 @@ public class WindowMain    // MainClass
 		System.exit(0);
 	}
 
-
 	// Constructor
 	public WindowMain()
 	{
@@ -75,10 +74,8 @@ public class WindowMain    // MainClass
 			ex.printStackTrace();
 		}
 
-
 		// Background color
 		Color backColor = new java.awt.Color(244, 244, 250);
-
 
 		/*
 		 * Top panel with the window title
@@ -102,7 +99,6 @@ public class WindowMain    // MainClass
 
 		topPanel.add(labelTitle);
 		topPanel.add(labelTitleShadow);
-
 
 		/*
 		 * Middle panel with the main buttons
@@ -131,7 +127,6 @@ public class WindowMain    // MainClass
 		middlePanel.add(button2);
 		middlePanel.add(button3);
 
-
 		/*
 		 * Bottom panel with the with About and Exit buttons
 		 */
@@ -154,7 +149,6 @@ public class WindowMain    // MainClass
 		bottomPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
 		bottomPanel.add(buttonExit);
 
-
 		/*
 		 * Main panel
 		 */
@@ -168,7 +162,6 @@ public class WindowMain    // MainClass
 		mainPanel.setPreferredSize(new Dimension(394, 369));
 		mainPanel.setMinimumSize(new Dimension(394, 369));
 		mainPanel.setMaximumSize(new Dimension(394, 369));
-
 
 		/*
 		 * Main window

@@ -16,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Contains static methods that are used by the other classes.
  * @author Athanasios Theodoropoulos
@@ -24,6 +23,7 @@ import java.util.List;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 public class Helper
 {
 	// Methods
@@ -55,7 +55,6 @@ public class Helper
 
 		return jsonStr;
 	}
-
 
 	/** 
 	 * Accepts as parameter a JsonObject with data of a single draw of the game Joker
@@ -97,7 +96,6 @@ public class Helper
 		double prizeTier2_1dividend;
 		int prizeTier1_1winners;
 		double prizeTier1_1dividend;
-
 
 		// Get the drawId
 		drawId = jObject.get("drawId").getAsInt();
@@ -173,7 +171,6 @@ public class Helper
 		bd = BigDecimal.valueOf(category7.get("divident").getAsDouble());
 		prizeTier1_1dividend = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
 
-
 		// Convert the first 209 divident from drachma to euro
 		if (drawId <= 209 && prizeTier1_1dividend > 100)
 		{
@@ -217,7 +214,6 @@ public class Helper
 		return jokerDraw;
 	}
 
-
 	/**
 	 * Accepts the gameId and a date range as parameters, breaks the date range to periods
 	 * of up to 92 days and creates a list with the appropriate URL strings of the api
@@ -242,7 +238,6 @@ public class Helper
 
 		// Max date range to call the API
 		int max = 92;
-
 
 		// Create the list with all the API urls we'll need to call
 		LocalDate start = ld1;

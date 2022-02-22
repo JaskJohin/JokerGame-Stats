@@ -142,7 +142,6 @@ public class JokerDrawData
 		this.prizeTier1_1dividend = prizeTier1_1dividend;
 	}
 
-
 	// Methods
 	/**
 	 * Get the draw id.

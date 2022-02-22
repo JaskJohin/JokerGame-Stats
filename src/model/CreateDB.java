@@ -4,6 +4,7 @@ package model;
  *
  * @author Thanos Theodoropoulos
  */
+
 public class CreateDB {
 
     /**

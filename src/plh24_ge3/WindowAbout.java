@@ -29,13 +29,13 @@ import javax.swing.JTextArea;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 public class WindowAbout
 {
 	// Variables declaration
 	private final JPanel middlePanelCards;
 	private final JButton buttonLicense;
 	private final JDialog dialog;
-
 
 	// Button actions
 	private void buttonLicenseActionPerformed(java.awt.event.ActionEvent evt)
@@ -58,7 +58,6 @@ public class WindowAbout
 		dialog.dispose();
 	}
 
-
 	// Constructor
 	public WindowAbout()
 	{
@@ -69,7 +68,6 @@ public class WindowAbout
 		authorList.add("Οδυσσέας Ραυτόπουλος");
 		authorList.add("Χριστόφορος Αμπελάς");
 		Collections.shuffle(authorList);
-
 
 		// Icons list
 		final List<Image> icons = new ArrayList<>();
@@ -90,10 +88,8 @@ public class WindowAbout
 			ex.printStackTrace();
 		}
 
-
 		// Background color
 		Color backColor = new java.awt.Color(244, 244, 250);
-
 
 		// Labels
 		JLabel labelName = new JLabel("Joker stats");
@@ -130,7 +126,7 @@ public class WindowAbout
 		textAreaLicense.setLineWrap(true);
 		textAreaLicense.setWrapStyleWord(true);
 		textAreaLicense.setEditable(false);
-		String lisenceText = "Copyright 2022, Athanasios Theodoropoulos, Alexandros Dimitrakopoulos, Odysseas Raftopoulos, Xristoforos Ampelas\n" +
+		String licenceText = "Copyright 2022, Athanasios Theodoropoulos, Alexandros Dimitrakopoulos, Odysseas Raftopoulos, Xristoforos Ampelas\n" +
 		"All rights reserved.\n" +
 		"\n" +
 		"Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n" +
@@ -142,24 +138,21 @@ public class WindowAbout
 		"3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n" +
 		"\n" +
 		"THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
-		textAreaLicense.setText(lisenceText);
+		textAreaLicense.setText(licenceText);
 		textAreaLicense.setCaretPosition(0);
-
 
 		// Scroll pane to enclose the textAreaLicense
 		JScrollPane scrollPane = new JScrollPane(textAreaLicense);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-
 		// Buttons
 		JButton buttonClose = new JButton("Κλείσιμο");
 		buttonClose.setPreferredSize(new java.awt.Dimension(116, 26));
-        buttonClose.addActionListener(this::buttonCloseActionPerformed);
+                buttonClose.addActionListener(this::buttonCloseActionPerformed);
 
 		buttonLicense = new JButton("Άδεια");
 		buttonLicense.setPreferredSize(new java.awt.Dimension(116, 26));
 		buttonLicense.addActionListener(this::buttonLicenseActionPerformed);
-
 
 		// Panels
 		JPanel topPanel = new JPanel();    // Panel with the window title label
@@ -215,7 +208,6 @@ public class WindowAbout
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanelCards);
 		mainPanel.add(bottomPanel);
-
 
 		// Main window
 		dialog = new JDialog();

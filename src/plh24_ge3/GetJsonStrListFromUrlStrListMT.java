@@ -14,6 +14,7 @@ import static plh24_ge3.Helper.getJsonStrFromApiURL;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 class GetJsonStrListFromUrlStrListMT extends Thread
 {
 	// Variables declaration
@@ -37,7 +38,6 @@ class GetJsonStrListFromUrlStrListMT extends Thread
 		this.index2 = index2;    // End index. In ST it would be = urlStrList.size().
 		this.urlStrList = urlStrList;
 	}
-
 
 	// Methods
 	public List<String> getJsonStrList() {return jsonStrList;}

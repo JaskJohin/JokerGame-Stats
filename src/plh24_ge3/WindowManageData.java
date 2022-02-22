@@ -288,7 +288,7 @@ public class WindowManageData
 				". Η επόμενη θα γίνει " + nextDrawDate + ".";
 			labelDrawInfo.setText(text);
 		}
-		catch (Exception ex) { ex.printStackTrace(); /* Silently continue */ }
+		catch (Exception ex) { /* Silently continue */ }
 	}
 
 
@@ -535,7 +535,19 @@ public class WindowManageData
 	 */
 	private void buttonFindLatestDrawActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		textFieldDrawId.setText(String.valueOf(lastDrawId));
+		if (lastDrawId != 0)
+		{
+			textFieldDrawId.setText(String.valueOf(lastDrawId));
+		}
+		else
+		{
+			findLastDrawId(true);
+			if (lastDrawId == 0)
+			{
+				String message = "Σφάλμα σύνδεσης στο API του ΟΠΑΠ.";
+				JOptionPane.showMessageDialog(null, message, "Σφάλμα σύνδεσης", 0);
+			}
+		}
 	}
 
 

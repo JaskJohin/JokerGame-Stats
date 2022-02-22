@@ -402,6 +402,7 @@ public class WindowShowData
 			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(6,0)));
 			gameSelectAndDLPanel.add(comboBoxYearSelect);
 
+
 			// Choose search method label panel
 			JPanel chooseMethodLabelPanel = new JPanel();
 			chooseMethodLabelPanel.setBorder(BorderFactory.createEmptyBorder(12, 0, 0, 0));
@@ -471,50 +472,50 @@ public class WindowShowData
 
 
 			// Data view panel
-					JPanel dataViewPanel = new JPanel();
-					dataViewPanel.setBorder(BorderFactory.createEmptyBorder(18, 0, 0, 0));
-					dataViewPanel.setLayout(new BorderLayout());
-					dataViewPanel.setBackground(backColor);
+			JPanel dataViewPanel = new JPanel();
+			dataViewPanel.setBorder(BorderFactory.createEmptyBorder(18, 0, 0, 0));
+			dataViewPanel.setLayout(new BorderLayout());
+			dataViewPanel.setBackground(backColor);
 
-						// Columns and initial data of the JTable for data per month
-						String[] columns = {"Μήνας", "Πλήθος κληρώσεων",
-							"Χρήματα που διανεμήθηκαν (€)", "Τζακ-ποτ"};
-						Object[][] data = {
-							{"Ιανουάριος", "", "", ""},
-							{"Φεβρουάριος", "", "", ""},
-							{"Μάρτιος", "", "", ""},
-							{"Απρίλιος", "", "", ""},
-							{"Μάιος", "", "", ""},
-							{"Ιούνιος", "", "", ""},
-							{"Ιούλιος", "", "", ""},
-							{"Αύγουστος", "", "", ""},
-							{"Σεπτέμβριος", "", "", ""},
-							{"Οκτώβριος", "", "", ""},
-							{"Νοέμβριος", "", "", ""},
-							{"Δεκέμβριος", "", "", ""},
-						};
+				// Columns and initial data of the JTable for data per month
+				String[] columns = {"Μήνας", "Πλήθος κληρώσεων",
+					"Χρήματα που διανεμήθηκαν (€)", "Τζακ-ποτ"};
+				Object[][] data = {
+					{"Ιανουάριος", "", "", ""},
+					{"Φεβρουάριος", "", "", ""},
+					{"Μάρτιος", "", "", ""},
+					{"Απρίλιος", "", "", ""},
+					{"Μάιος", "", "", ""},
+					{"Ιούνιος", "", "", ""},
+					{"Ιούλιος", "", "", ""},
+					{"Αύγουστος", "", "", ""},
+					{"Σεπτέμβριος", "", "", ""},
+					{"Οκτώβριος", "", "", ""},
+					{"Νοέμβριος", "", "", ""},
+					{"Δεκέμβριος", "", "", ""},
+				};
 
-						// Center renderer for table columns
-						DefaultTableCellRenderer centerText = new DefaultTableCellRenderer();
-						centerText.setHorizontalAlignment(SwingConstants.CENTER);
-						
-						// JTable for Joker single draw
-						dataViewTable = new JTable(data, columns);
-						dataViewTable.getColumnModel().getColumn(0).setCellRenderer(centerText);
-						dataViewTable.getColumnModel().getColumn(1).setCellRenderer(centerText);
-						dataViewTable.getColumnModel().getColumn(2).setCellRenderer(centerText);
-						dataViewTable.getColumnModel().getColumn(3).setCellRenderer(centerText);
+				// Center renderer for table columns
+				DefaultTableCellRenderer centerText = new DefaultTableCellRenderer();
+				centerText.setHorizontalAlignment(SwingConstants.CENTER);
 
-						// Make table cells unselectable and uneditable
-						dataViewTable.setEnabled(false);
+				// JTable for Joker single draw
+				dataViewTable = new JTable(data, columns);
+				dataViewTable.getColumnModel().getColumn(0).setCellRenderer(centerText);
+				dataViewTable.getColumnModel().getColumn(1).setCellRenderer(centerText);
+				dataViewTable.getColumnModel().getColumn(2).setCellRenderer(centerText);
+				dataViewTable.getColumnModel().getColumn(3).setCellRenderer(centerText);
 
-						// Disable table column re-ordering
-						dataViewTable.getTableHeader().setReorderingAllowed(false);
+				// Make table cells unselectable and uneditable
+				dataViewTable.setEnabled(false);
 
-						// Make the JScrollPane take the same size as the JTable
-						dataViewTable.setPreferredScrollableViewportSize(dataViewTable.getPreferredSize());
+				// Disable table column re-ordering
+				dataViewTable.getTableHeader().setReorderingAllowed(false);
 
-					dataViewPanel.add(new JScrollPane(dataViewTable), BorderLayout.NORTH);
+				// Make the JScrollPane take the same size as the JTable
+				dataViewTable.setPreferredScrollableViewportSize(dataViewTable.getPreferredSize());
+
+			dataViewPanel.add(new JScrollPane(dataViewTable), BorderLayout.NORTH);
 
 		middlePanel.add(gameSelectAndDLPanel);
 		middlePanel.add(chooseMethodLabelPanel);

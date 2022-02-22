@@ -23,7 +23,6 @@ import java.util.List;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
-
 public class Helper
 {
 	// Methods

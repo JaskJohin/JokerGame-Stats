@@ -379,10 +379,6 @@ public class WindowManageData
 	 */
 	private void getJokerDateRangeData()
 	{
-		// First remove the old data from the jokerDRTable
-		modeljokerDRTable.setRowCount(0);
-
-
 		// Variables
 		int maxSimConnections = 50;  // Max number of simultaneous calls to the API
 		int threadNum;               // Number of threads (simultaneous calls to the API)
@@ -437,6 +433,9 @@ public class WindowManageData
 			});
 		}
 
+
+		// Remove the old data from the jokerDRTable, before adding the new
+		modeljokerDRTable.setRowCount(0);
 
 		// Parce all json strings in jsonStrList
 		for (int i = jsonStrList.size()-1; i >= 0; i--)

@@ -23,7 +23,6 @@ import javax.swing.JPanel;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
-
 public class WindowMain
 {
 	// Button actions

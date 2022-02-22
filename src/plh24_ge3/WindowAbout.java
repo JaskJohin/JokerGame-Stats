@@ -29,7 +29,6 @@ import javax.swing.JTextArea;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
-
 public class WindowAbout
 {
 	// Variables declaration
@@ -148,7 +147,7 @@ public class WindowAbout
 		// Buttons
 		JButton buttonClose = new JButton("Κλείσιμο");
 		buttonClose.setPreferredSize(new java.awt.Dimension(116, 26));
-                buttonClose.addActionListener(this::buttonCloseActionPerformed);
+		buttonClose.addActionListener(this::buttonCloseActionPerformed);
 
 		buttonLicense = new JButton("Άδεια");
 		buttonLicense.setPreferredSize(new java.awt.Dimension(116, 26));

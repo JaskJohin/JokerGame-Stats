@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.net.URL;
+import model.*;
 
 /**
  * @author Alexandros Dimitrakopoulos
@@ -44,7 +45,7 @@ public class Utilities {
         //TzokerController.storeDrawsDataByDrawID(response2);
         
         //delete data from DB for a specific game
-        //jokerdbtest.ContentTable.deleteGameData(5104);
+        //ContentTable.deleteGameData(5104);
 
     }
 }

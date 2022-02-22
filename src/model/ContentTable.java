@@ -22,7 +22,7 @@ public class ContentTable {
             if(!DbConnect.tableExists(connection, "CONTENT")) {
                 String createTableSQL = "CREATE TABLE content ("
                         + "gameID INTEGER NOT NULL, "
-                        + "drawID INTEGER NOT NULL , "
+                        + "drawID INTEGER NOT NULL, "
                         + "drawTime BIGINT NOT NULL, "
                         + "status VARCHAR(30) NOT NULL, "
                         + "drawBreak INTEGER NOT NULL, "
@@ -148,24 +148,28 @@ public class ContentTable {
             Logger.getLogger(ContentTable.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
-        public static int checkIfRecordExists (Content content) {
-        Connection connection = DbConnect.connect();
-        String countRecordsByPK = "SELECT COUNT(1) FROM CONTENT WHERE gameid=? AND drawid=?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(countRecordsByPK);
-            preparedStatement.setInt(1, content.getContentPK().getGameid());
-            preparedStatement.setInt(2, content.getContentPK().getDrawid());
-            ResultSet exists = preparedStatement.executeQuery();
-            int value = -1;
-            while(exists.next()) {
-                value = exists.getInt(1);
-                
-            }
-            preparedStatement.close();
-            return value;
-        } catch (SQLException ex) {
-            Logger.getLogger(ContentTable.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return -1;
+    //method to check if a record already exists in the database
+    public static boolean checkIfRecordExists (Content content) {
+    Connection connection = DbConnect.connect();
+    //SQL query to find record. If record exists, returns 1, else 0
+    String findRecordsByPK = "SELECT COUNT(1) FROM CONTENT WHERE gameid=? AND drawid=?";
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(findRecordsByPK);
+        preparedStatement.setInt(1, content.getContentPK().getGameid());
+        preparedStatement.setInt(2, content.getContentPK().getDrawid());
+        //definee a local variable to store SQL query returned value 
+        ResultSet resultSet = preparedStatement.executeQuery();
+        //definee a local variable to store SQL query returned value
+        boolean exists = false;
+        while(resultSet.next())
+            exists = resultSet.getInt(1) == 1; 
+        preparedStatement.close();
+        //inform the user for check result (for debugging)
+        System.out.println(exists);
+        return exists;
+    } catch (SQLException ex) {
+        Logger.getLogger(ContentTable.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return false;
     }
 }

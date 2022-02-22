@@ -20,12 +20,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * @author Alexandros Dimitrakopoulos
- * @author Odysseas Raftopoulos
- * @author Xristoforos Ampelas
+ *
  * @author Thanos Theodoropoulos
  */
-
 @Entity
 @Table(name = "CONTENT")
 @XmlRootElement

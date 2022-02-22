@@ -74,8 +74,8 @@ public class TzokerController {
             content.setVisualdraw(contentDetails.get(i).getAsJsonObject().get("visualDraw").getAsInt());
             
             //checking if record exists in database
-            int control = ContentTable.checkIfRecordExists(content);
-            if(control != 1) {
+            boolean control = ContentTable.checkIfRecordExists(content);
+            if(!control) {
                 /*--------------------SETTING FIELDS OF PRICEPOINTS TABLE--------------------*/
                 //set values for pricePoints Element
                 Pricepoints pricePoints = new Pricepoints();
@@ -209,8 +209,8 @@ public class TzokerController {
         content.setVisualdraw(contentDetails.get("visualDraw").getAsInt());
 
         //checking if record exists in database
-        int control = ContentTable.checkIfRecordExists(content);
-        if(control != 1) {
+        boolean control = ContentTable.checkIfRecordExists(content);
+        if(!control) {
 
             /*--------------------SETTING FIELDS OF PRICEPOINTS TABLE--------------------*/
             //set values for pricePoints Element

@@ -36,7 +36,7 @@ public class Utilities {
     public static void main(String[] args) throws Exception {
       
         JsonObject response =  Utilities.GET_API("https://api.opap.gr/draws/v3.0/5104/draw-date/2020-01-01/2020-02-01");
-        TzokerController.storeDrawsData(response);
+        TzokerController.storeDrawsDataFromDateRange(response);
 
     }
 }

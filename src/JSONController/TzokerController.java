@@ -27,7 +27,7 @@ public class TzokerController {
         em = emf.createEntityManager();
     }
     //method to store data in table Content
-    public static void storeDrawsData(JsonObject response) throws Exception {
+    public static void storeDrawsDataFromDateRange(JsonObject response) throws Exception {
         
         //Content for API call for dates range returns content as an Array of draws
         JsonArray contentDetails = response.getAsJsonArray("content");

@@ -176,7 +176,7 @@ public class ContentTable {
     }
     return false;
     }
-    
+    //method to delete data from the database providing a date range
     public static void deleteDataByDateRange (String fromDateStr, String toDateStr) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date fromDate = dateFormat.parse(fromDateStr);

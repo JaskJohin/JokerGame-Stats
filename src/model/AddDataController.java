@@ -6,7 +6,6 @@ import POJOs.*;
 import javax.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
-import model.QueriesSQL;
 
 /**
  * @author Alexandros Dimitrakopoulos

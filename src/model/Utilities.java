@@ -42,14 +42,14 @@ public class Utilities {
         AddDataController.storeDrawsDataByDateRange(response);
         
         //method to store signle Draw data to the DataBase
-        JsonObject response2 =  Utilities.GET_API("https://api.opap.gr/draws/v3.0/5104/2404");
-        AddDataController.storeDrawsDataByDrawID(response2);
+        //JsonObject response2 =  Utilities.GET_API("https://api.opap.gr/draws/v3.0/5104/2404");
+        //AddDataController.storeDrawsDataByDrawID(response2);
         
         //delete data from DB for a specific game
-        QueriesSQL.deleteDataByGameId(5104);
+        //QueriesSQL.deleteDataByGameId(5104);
         
         //delete data from DB for specific date range
-        QueriesSQL.deleteDataByDateRange("2020-01-01", "2020-02-01");
+        //QueriesSQL.deleteDataByDateRange("2020-01-01", "2020-02-01");
 
     }
 }

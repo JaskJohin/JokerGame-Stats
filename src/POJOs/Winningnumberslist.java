@@ -21,9 +21,12 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * @author Alexandros Dimitrakopoulos
+ * @author Odysseas Raftopoulos
+ * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 @Entity
 @Table(name = "WINNINGNUMBERSLIST")
 @XmlRootElement

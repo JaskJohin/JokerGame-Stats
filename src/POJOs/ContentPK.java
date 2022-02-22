@@ -11,9 +11,12 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- *
+ * @author Alexandros Dimitrakopoulos
+ * @author Odysseas Raftopoulos
+ * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 @Embeddable
 public class ContentPK implements Serializable {
 

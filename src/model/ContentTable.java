@@ -2,8 +2,11 @@ package model;
 
 import POJOs.Content;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Date;
 
 /**
  * @author Alexandros Dimitrakopoulos
@@ -164,6 +167,7 @@ public class ContentTable {
         while(resultSet.next())
             exists = resultSet.getInt(1) == 1; 
         preparedStatement.close();
+        connection.close();
         //inform the user for check result (for debugging)
         System.out.println(exists);
         return exists;
@@ -171,5 +175,26 @@ public class ContentTable {
         Logger.getLogger(ContentTable.class.getName()).log(Level.SEVERE, null, ex);
     }
     return false;
+    }
+    
+    public static void deleteDataByDateRange (String fromDateStr, String toDateStr) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date fromDate = dateFormat.parse(fromDateStr);
+        Date toDate = dateFormat.parse(toDateStr);
+        long fromEpoch = fromDate.getTime();
+        long toEpoch = toDate.getTime();
+        
+        Connection connection = DbConnect.connect();
+        String deleteRecordsByDR = "DELETE FROM CONTENT WHERE DRAWTIME >=? AND DRAWTIME<=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteRecordsByDR);
+            preparedStatement.setLong(1, fromEpoch);
+            preparedStatement.setLong(2, toEpoch);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ContentTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

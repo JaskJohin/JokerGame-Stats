@@ -46,6 +46,9 @@ public class Utilities {
         
         //delete data from DB for a specific game
         //ContentTable.deleteGameData(5104);
+        
+        //delete data from DB for specific date range
+        //ContentTable.deleteDataByDateRange("2020-01-01", "2020-02-01");
 
     }
 }

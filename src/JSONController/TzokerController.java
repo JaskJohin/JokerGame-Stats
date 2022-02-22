@@ -6,6 +6,7 @@ import POJOs.*;
 import javax.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
+import model.ContentTable;
 
 /**
  * @author Alexandros Dimitrakopoulos
@@ -72,87 +73,91 @@ public class TzokerController {
             content.setDrawbreak(contentDetails.get(i).getAsJsonObject().get("drawBreak").getAsInt());
             content.setVisualdraw(contentDetails.get(i).getAsJsonObject().get("visualDraw").getAsInt());
             
-            /*--------------------SETTING FIELDS OF PRICEPOINTS TABLE--------------------*/
-            //set values for pricePoints Element
-            Pricepoints pricePoints = new Pricepoints();
-            pricePoints.setIndex(i);
-            pricePoints.setAmount(pricePointsObj.get("amount").getAsDouble());
-            pricePoints.setContent(content);
-            
-            /*-----------------SETTING FIELDS OF WINNINGNUMBERSLIST TABLE----------------*/
-            //array list to store all the winning numbers
-            List<Winningnumberslist> quintet = new ArrayList<>();
-            //loop to parse numbers and add to the List
-            for(int j = 0; j < wnListArray.size(); j++) {
-                Winningnumberslist wnList = new Winningnumberslist();
-                wnList.setIndex(j);
-                wnList.setNumber(wnListArray.get(j).getAsInt());
-                wnList.setContent(content);
-                quintet.add(wnList);
-            }
-            /*----------------SETTING FIELDS OF WINNINGNUMBERSBONUS TABLE-----------------*/
-            //ArrayList to store bonus numbers (for Tzoker is 1 but bonus is defined as Array in JSON
-            List<Winningnumbersbonus> bonuses = new ArrayList<>();
-            for(int k = 0; k < bonusArray.size(); k++) {
-                Winningnumbersbonus bonusList = new Winningnumbersbonus();
-                bonusList.setIndex(k);
-                bonusList.setBonus(bonusArray.get(k).getAsInt());
-                bonusList.setContent(content);
-                bonuses.add(bonusList);
-            }
-            /*------------------SETTING FIELDS OF PRIZECATEGORIES TABLE-------------------*/
-            //ArrayList to store values for subsequent prize categories
-            List<Prizecategories> pkList = new ArrayList<>();
-            for(int l = 0; l < prizeCatArray.size(); l++){
-                Prizecategories prizeCategory = new Prizecategories();
-                prizeCategory.setIndex(l);
-                prizeCategory.setCategoryid(prizeCatArray.get(l).getAsJsonObject().get("id").getAsInt());
-                prizeCategory.setDivident(prizeCatArray.get(l).getAsJsonObject().get("divident").getAsDouble());
-                prizeCategory.setWinners(prizeCatArray.get(l).getAsJsonObject().get("winners").getAsInt());
-                prizeCategory.setDistributed(prizeCatArray.get(l).getAsJsonObject().get("distributed").getAsDouble());
-                prizeCategory.setJackpot(prizeCatArray.get(l).getAsJsonObject().get("jackpot").getAsDouble());
-                prizeCategory.setFixed(prizeCatArray.get(l).getAsJsonObject().get("fixed").getAsDouble());
-                prizeCategory.setCategorytype(prizeCatArray.get(l).getAsJsonObject().get("categoryType").getAsInt());
-                prizeCategory.setGametype(prizeCatArray.get(l).getAsJsonObject().get("gameType").getAsString());
-                prizeCategory.setContent(content);
-                pkList.add(prizeCategory);
-            }
-            
-            /*--------------------SETTING FIELDS OF WAGERSTATISTICS TABLE------------------*/
-            Wagerstatistics wagerStats = new Wagerstatistics();
-            wagerStats.setIndex(i);
-            wagerStats.setColumns(wagerObg.get("columns").getAsInt());
-            wagerStats.setWagers(wagerObg.get("wagers").getAsInt());
-            wagerStats.setContent(content);
-            
-            /*-------------JPA SECTION FOR THE INSERTION OF DATA TO THE TALBES--------------*/
-            //create & execute Entity Transaction to commit the data to the DB table
-            EntityTransaction entityTransaction = null;
-            try {
-                entityTransaction = em.getTransaction();
-                entityTransaction.begin();
-                //store to Content table
-                em.persist(content);
-                //sotre to PricePoints Table
-                em.persist(pricePoints);
-                //store number to winning number table
-                for(Winningnumberslist wNumElement : quintet)
-                    em.persist(wNumElement);
-                
-                //store bonus to winning number bonus
-                for(Winningnumbersbonus bonus: bonuses)
-                    em.persist(bonus);
-                
-                //store Prize Categories data
-                for(Prizecategories pk: pkList)
-                    em.persist(pk);
-                //store wager statistics
-                em.persist(wagerStats);
-                //commit changes to the database
-                entityTransaction.commit();
-            }catch(RuntimeException e) {
-                    if(entityTransaction.isActive())
-                        entityTransaction.rollback();
+            //checking if record exists in database
+            int control = ContentTable.checkIfRecordExists(content);
+            if(control != 1) {
+                /*--------------------SETTING FIELDS OF PRICEPOINTS TABLE--------------------*/
+                //set values for pricePoints Element
+                Pricepoints pricePoints = new Pricepoints();
+                pricePoints.setIndex(i);
+                pricePoints.setAmount(pricePointsObj.get("amount").getAsDouble());
+                pricePoints.setContent(content);
+
+                /*-----------------SETTING FIELDS OF WINNINGNUMBERSLIST TABLE----------------*/
+                //array list to store all the winning numbers
+                List<Winningnumberslist> quintet = new ArrayList<>();
+                //loop to parse numbers and add to the List
+                for(int j = 0; j < wnListArray.size(); j++) {
+                    Winningnumberslist wnList = new Winningnumberslist();
+                    wnList.setIndex(j);
+                    wnList.setNumber(wnListArray.get(j).getAsInt());
+                    wnList.setContent(content);
+                    quintet.add(wnList);
+                }
+                /*----------------SETTING FIELDS OF WINNINGNUMBERSBONUS TABLE-----------------*/
+                //ArrayList to store bonus numbers (for Tzoker is 1 but bonus is defined as Array in JSON
+                List<Winningnumbersbonus> bonuses = new ArrayList<>();
+                for(int k = 0; k < bonusArray.size(); k++) {
+                    Winningnumbersbonus bonusList = new Winningnumbersbonus();
+                    bonusList.setIndex(k);
+                    bonusList.setBonus(bonusArray.get(k).getAsInt());
+                    bonusList.setContent(content);
+                    bonuses.add(bonusList);
+                }
+                /*------------------SETTING FIELDS OF PRIZECATEGORIES TABLE-------------------*/
+                //ArrayList to store values for subsequent prize categories
+                List<Prizecategories> pkList = new ArrayList<>();
+                for(int l = 0; l < prizeCatArray.size(); l++){
+                    Prizecategories prizeCategory = new Prizecategories();
+                    prizeCategory.setIndex(l);
+                    prizeCategory.setCategoryid(prizeCatArray.get(l).getAsJsonObject().get("id").getAsInt());
+                    prizeCategory.setDivident(prizeCatArray.get(l).getAsJsonObject().get("divident").getAsDouble());
+                    prizeCategory.setWinners(prizeCatArray.get(l).getAsJsonObject().get("winners").getAsInt());
+                    prizeCategory.setDistributed(prizeCatArray.get(l).getAsJsonObject().get("distributed").getAsDouble());
+                    prizeCategory.setJackpot(prizeCatArray.get(l).getAsJsonObject().get("jackpot").getAsDouble());
+                    prizeCategory.setFixed(prizeCatArray.get(l).getAsJsonObject().get("fixed").getAsDouble());
+                    prizeCategory.setCategorytype(prizeCatArray.get(l).getAsJsonObject().get("categoryType").getAsInt());
+                    prizeCategory.setGametype(prizeCatArray.get(l).getAsJsonObject().get("gameType").getAsString());
+                    prizeCategory.setContent(content);
+                    pkList.add(prizeCategory);
+                }
+
+                /*--------------------SETTING FIELDS OF WAGERSTATISTICS TABLE------------------*/
+                Wagerstatistics wagerStats = new Wagerstatistics();
+                wagerStats.setIndex(i);
+                wagerStats.setColumns(wagerObg.get("columns").getAsInt());
+                wagerStats.setWagers(wagerObg.get("wagers").getAsInt());
+                wagerStats.setContent(content);
+
+                /*-------------JPA SECTION FOR THE INSERTION OF DATA TO THE TALBES--------------*/
+                //create & execute Entity Transaction to commit the data to the DB table
+                EntityTransaction entityTransaction = null;
+                try {
+                    entityTransaction = em.getTransaction();
+                    entityTransaction.begin();
+                    //store to Content table
+                    em.persist(content);
+                    //sotre to PricePoints Table
+                    em.persist(pricePoints);
+                    //store number to winning number table
+                    for(Winningnumberslist wNumElement : quintet)
+                        em.persist(wNumElement);
+
+                    //store bonus to winning number bonus
+                    for(Winningnumbersbonus bonus: bonuses)
+                        em.persist(bonus);
+
+                    //store Prize Categories data
+                    for(Prizecategories pk: pkList)
+                        em.persist(pk);
+                    //store wager statistics
+                    em.persist(wagerStats);
+                    //commit changes to the database
+                    entityTransaction.commit();
+                }catch(RuntimeException e) {
+                        if(entityTransaction.isActive())
+                            entityTransaction.rollback();
+                }
             }
             //closing element manager & element manage factory
             em.close();

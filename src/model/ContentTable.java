@@ -1,5 +1,6 @@
 package model;
 
+import POJOs.Content;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -146,5 +147,25 @@ public class ContentTable {
         } catch (SQLException ex) {
             Logger.getLogger(ContentTable.class.getName()).log(Level.SEVERE, null, ex);          
         }
-    }   
+    }
+        public static int checkIfRecordExists (Content content) {
+        Connection connection = DbConnect.connect();
+        String countRecordsByPK = "SELECT COUNT(1) FROM CONTENT WHERE gameid=? AND drawid=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(countRecordsByPK);
+            preparedStatement.setInt(1, content.getContentPK().getGameid());
+            preparedStatement.setInt(2, content.getContentPK().getDrawid());
+            ResultSet exists = preparedStatement.executeQuery();
+            int value = -1;
+            while(exists.next()) {
+                value = exists.getInt(1);
+                
+            }
+            preparedStatement.close();
+            return value;
+        } catch (SQLException ex) {
+            Logger.getLogger(ContentTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
 }

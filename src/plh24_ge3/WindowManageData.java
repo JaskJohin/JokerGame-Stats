@@ -747,8 +747,10 @@ public class WindowManageData
 	 * Action of the buttonDelDRInDB.
 	 * @param evt 
 	 */
-	private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt)
-	{
+	private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt) {
+                
+                // TO DO εμφάνιση παραθύρου επιβεβαίωσης διαγραφής
+            
 		LocalDate date1;
 		LocalDate date2;
 
@@ -804,6 +806,8 @@ public class WindowManageData
 			case "Τζόκερ":    gId = "5104"; break;
 			case "Extra5":    gId = "5106"; break;
 		}
+                
+                // TO DO εμφάνιση παραθύρου επιβεβαίωσης διαγραφής
                 //convert game ID to Integer
                 int gameId = Integer.parseInt(gId);
                 //calling function to delete data for selected game ID

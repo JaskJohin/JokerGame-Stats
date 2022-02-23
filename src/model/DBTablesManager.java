@@ -239,5 +239,22 @@ public class DBTablesManager {
         } catch (SQLException ex) {
             Logger.getLogger(DBTablesManager.class.getName()).log(Level.SEVERE, null, ex);          
         }
+    }    
+    public static void createDatabaseTables() {
+        DBTablesManager.createContentTable();
+        DBTablesManager.createPPTable();
+        DBTablesManager.createPCTable();
+        DBTablesManager.createWSTable();
+        DBTablesManager.createWNLTable();
+        DBTablesManager.createWNBTable();
+    }
+    public static void dropDatabaseTables() {
+        DBTablesManager.dropWNLTable();
+        DBTablesManager.dropWNBTable();
+        DBTablesManager.dropWSTable();
+        DBTablesManager.dropPCTable();
+        DBTablesManager.dropPPTable();
+        DBTablesManager.dropContentTable();
     }
 }
+

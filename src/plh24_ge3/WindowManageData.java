@@ -1,7 +1,5 @@
 package plh24_ge3;
 
-import POJOs.Content;
-import POJOs.ContentPK;
 import com.google.gson.*;
 import java.awt.*;
 import java.text.ParseException;

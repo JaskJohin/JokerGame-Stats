@@ -17,12 +17,17 @@ import java.util.Date;
 
 public class QueriesSQL {
     
+    //Attributes  declaration
+    private static Connection connection;
+    private static Statement statement;
+    private static PreparedStatement preparedStatement;
+    private static SimpleDateFormat dateFormat;
 
     //Method to select all table contents (for testing purposes)
     public static ResultSet selectContentAll() {
         try {
-            Connection connection = DbConnect.connect();   
-            Statement statement = connection.createStatement();
+            connection = DbConnect.connect();   
+            statement = connection.createStatement();
             String selectSQL = "(SELECT * FROM content)";
             ResultSet resultSet = statement.executeQuery(selectSQL);
             statement.close();
@@ -37,9 +42,9 @@ public class QueriesSQL {
     //Method to delete all tuples for a specific draw, based on the primary key
     public static void deleteContentTupple (int gameId, int drawId) {
         try {
-            Connection connection = DbConnect.connect();
+            connection = DbConnect.connect();
             String deleteSQL = "DELETE FROM content WHERE gameID = ? AND drawID = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
+            preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.setInt(2, drawId);
             preparedStatement.executeUpdate();
@@ -53,9 +58,9 @@ public class QueriesSQL {
     //Method to delete all data for a specific game
     public static void deleteDataByGameId (int gameId) {
         try {
-            Connection connection = DbConnect.connect();
+            connection = DbConnect.connect();
             String deleteSQL = "DELETE FROM content WHERE gameID = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
+            preparedStatement = connection.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, gameId);
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -66,11 +71,11 @@ public class QueriesSQL {
     }
     //method to check if a record already exists in the database
     public static boolean checkIfRecordExists (Content content) {
-    Connection connection = DbConnect.connect();
+    connection = DbConnect.connect();
     //SQL query to find record. If record exists, returns 1, else 0
     String findRecordsByPK = "SELECT COUNT(1) FROM CONTENT WHERE gameid=? AND drawid=?";
     try {
-        PreparedStatement preparedStatement = connection.prepareStatement(findRecordsByPK);
+        preparedStatement = connection.prepareStatement(findRecordsByPK);
         preparedStatement.setInt(1, content.getContentPK().getGameid());
         preparedStatement.setInt(2, content.getContentPK().getDrawid());
         //definee a local variable to store SQL query returned value 
@@ -92,7 +97,7 @@ public class QueriesSQL {
     //method to delete data from the database providing a date range
     public static void deleteDataByDateRange (String fromDateStr, String toDateStr) throws ParseException {
         //format the input String
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         //parse the formatted String to Date class
         Date fromDate = dateFormat.parse(fromDateStr);
         Date toDate = dateFormat.parse(toDateStr);
@@ -100,11 +105,11 @@ public class QueriesSQL {
         long fromEpoch = fromDate.getTime();
         long toEpoch = toDate.getTime();
         //connect to the database
-        Connection connection = DbConnect.connect();
+        connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
         String deleteRecordsByDR = "DELETE FROM CONTENT WHERE DRAWTIME >=? AND DRAWTIME<=?";
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(deleteRecordsByDR);
+            preparedStatement = connection.prepareStatement(deleteRecordsByDR);
             preparedStatement.setLong(1, fromEpoch);
             preparedStatement.setLong(2, toEpoch);
             preparedStatement.executeUpdate();

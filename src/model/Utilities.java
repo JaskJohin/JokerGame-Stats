@@ -38,15 +38,15 @@ public class Utilities {
     public static void main(String[] args) throws Exception {
         
         //method to store to the DataBase Draw data derived for a date range
-        JsonObject response =  Utilities.GET_API("https://api.opap.gr/draws/v3.0/5104/draw-date/2020-01-01/2020-02-01");
-        AddDataController.storeDrawsDataByDateRange(response);
+        //JsonObject response =  Utilities.GET_API("https://api.opap.gr/draws/v3.0/5104/draw-date/2020-01-01/2020-02-10");
+        //AddDataController.storeDrawsDataByDateRange(response);
         
         //method to store signle Draw data to the DataBase
-        //JsonObject response2 =  Utilities.GET_API("https://api.opap.gr/draws/v3.0/5104/2404");
+        //JsonObject response2 =  Utilities.GET_API("https://api.opap.gr/draws/v3.0/5104/2402");
         //AddDataController.storeDrawsDataByDrawID(response2);
         
         //delete data from DB for a specific game
-        //QueriesSQL.deleteDataByGameId(5104);
+        QueriesSQL.deleteDataByGameId(5104);
         
         //delete data from DB for specific date range
         //QueriesSQL.deleteDataByDateRange("2020-01-01", "2020-02-01");

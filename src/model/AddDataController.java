@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class AddDataController {
     
-    //variables declaration
+    //attributes declaration
     private static  EntityManagerFactory emf;
     private static EntityManager em;
     

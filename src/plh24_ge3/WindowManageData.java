@@ -1,45 +1,23 @@
 package plh24_ge3;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import POJOs.Content;
+import POJOs.ContentPK;
+import com.google.gson.*;
+import java.awt.*;
+import java.text.ParseException;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import model.AddDataController;
+import model.QueriesSQL;
 import static plh24_ge3.Helper.getJsonStrFromApiURL;
 import static plh24_ge3.Helper.getUrlStrForDateRange;
 import static plh24_ge3.Helper.jokerJsonSingleDrawToObject;
@@ -708,81 +686,63 @@ public class WindowManageData
 	 */
 	private void buttonStoreInDBActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		if (radioButtonSingleDraw.isSelected())
-		{
-			// Αν είναι ενεργοποιημένη η επιλογή "Συγκεκριμένη κλήρωση", το json string
-			// της τελευταίας αναζήτησης είναι αποθηκευμένο στο attribute lastSearchjsonStr
+            if (radioButtonSingleDraw.isSelected())
+            {
+                try {
+                    // Check if a search has been performed
+                    String errorMsg = "Δεν έχει γίνει αναζήτηση για συγκεκριμένη κλήρωση!";
+                    if (lastSearchjsonStr == null)
+                    {
+                        JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
+                        return;
+                    }
+                    
+                    // Json string from the last single draw search
+                    String jsonStr = lastSearchjsonStr;
 
-			// Check if a search has been performed
-			String errorMsg = "Δεν έχει γίνει αναζήτηση για συγκεκριμένη κλήρωση!";
-			if (lastSearchjsonStr == null)
-			{
-				JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
-				return;
-			}
+                    // Parse jsonStr into json element and get an object structure
+                    JsonObject jObject = new JsonParser().parse(jsonStr).getAsJsonObject();
+                    //INSERT data to the database
+                    AddDataController.storeDrawsDataByDrawID(jObject);
+                    return;
+                } catch (Exception ex) {
+                    Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else
+            {
+                // Αν είναι ενεργοποιημένη η επιλογή "Εύρος ημερομηνιών", τα json strings
+                // της τελευταίας αναζήτησης είναι αποθηκευμένα στο attribute lastSearchjsonStrList
 
-			// Json string from the last single draw search
-			String jsonStr = lastSearchjsonStr;
+                // Check if a search has been performed
+                String errorMsg = "Δεν έχει γίνει αναζήτηση για εύρος ημερομηνιών!";
+                if (lastSearchjsonStrList.size() == 0)
+                {
+                        JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
+                        return;
+                }
 
-			// Parse jsonStr into json element and get an object structure
-			JsonElement jElement = new JsonParser().parse(jsonStr);
-			JsonObject jObject = jElement.getAsJsonObject();
+                // Parce all json strings in lastSearchjsonStrList
+                for (int i = 0; i <  lastSearchjsonStrList.size(); i++)
+                {
+                    try {
+                        String jsonStr = lastSearchjsonStrList.get(i);
 
+                        // Parse jsonStr into json element and get an object structure
+                        JsonObject jObject = new JsonParser().parse(jsonStr).getAsJsonObject();
 
-			// TODO   Έλεγχος αν υπάρχει ήδη η συγκεκριμένη κλήρωση στη βάση
+                        // Get the totalElements
+                        int totalElements = jObject.get("totalElements").getAsInt();
 
-			// TODO   Αποθήκευση κλήρωσης στη βάση (αν δεν υπάρχει ήδη)
-
-
-		}
-		else
-		{
-			// Αν είναι ενεργοποιημένη η επιλογή "Εύρος ημερομηνιών", τα json strings
-			// της τελευταίας αναζήτησης είναι αποθηκευμένα στο attribute lastSearchjsonStrList
-
-			// Check if a search has been performed
-			String errorMsg = "Δεν έχει γίνει αναζήτηση για εύρος ημερομηνιών!";
-			if (lastSearchjsonStrList.size() == 0)
-			{
-				JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
-				return;
-			}
-
-			// Parce all json strings in lastSearchjsonStrList
-			for (int i = lastSearchjsonStrList.size()-1; i >= 0; i--)
-			{
-				String jsonStr = lastSearchjsonStrList.get(i);
-
-				// Parse jsonStr into json element and get an object structure
-				JsonElement jElement = new JsonParser().parse(jsonStr);
-				JsonObject jObject = jElement.getAsJsonObject();
-
-				// Get the totalElements
-				int totalElements = jObject.get("totalElements").getAsInt();
-
-				// If there are no draw data, go to the next jsonStrList element
-				if (totalElements == 0) {continue;}
-
-				// Get the "content" json array
-				JsonArray content = jObject.getAsJsonArray("content");
-
-				for (JsonElement drawElement : content)
-				{
-					// Get the json object from this content json element
-					JsonObject drawObject = drawElement.getAsJsonObject();
-					
-					
-					// TODO   Έλεγχος αν υπάρχουν ήδη (κάποια από) τα δεδομένα στη βάση
-
-					// TODO   Αποθήκευση δεδομένων στη βάση (όσων δεν υπάρχουν ήδη)
-
-
-				}
-			}
-		}
-	}
-
-
+                        // If there are no draw data, go to the next jsonStrList element
+                        if (totalElements == 0) {continue;}
+                        AddDataController.storeDrawsDataByDateRange(jObject);
+                    } catch (Exception ex) {
+                        Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
 	/**
 	 * Action of the buttonDelDRInDB.
 	 * @param evt 
@@ -812,10 +772,16 @@ public class WindowManageData
 			JOptionPane.showMessageDialog(null, errorMsgRange, "Λάθος είσοδος", 0);
 			return;
 		}
+                //get LocaDate as String
+                String fromDate = date1.toString();
+                String toDate = date2.toString();
+                try {
+                    //execute DELETE
+                    QueriesSQL.deleteDataByDateRange(fromDate, toDate);
 
-
-		// TODO   Διαγραφή δεδομένων από τη βάση με εύρος ημερομηνιών
-
+                } catch (ParseException ex) {
+                    Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
+                }
 	}
 
 
@@ -838,8 +804,10 @@ public class WindowManageData
 			case "Τζόκερ":    gId = "5104"; break;
 			case "Extra5":    gId = "5106"; break;
 		}
-
-		// TODO   Διαγραφή όλων των δεδομένων από τη βάση για το επιλεγμένο παιχνίδι
+                //convert game ID to Integer
+                int gameId = Integer.parseInt(gId);
+                //calling function to delete data for selected game ID
+                QueriesSQL.deleteDataByGameId(gameId);
 
 	}
 

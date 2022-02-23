@@ -87,7 +87,10 @@ public class QueriesSQL {
         preparedStatement.close();
         connection.close();
         //inform the user for check result (for debugging)
-        System.out.println(exists);
+        if(exists)
+            System.out.println("Record exists.");
+        else
+            System.out.println("Record doesn't exist. Adding!");
         return exists;
     } catch (SQLException ex) {
         Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);

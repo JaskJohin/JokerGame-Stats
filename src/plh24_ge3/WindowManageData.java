@@ -745,33 +745,60 @@ public class WindowManageData
 	 * Action of the buttonDelDRInDB.
 	 * @param evt 
 	 */
-	private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        private int deletionConfirmationDialog() {
+            ImageIcon icon = new ImageIcon("src/resources/exclamation4.png");
+
+            JPanel panel = new JPanel();
+            //panel.setBackground(Color.getHSBColor(255, 102, 102));
+            panel.setPreferredSize(new Dimension(400, 96));
+            panel.setLayout(null);
+
+            JLabel label1 = new JLabel("ΠΡΟΣΟΧΗ! Αυτή η ενέργεια θα διαγράψει δεδομένα από τη βάση");
+            label1.setVerticalAlignment(SwingConstants.BOTTOM);
+            label1.setBounds(32, 16, 400, 32);
+            label1.setFont(new Font("Arial", Font.BOLD, 12));
+            label1.setHorizontalAlignment(SwingConstants.LEFT);
+            panel.add(label1);
+
+            JLabel label2 = new JLabel("Είστε βέβαιοι;");
+            label2.setVerticalAlignment(SwingConstants.TOP);
+            label2.setHorizontalAlignment(SwingConstants.LEFT);
+            label2.setFont(new Font("Arial", Font.BOLD, 12));
+            label2.setBounds(32, 48, 200, 96);
+            panel.add(label2);
+            String[] options = {"Διαγραφή", "Ακύρωση"};
+            UIManager.put("OptionPane.minimumSize", new Dimension(300, 120));
+            int input = JOptionPane.showConfirmDialog(null, panel, "Επιβεβαίωση διαγραφής",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, icon);
+            return input;
+        }
+        
+        
+        
+        private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt) {
                 
-                // TO DO εμφάνιση παραθύρου επιβεβαίωσης διαγραφής
-            
-		LocalDate date1;
-		LocalDate date2;
+            int choice = deletionConfirmationDialog();
+            if(choice == 1) {
+                LocalDate date1;
+                LocalDate date2;
 
-		// Check if given dates are valid
-		String errorMsgDates = "Οι ημερομηνίες πρέπει να είναι της μορφής YYYY-MM-DD.";
-		try
-		{
-			date1 = LocalDate.parse(textFieldDBDate1.getText());
-			date2 = LocalDate.parse(textFieldDBDate2.getText());
-		}
-		catch (Exception ex)
-		{
-			JOptionPane.showMessageDialog(null, errorMsgDates, "Λάθος είσοδος", 0);
-			return;
-		}
+                // Check if given dates are valid
+                String errorMsgDates = "Οι ημερομηνίες πρέπει να είναι της μορφής YYYY-MM-DD.";
+                try {
+                        date1 = LocalDate.parse(textFieldDBDate1.getText());
+                        date2 = LocalDate.parse(textFieldDBDate2.getText());
+                }catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, errorMsgDates, "Λάθος είσοδος", 0);
+                        return;
+                }
 
-		// Chech if the date range is valid
-		String errorMsgRange = "Η αρχική ημερομηνία πρέπει να είναι πριν την τελική.";
-		if (!date1.minusDays(1).isBefore(date2))
-		{
-			JOptionPane.showMessageDialog(null, errorMsgRange, "Λάθος είσοδος", 0);
-			return;
-		}
+                // Chech if the date range is valid
+                String errorMsgRange = "Η αρχική ημερομηνία πρέπει να είναι πριν την τελική.";
+                if (!date1.minusDays(1).isBefore(date2)) {
+                        JOptionPane.showMessageDialog(null, errorMsgRange, "Λάθος είσοδος", 0);
+                        return;
+                }
                 //get LocaDate as String
                 String fromDate = date1.toString();
                 String toDate = date2.toString();
@@ -782,6 +809,7 @@ public class WindowManageData
                 } catch (ParseException ex) {
                     Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
 	}
 
 
@@ -789,13 +817,11 @@ public class WindowManageData
 	 * Action of the buttonDelAllForSelGameInDB.
 	 * @param evt 
 	 */
-	private void buttonDelAllForSelGameInDBActionPerformed(java.awt.event.ActionEvent evt)
-	{
+	private void buttonDelAllForSelGameInDBActionPerformed(java.awt.event.ActionEvent evt) {
 		// Get selected game id
 		String gId = null;
 
-		switch (comboBoxGameSelect.getSelectedItem().toString())
-		{
+		switch (comboBoxGameSelect.getSelectedItem().toString()) {
 			case "Κίνο":      gId = "1100"; break;
 			case "Powerspin": gId = "1110"; break;
 			case "Super3":    gId = "2100"; break;
@@ -805,12 +831,13 @@ public class WindowManageData
 			case "Extra5":    gId = "5106"; break;
 		}
                 
-                // TO DO εμφάνιση παραθύρου επιβεβαίωσης διαγραφής
-                //convert game ID to Integer
-                int gameId = Integer.parseInt(gId);
-                //calling function to delete data for selected game ID
-                QueriesSQL.deleteDataByGameId(gameId);
-
+                int choice = deletionConfirmationDialog();
+                if(choice == 1) {
+                    //convert game ID to Integer
+                    int gameId = Integer.parseInt(gId);
+                    //calling function to delete data for selected game ID
+                    QueriesSQL.deleteDataByGameId(gameId);
+                }
 	}
 
 

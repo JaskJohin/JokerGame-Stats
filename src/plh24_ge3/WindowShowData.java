@@ -4,14 +4,21 @@ import com.google.gson.*;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import model.AddDataController;
+import model.QueriesSQL;
 import static plh24_ge3.Helper.jokerJsonSingleDrawToObject;
 
 
@@ -220,16 +227,28 @@ public class WindowShowData
 		}
 	}
 
-
 	/**
 	 * Gather data for the selected game and year using the DB.
 	 */
-	private void getDataFromDB(String gameId, String year)
-	{
-            //TO DO
-                
-	}
-
+	private void getDataFromDB(String gameId, String year) throws Exception	{
+/*            String startDate, endDate;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat();
+            
+            for(int i = 1; i<=12; i++) {
+                    startDate = year + "01" + "-0" + i;
+                    endDate = formatter.format(LocalDate.parse(startDate, formatter).plusMonths(1).minusDays(1));
+                    Date fromDate = dateFormat.parse(startDate);
+                    Date toDate = dateFormat.parse(endDate);
+                    JsonObject response = model.Utilities.GET_API("https://api.opap.gr/draws/v3.0/5104/draw-date/" + fromDate +"/" + toDate + "/draw-id");
+                    JsonArray monthlyDraws = response.getAsJsonArray();
+                    List<Integer> yearDraws = new ArrayList<>();
+                    for(Integer draw : yearDraws)
+                        QueriesSQL.checkIfRecordExists(content)
+                    
+                }
+*/
+            }
 
 	// Button actions
 	/**

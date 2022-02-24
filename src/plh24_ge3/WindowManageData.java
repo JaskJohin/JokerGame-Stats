@@ -777,14 +777,17 @@ public class WindowManageData
         
         
         private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt) {
-                
+            //show a confirmation dialog    
             int choice = deletionConfirmationDialog();
+            //if OK is pressed, then
             if(choice == 1) {
+                //set date variables
                 LocalDate date1;
                 LocalDate date2;
 
                 // Check if given dates are valid
                 String errorMsgDates = "Οι ημερομηνίες πρέπει να είναι της μορφής YYYY-MM-DD.";
+                //parse dates
                 try {
                         date1 = LocalDate.parse(textFieldDBDate1.getText());
                         date2 = LocalDate.parse(textFieldDBDate2.getText());
@@ -803,7 +806,7 @@ public class WindowManageData
                 String fromDate = date1.toString();
                 String toDate = date2.toString();
                 try {
-                    //execute DELETE
+                    //execute DELETE operation
                     QueriesSQL.deleteDataByDateRange(fromDate, toDate);
 
                 } catch (ParseException ex) {
@@ -830,14 +833,14 @@ public class WindowManageData
 			case "Τζόκερ":    gId = "5104"; break;
 			case "Extra5":    gId = "5106"; break;
 		}
-                
+                //convert game ID to Integer
+                int gameId = Integer.parseInt(gId);
+                //call the confirmation dialog
                 int choice = deletionConfirmationDialog();
-                if(choice == 1) {
-                    //convert game ID to Integer
-                    int gameId = Integer.parseInt(gId);
+                //if answer is OK then
+                if(choice == 1)
                     //calling function to delete data for selected game ID
-                    QueriesSQL.deleteDataByGameId(gameId);
-                }
+                    QueriesSQL.deleteDataByGameId(gameId); 
 	}
 
 

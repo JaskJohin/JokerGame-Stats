@@ -290,7 +290,11 @@ public class WindowShowData
 		}
 		else
 		{
-			getDataFromDB(gameId, year);
+                    try {
+                        getDataFromDB(gameId, year);
+                    } catch (Exception ex) {
+                        Logger.getLogger(WindowShowData.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 		}
 	}
 

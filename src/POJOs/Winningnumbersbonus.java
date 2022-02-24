@@ -1,17 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package POJOs;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -31,43 +24,46 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Winningnumbersbonus.findAll", query = "SELECT w FROM Winningnumbersbonus w")
-    , @NamedQuery(name = "Winningnumbersbonus.findByIndex", query = "SELECT w FROM Winningnumbersbonus w WHERE w.index = :index")
+    , @NamedQuery(name = "Winningnumbersbonus.findByIndex", query = "SELECT w FROM Winningnumbersbonus w WHERE w.winningnumbersbonusPK.index = :index")
+    , @NamedQuery(name = "Winningnumbersbonus.findByGameid", query = "SELECT w FROM Winningnumbersbonus w WHERE w.winningnumbersbonusPK.gameid = :gameid")
+    , @NamedQuery(name = "Winningnumbersbonus.findByDrawid", query = "SELECT w FROM Winningnumbersbonus w WHERE w.winningnumbersbonusPK.drawid = :drawid")
     , @NamedQuery(name = "Winningnumbersbonus.findByBonus", query = "SELECT w FROM Winningnumbersbonus w WHERE w.bonus = :bonus")})
 public class Winningnumbersbonus implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "INDEX")
-    private Integer index;
+    @EmbeddedId
+    protected WinningnumbersbonusPK winningnumbersbonusPK;
     @Basic(optional = false)
     @Column(name = "BONUS")
     private int bonus;
     @JoinColumns({
-        @JoinColumn(name = "GAMEID", referencedColumnName = "GAMEID")
-        , @JoinColumn(name = "DRAWID", referencedColumnName = "DRAWID")})
+        @JoinColumn(name = "GAMEID", referencedColumnName = "GAMEID", insertable = false, updatable = false)
+        , @JoinColumn(name = "DRAWID", referencedColumnName = "DRAWID", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Content content;
 
     public Winningnumbersbonus() {
     }
 
-    public Winningnumbersbonus(Integer index) {
-        this.index = index;
+    public Winningnumbersbonus(WinningnumbersbonusPK winningnumbersbonusPK) {
+        this.winningnumbersbonusPK = winningnumbersbonusPK;
     }
 
-    public Winningnumbersbonus(Integer index, int bonus) {
-        this.index = index;
+    public Winningnumbersbonus(WinningnumbersbonusPK winningnumbersbonusPK, int bonus) {
+        this.winningnumbersbonusPK = winningnumbersbonusPK;
         this.bonus = bonus;
     }
 
-    public Integer getIndex() {
-        return index;
+    public Winningnumbersbonus(int index, int gameid, int drawid) {
+        this.winningnumbersbonusPK = new WinningnumbersbonusPK(index, gameid, drawid);
     }
 
-    public void setIndex(Integer index) {
-        this.index = index;
+    public WinningnumbersbonusPK getWinningnumbersbonusPK() {
+        return winningnumbersbonusPK;
+    }
+
+    public void setWinningnumbersbonusPK(WinningnumbersbonusPK winningnumbersbonusPK) {
+        this.winningnumbersbonusPK = winningnumbersbonusPK;
     }
 
     public int getBonus() {
@@ -89,7 +85,7 @@ public class Winningnumbersbonus implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (index != null ? index.hashCode() : 0);
+        hash += (winningnumbersbonusPK != null ? winningnumbersbonusPK.hashCode() : 0);
         return hash;
     }
 
@@ -100,7 +96,7 @@ public class Winningnumbersbonus implements Serializable {
             return false;
         }
         Winningnumbersbonus other = (Winningnumbersbonus) object;
-        if ((this.index == null && other.index != null) || (this.index != null && !this.index.equals(other.index))) {
+        if ((this.winningnumbersbonusPK == null && other.winningnumbersbonusPK != null) || (this.winningnumbersbonusPK != null && !this.winningnumbersbonusPK.equals(other.winningnumbersbonusPK))) {
             return false;
         }
         return true;
@@ -108,7 +104,7 @@ public class Winningnumbersbonus implements Serializable {
 
     @Override
     public String toString() {
-        return "POJOs.Winningnumbersbonus[ index=" + index + " ]";
+        return "POJOs.Winningnumbersbonus[ winningnumbersbonusPK=" + winningnumbersbonusPK + " ]";
     }
     
 }

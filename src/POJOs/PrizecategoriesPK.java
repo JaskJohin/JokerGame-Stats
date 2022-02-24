@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
  * @author Thanos Theodoropoulos
  */
 @Embeddable
-public class ContentPK implements Serializable {
+public class PrizecategoriesPK implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "GAMEID")
@@ -20,13 +20,17 @@ public class ContentPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "DRAWID")
     private int drawid;
+    @Basic(optional = false)
+    @Column(name = "CATEGORYID")
+    private int categoryid;
 
-    public ContentPK() {
+    public PrizecategoriesPK() {
     }
 
-    public ContentPK(int gameid, int drawid) {
+    public PrizecategoriesPK(int gameid, int drawid, int categoryid) {
         this.gameid = gameid;
         this.drawid = drawid;
+        this.categoryid = categoryid;
     }
 
     public int getGameid() {
@@ -45,25 +49,37 @@ public class ContentPK implements Serializable {
         this.drawid = drawid;
     }
 
+    public int getCategoryid() {
+        return categoryid;
+    }
+
+    public void setCategoryid(int categoryid) {
+        this.categoryid = categoryid;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) gameid;
         hash += (int) drawid;
+        hash += (int) categoryid;
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContentPK)) {
+        if (!(object instanceof PrizecategoriesPK)) {
             return false;
         }
-        ContentPK other = (ContentPK) object;
+        PrizecategoriesPK other = (PrizecategoriesPK) object;
         if (this.gameid != other.gameid) {
             return false;
         }
         if (this.drawid != other.drawid) {
+            return false;
+        }
+        if (this.categoryid != other.categoryid) {
             return false;
         }
         return true;
@@ -71,7 +87,7 @@ public class ContentPK implements Serializable {
 
     @Override
     public String toString() {
-        return "POJOs.ContentPK[ gameid=" + gameid + ", drawid=" + drawid + " ]";
+        return "POJOs.PrizecategoriesPK[ gameid=" + gameid + ", drawid=" + drawid + ", categoryid=" + categoryid + " ]";
     }
     
 }

@@ -19,7 +19,7 @@ public class DbConnect {
     
     //Method to connect to the database
     public static Connection connect() {
-        connectionString = "jdbc:derby://localhost/jokerStatData;create=true";
+        connectionString = "jdbc:derby://localhost/opapGameStatistics;create=true";
         connection = null;
         try {
             connection = DriverManager.getConnection(connectionString);

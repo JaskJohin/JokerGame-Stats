@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package POJOs;
 
 import java.io.Serializable;
@@ -15,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -53,14 +49,14 @@ public class Content implements Serializable {
     @Basic(optional = false)
     @Column(name = "VISUALDRAW")
     private int visualdraw;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "content")
-    private Collection<Pricepoints> pricepointsCollection;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "content")
+    private Pricepoints pricepoints;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "content")
     private Collection<Winningnumbersbonus> winningnumbersbonusCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "content")
     private Collection<Prizecategories> prizecategoriesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "content")
-    private Collection<Wagerstatistics> wagerstatisticsCollection;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "content")
+    private Wagerstatistics wagerstatistics;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "content")
     private Collection<Winningnumberslist> winningnumberslistCollection;
 
@@ -123,13 +119,12 @@ public class Content implements Serializable {
         this.visualdraw = visualdraw;
     }
 
-    @XmlTransient
-    public Collection<Pricepoints> getPricepointsCollection() {
-        return pricepointsCollection;
+    public Pricepoints getPricepoints() {
+        return pricepoints;
     }
 
-    public void setPricepointsCollection(Collection<Pricepoints> pricepointsCollection) {
-        this.pricepointsCollection = pricepointsCollection;
+    public void setPricepoints(Pricepoints pricepoints) {
+        this.pricepoints = pricepoints;
     }
 
     @XmlTransient
@@ -150,13 +145,12 @@ public class Content implements Serializable {
         this.prizecategoriesCollection = prizecategoriesCollection;
     }
 
-    @XmlTransient
-    public Collection<Wagerstatistics> getWagerstatisticsCollection() {
-        return wagerstatisticsCollection;
+    public Wagerstatistics getWagerstatistics() {
+        return wagerstatistics;
     }
 
-    public void setWagerstatisticsCollection(Collection<Wagerstatistics> wagerstatisticsCollection) {
-        this.wagerstatisticsCollection = wagerstatisticsCollection;
+    public void setWagerstatistics(Wagerstatistics wagerstatistics) {
+        this.wagerstatistics = wagerstatistics;
     }
 
     @XmlTransient

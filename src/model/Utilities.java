@@ -46,7 +46,7 @@ public class Utilities {
         //AddDataController.storeDrawsDataByDrawID(response2);
         
         //delete data from DB for a specific game
-        QueriesSQL.deleteDataByGameId(5104);
+        //QueriesSQL.deleteDataByGameId(5104);
         
         //delete data from DB for specific date range
         //QueriesSQL.deleteDataByDateRange("2020-01-01", "2020-02-01");

@@ -1,17 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package POJOs;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -31,8 +24,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Prizecategories.findAll", query = "SELECT p FROM Prizecategories p")
-    , @NamedQuery(name = "Prizecategories.findByIndex", query = "SELECT p FROM Prizecategories p WHERE p.index = :index")
-    , @NamedQuery(name = "Prizecategories.findByCategoryid", query = "SELECT p FROM Prizecategories p WHERE p.categoryid = :categoryid")
+    , @NamedQuery(name = "Prizecategories.findByGameid", query = "SELECT p FROM Prizecategories p WHERE p.prizecategoriesPK.gameid = :gameid")
+    , @NamedQuery(name = "Prizecategories.findByDrawid", query = "SELECT p FROM Prizecategories p WHERE p.prizecategoriesPK.drawid = :drawid")
+    , @NamedQuery(name = "Prizecategories.findByCategoryid", query = "SELECT p FROM Prizecategories p WHERE p.prizecategoriesPK.categoryid = :categoryid")
     , @NamedQuery(name = "Prizecategories.findByDivident", query = "SELECT p FROM Prizecategories p WHERE p.divident = :divident")
     , @NamedQuery(name = "Prizecategories.findByWinners", query = "SELECT p FROM Prizecategories p WHERE p.winners = :winners")
     , @NamedQuery(name = "Prizecategories.findByDistributed", query = "SELECT p FROM Prizecategories p WHERE p.distributed = :distributed")
@@ -43,14 +37,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Prizecategories implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "INDEX")
-    private Integer index;
-    @Basic(optional = false)
-    @Column(name = "CATEGORYID")
-    private int categoryid;
+    @EmbeddedId
+    protected PrizecategoriesPK prizecategoriesPK;
     @Basic(optional = false)
     @Column(name = "DIVIDENT")
     private double divident;
@@ -73,21 +61,20 @@ public class Prizecategories implements Serializable {
     @Column(name = "GAMETYPE")
     private String gametype;
     @JoinColumns({
-        @JoinColumn(name = "GAMEID", referencedColumnName = "GAMEID")
-        , @JoinColumn(name = "DRAWID", referencedColumnName = "DRAWID")})
+        @JoinColumn(name = "GAMEID", referencedColumnName = "GAMEID", insertable = false, updatable = false)
+        , @JoinColumn(name = "DRAWID", referencedColumnName = "DRAWID", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Content content;
 
     public Prizecategories() {
     }
 
-    public Prizecategories(Integer index) {
-        this.index = index;
+    public Prizecategories(PrizecategoriesPK prizecategoriesPK) {
+        this.prizecategoriesPK = prizecategoriesPK;
     }
 
-    public Prizecategories(Integer index, int categoryid, double divident, int winners, double distributed, double jackpot, double fixed, int categorytype, String gametype) {
-        this.index = index;
-        this.categoryid = categoryid;
+    public Prizecategories(PrizecategoriesPK prizecategoriesPK, double divident, int winners, double distributed, double jackpot, double fixed, int categorytype, String gametype) {
+        this.prizecategoriesPK = prizecategoriesPK;
         this.divident = divident;
         this.winners = winners;
         this.distributed = distributed;
@@ -97,20 +84,16 @@ public class Prizecategories implements Serializable {
         this.gametype = gametype;
     }
 
-    public Integer getIndex() {
-        return index;
+    public Prizecategories(int gameid, int drawid, int categoryid) {
+        this.prizecategoriesPK = new PrizecategoriesPK(gameid, drawid, categoryid);
     }
 
-    public void setIndex(Integer index) {
-        this.index = index;
+    public PrizecategoriesPK getPrizecategoriesPK() {
+        return prizecategoriesPK;
     }
 
-    public int getCategoryid() {
-        return categoryid;
-    }
-
-    public void setCategoryid(int categoryid) {
-        this.categoryid = categoryid;
+    public void setPrizecategoriesPK(PrizecategoriesPK prizecategoriesPK) {
+        this.prizecategoriesPK = prizecategoriesPK;
     }
 
     public double getDivident() {
@@ -180,7 +163,7 @@ public class Prizecategories implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (index != null ? index.hashCode() : 0);
+        hash += (prizecategoriesPK != null ? prizecategoriesPK.hashCode() : 0);
         return hash;
     }
 
@@ -191,7 +174,7 @@ public class Prizecategories implements Serializable {
             return false;
         }
         Prizecategories other = (Prizecategories) object;
-        if ((this.index == null && other.index != null) || (this.index != null && !this.index.equals(other.index))) {
+        if ((this.prizecategoriesPK == null && other.prizecategoriesPK != null) || (this.prizecategoriesPK != null && !this.prizecategoriesPK.equals(other.prizecategoriesPK))) {
             return false;
         }
         return true;
@@ -199,7 +182,7 @@ public class Prizecategories implements Serializable {
 
     @Override
     public String toString() {
-        return "POJOs.Prizecategories[ index=" + index + " ]";
+        return "POJOs.Prizecategories[ prizecategoriesPK=" + prizecategoriesPK + " ]";
     }
     
 }

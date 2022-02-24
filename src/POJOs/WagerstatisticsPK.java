@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
  * @author Thanos Theodoropoulos
  */
 @Embeddable
-public class ContentPK implements Serializable {
+public class WagerstatisticsPK implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "GAMEID")
@@ -21,10 +21,10 @@ public class ContentPK implements Serializable {
     @Column(name = "DRAWID")
     private int drawid;
 
-    public ContentPK() {
+    public WagerstatisticsPK() {
     }
 
-    public ContentPK(int gameid, int drawid) {
+    public WagerstatisticsPK(int gameid, int drawid) {
         this.gameid = gameid;
         this.drawid = drawid;
     }
@@ -56,10 +56,10 @@ public class ContentPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContentPK)) {
+        if (!(object instanceof WagerstatisticsPK)) {
             return false;
         }
-        ContentPK other = (ContentPK) object;
+        WagerstatisticsPK other = (WagerstatisticsPK) object;
         if (this.gameid != other.gameid) {
             return false;
         }
@@ -71,7 +71,7 @@ public class ContentPK implements Serializable {
 
     @Override
     public String toString() {
-        return "POJOs.ContentPK[ gameid=" + gameid + ", drawid=" + drawid + " ]";
+        return "POJOs.WagerstatisticsPK[ gameid=" + gameid + ", drawid=" + drawid + " ]";
     }
     
 }

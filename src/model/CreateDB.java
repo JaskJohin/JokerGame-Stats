@@ -7,8 +7,9 @@ package model;
 
 public class CreateDB {
 
+
     public static void main(String[] args) {
         DBTablesManager.createDatabaseTables();
-        DBTablesManager.dropDatabaseTables();
+        //DBTablesManager.dropDatabaseTables();
     }  
 }

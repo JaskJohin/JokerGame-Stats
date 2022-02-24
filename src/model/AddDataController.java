@@ -71,16 +71,19 @@ public class AddDataController {
             content.setStatus(contentDetails.get(i).getAsJsonObject().get("status").getAsString());
             content.setDrawbreak(contentDetails.get(i).getAsJsonObject().get("drawBreak").getAsInt());
             content.setVisualdraw(contentDetails.get(i).getAsJsonObject().get("visualDraw").getAsInt());
-            
+                       
             //checking if record exists in database
             boolean control = QueriesSQL.checkIfRecordExists(content);
             if(!control) {
                 /*--------------------SETTING FIELDS OF PRICEPOINTS TABLE--------------------*/
                 //set values for pricePoints Element
                 Pricepoints pricePoints = new Pricepoints();
-                pricePoints.setIndex(i);
-                pricePoints.setAmount(pricePointsObj.get("amount").getAsDouble());
+                PricepointsPK pricePointsPK = new PricepointsPK();
                 pricePoints.setContent(content);
+                pricePointsPK.setGameid(content.getContentPK().getGameid());
+                pricePointsPK.setDrawid(content.getContentPK().getDrawid());
+                pricePoints.setPricepointsPK(pricePointsPK);
+                pricePoints.setAmount(pricePointsObj.get("amount").getAsDouble());
 
                 /*-----------------SETTING FIELDS OF WINNINGNUMBERSLIST TABLE----------------*/
                 //array list to store all the winning numbers
@@ -88,9 +91,13 @@ public class AddDataController {
                 //loop to parse numbers and add to the List
                 for(int j = 0; j < wnListArray.size(); j++) {
                     Winningnumberslist wnList = new Winningnumberslist();
-                    wnList.setIndex(j);
-                    wnList.setNumber(wnListArray.get(j).getAsInt());
+                    WinningnumberslistPK wnListPK = new WinningnumberslistPK();
                     wnList.setContent(content);
+                    wnListPK.setIndex(j + 1);
+                    wnListPK.setGameid(content.getContentPK().getGameid());
+                    wnListPK.setDrawid(content.getContentPK().getDrawid());
+                    wnList.setWinningnumberslistPK(wnListPK);
+                    wnList.setNumber(wnListArray.get(j).getAsInt());
                     quintet.add(wnList);
                 }
                 /*----------------SETTING FIELDS OF WINNINGNUMBERSBONUS TABLE-----------------*/
@@ -98,9 +105,13 @@ public class AddDataController {
                 List<Winningnumbersbonus> bonuses = new ArrayList<>();
                 for(int k = 0; k < bonusArray.size(); k++) {
                     Winningnumbersbonus bonusList = new Winningnumbersbonus();
-                    bonusList.setIndex(k);
-                    bonusList.setBonus(bonusArray.get(k).getAsInt());
+                    WinningnumbersbonusPK bonusListPK = new WinningnumbersbonusPK();
                     bonusList.setContent(content);
+                    bonusListPK.setIndex(k + 1);
+                    bonusListPK.setGameid(content.getContentPK().getGameid());
+                    bonusListPK.setDrawid(content.getContentPK().getDrawid());
+                    bonusList.setWinningnumbersbonusPK(bonusListPK);
+                    bonusList.setBonus(bonusArray.get(k).getAsInt());
                     bonuses.add(bonusList);
                 }
                 /*------------------SETTING FIELDS OF PRIZECATEGORIES TABLE-------------------*/
@@ -108,8 +119,12 @@ public class AddDataController {
                 List<Prizecategories> pkList = new ArrayList<>();
                 for(int l = 0; l < prizeCatArray.size(); l++){
                     Prizecategories prizeCategory = new Prizecategories();
-                    prizeCategory.setIndex(l);
-                    prizeCategory.setCategoryid(prizeCatArray.get(l).getAsJsonObject().get("id").getAsInt());
+                    PrizecategoriesPK prizecatPK = new PrizecategoriesPK();
+                    prizeCategory.setContent(content);
+                    prizecatPK.setCategoryid(prizeCatArray.get(l).getAsJsonObject().get("id").getAsInt());
+                    prizecatPK.setGameid(content.getContentPK().getGameid());
+                    prizecatPK.setDrawid(content.getContentPK().getDrawid());
+                    prizeCategory.setPrizecategoriesPK(prizecatPK);
                     prizeCategory.setDivident(prizeCatArray.get(l).getAsJsonObject().get("divident").getAsDouble());
                     prizeCategory.setWinners(prizeCatArray.get(l).getAsJsonObject().get("winners").getAsInt());
                     prizeCategory.setDistributed(prizeCatArray.get(l).getAsJsonObject().get("distributed").getAsDouble());
@@ -117,17 +132,20 @@ public class AddDataController {
                     prizeCategory.setFixed(prizeCatArray.get(l).getAsJsonObject().get("fixed").getAsDouble());
                     prizeCategory.setCategorytype(prizeCatArray.get(l).getAsJsonObject().get("categoryType").getAsInt());
                     prizeCategory.setGametype(prizeCatArray.get(l).getAsJsonObject().get("gameType").getAsString());
-                    prizeCategory.setContent(content);
                     pkList.add(prizeCategory);
                 }
 
                 /*--------------------SETTING FIELDS OF WAGERSTATISTICS TABLE------------------*/
                 Wagerstatistics wagerStats = new Wagerstatistics();
-                wagerStats.setIndex(i);
+                WagerstatisticsPK wagerPK = new WagerstatisticsPK();
+                wagerStats.setContent(content);
+                wagerPK.setGameid(content.getContentPK().getGameid());
+                wagerPK.setDrawid(content.getContentPK().getDrawid());
+                wagerStats.setWagerstatisticsPK(wagerPK);
                 wagerStats.setColumns(wagerObg.get("columns").getAsInt());
                 wagerStats.setWagers(wagerObg.get("wagers").getAsInt());
-                wagerStats.setContent(content);
-
+                
+                
                 /*-------------JPA SECTION FOR THE INSERTION OF DATA TO THE TALBES--------------*/
                 //create & execute Entity Transaction to commit the data to the DB table
                 EntityTransaction entityTransaction = null;
@@ -214,9 +232,12 @@ public class AddDataController {
             /*--------------------SETTING FIELDS OF PRICEPOINTS TABLE--------------------*/
             //set values for pricePoints Element
             Pricepoints pricePoints = new Pricepoints();
-            pricePoints.setIndex(1);
-            pricePoints.setAmount(pricePointsObj.get("amount").getAsDouble());
+            PricepointsPK pricePointsPK = new PricepointsPK();
             pricePoints.setContent(content);
+            pricePointsPK.setGameid(content.getContentPK().getGameid());
+            pricePointsPK.setDrawid(content.getContentPK().getDrawid());
+            pricePoints.setPricepointsPK(pricePointsPK);
+            pricePoints.setAmount(pricePointsObj.get("amount").getAsDouble());
 
             /*-----------------SETTING FIELDS OF WINNINGNUMBERSLIST TABLE----------------*/
             //array list to store all the winning numbers
@@ -224,9 +245,13 @@ public class AddDataController {
             //loop to parse numbers and add to the List
             for(int j = 0; j < wnListArray.size(); j++) {
                 Winningnumberslist wnList = new Winningnumberslist();
-                wnList.setIndex(j);
-                wnList.setNumber(wnListArray.get(j).getAsInt());
+                WinningnumberslistPK wnListPK = new WinningnumberslistPK();
                 wnList.setContent(content);
+                wnListPK.setIndex(j + 1);
+                wnListPK.setGameid(content.getContentPK().getGameid());
+                wnListPK.setDrawid(content.getContentPK().getDrawid());
+                wnList.setWinningnumberslistPK(wnListPK);
+                wnList.setNumber(wnListArray.get(j).getAsInt());
                 quintet.add(wnList);
             }
             /*----------------SETTING FIELDS OF WINNINGNUMBERSBONUS TABLE-----------------*/
@@ -234,9 +259,13 @@ public class AddDataController {
             List<Winningnumbersbonus> bonuses = new ArrayList<>();
             for(int k = 0; k < bonusArray.size(); k++) {
                 Winningnumbersbonus bonusList = new Winningnumbersbonus();
-                bonusList.setIndex(k);
-                bonusList.setBonus(bonusArray.get(k).getAsInt());
+                WinningnumbersbonusPK bonusListPK = new WinningnumbersbonusPK();
                 bonusList.setContent(content);
+                bonusListPK.setIndex(k + 1);
+                bonusListPK.setGameid(content.getContentPK().getGameid());
+                bonusListPK.setDrawid(content.getContentPK().getDrawid());
+                bonusList.setWinningnumbersbonusPK(bonusListPK);
+                bonusList.setBonus(bonusArray.get(k).getAsInt());
                 bonuses.add(bonusList);
             }
             /*------------------SETTING FIELDS OF PRIZECATEGORIES TABLE-------------------*/
@@ -244,8 +273,12 @@ public class AddDataController {
             List<Prizecategories> pkList = new ArrayList<>();
             for(int l = 0; l < prizeCatArray.size(); l++){
                 Prizecategories prizeCategory = new Prizecategories();
-                prizeCategory.setIndex(l);
-                prizeCategory.setCategoryid(prizeCatArray.get(l).getAsJsonObject().get("id").getAsInt());
+                PrizecategoriesPK prizecatPK = new PrizecategoriesPK();
+                prizeCategory.setContent(content);
+                prizecatPK.setCategoryid(prizeCatArray.get(l).getAsJsonObject().get("id").getAsInt());
+                prizecatPK.setGameid(content.getContentPK().getGameid());
+                prizecatPK.setDrawid(content.getContentPK().getDrawid());
+                prizeCategory.setPrizecategoriesPK(prizecatPK);
                 prizeCategory.setDivident(prizeCatArray.get(l).getAsJsonObject().get("divident").getAsDouble());
                 prizeCategory.setWinners(prizeCatArray.get(l).getAsJsonObject().get("winners").getAsInt());
                 prizeCategory.setDistributed(prizeCatArray.get(l).getAsJsonObject().get("distributed").getAsDouble());
@@ -253,16 +286,18 @@ public class AddDataController {
                 prizeCategory.setFixed(prizeCatArray.get(l).getAsJsonObject().get("fixed").getAsDouble());
                 prizeCategory.setCategorytype(prizeCatArray.get(l).getAsJsonObject().get("categoryType").getAsInt());
                 prizeCategory.setGametype(prizeCatArray.get(l).getAsJsonObject().get("gameType").getAsString());
-                prizeCategory.setContent(content);
                 pkList.add(prizeCategory);
             }
 
             /*--------------------SETTING FIELDS OF WAGERSTATISTICS TABLE------------------*/
             Wagerstatistics wagerStats = new Wagerstatistics();
-            wagerStats.setIndex(1);
+            WagerstatisticsPK wagerPK = new WagerstatisticsPK();
+            wagerStats.setContent(content);
+            wagerPK.setGameid(content.getContentPK().getGameid());
+            wagerPK.setDrawid(content.getContentPK().getDrawid());
+            wagerStats.setWagerstatisticsPK(wagerPK);
             wagerStats.setColumns(wagerObg.get("columns").getAsInt());
             wagerStats.setWagers(wagerObg.get("wagers").getAsInt());
-            wagerStats.setContent(content);
 
             /*-------------JPA SECTION FOR THE INSERTION OF DATA TO THE TALBES--------------*/
             //create & execute Entity Transaction to commit the data to the DB table

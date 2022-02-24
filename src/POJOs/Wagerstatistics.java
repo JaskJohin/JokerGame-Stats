@@ -1,22 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package POJOs;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -31,17 +24,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Wagerstatistics.findAll", query = "SELECT w FROM Wagerstatistics w")
-    , @NamedQuery(name = "Wagerstatistics.findByIndex", query = "SELECT w FROM Wagerstatistics w WHERE w.index = :index")
+    , @NamedQuery(name = "Wagerstatistics.findByGameid", query = "SELECT w FROM Wagerstatistics w WHERE w.wagerstatisticsPK.gameid = :gameid")
+    , @NamedQuery(name = "Wagerstatistics.findByDrawid", query = "SELECT w FROM Wagerstatistics w WHERE w.wagerstatisticsPK.drawid = :drawid")
     , @NamedQuery(name = "Wagerstatistics.findByColumns", query = "SELECT w FROM Wagerstatistics w WHERE w.columns = :columns")
     , @NamedQuery(name = "Wagerstatistics.findByWagers", query = "SELECT w FROM Wagerstatistics w WHERE w.wagers = :wagers")})
 public class Wagerstatistics implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "INDEX")
-    private Integer index;
+    @EmbeddedId
+    protected WagerstatisticsPK wagerstatisticsPK;
     @Basic(optional = false)
     @Column(name = "COLUMNS")
     private int columns;
@@ -49,30 +40,34 @@ public class Wagerstatistics implements Serializable {
     @Column(name = "WAGERS")
     private int wagers;
     @JoinColumns({
-        @JoinColumn(name = "GAMEID", referencedColumnName = "GAMEID")
-        , @JoinColumn(name = "DRAWID", referencedColumnName = "DRAWID")})
-    @ManyToOne(optional = false)
+        @JoinColumn(name = "GAMEID", referencedColumnName = "GAMEID", insertable = false, updatable = false)
+        , @JoinColumn(name = "DRAWID", referencedColumnName = "DRAWID", insertable = false, updatable = false)})
+    @OneToOne(optional = false)
     private Content content;
 
     public Wagerstatistics() {
     }
 
-    public Wagerstatistics(Integer index) {
-        this.index = index;
+    public Wagerstatistics(WagerstatisticsPK wagerstatisticsPK) {
+        this.wagerstatisticsPK = wagerstatisticsPK;
     }
 
-    public Wagerstatistics(Integer index, int columns, int wagers) {
-        this.index = index;
+    public Wagerstatistics(WagerstatisticsPK wagerstatisticsPK, int columns, int wagers) {
+        this.wagerstatisticsPK = wagerstatisticsPK;
         this.columns = columns;
         this.wagers = wagers;
     }
 
-    public Integer getIndex() {
-        return index;
+    public Wagerstatistics(int gameid, int drawid) {
+        this.wagerstatisticsPK = new WagerstatisticsPK(gameid, drawid);
     }
 
-    public void setIndex(Integer index) {
-        this.index = index;
+    public WagerstatisticsPK getWagerstatisticsPK() {
+        return wagerstatisticsPK;
+    }
+
+    public void setWagerstatisticsPK(WagerstatisticsPK wagerstatisticsPK) {
+        this.wagerstatisticsPK = wagerstatisticsPK;
     }
 
     public int getColumns() {
@@ -102,7 +97,7 @@ public class Wagerstatistics implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (index != null ? index.hashCode() : 0);
+        hash += (wagerstatisticsPK != null ? wagerstatisticsPK.hashCode() : 0);
         return hash;
     }
 
@@ -113,7 +108,7 @@ public class Wagerstatistics implements Serializable {
             return false;
         }
         Wagerstatistics other = (Wagerstatistics) object;
-        if ((this.index == null && other.index != null) || (this.index != null && !this.index.equals(other.index))) {
+        if ((this.wagerstatisticsPK == null && other.wagerstatisticsPK != null) || (this.wagerstatisticsPK != null && !this.wagerstatisticsPK.equals(other.wagerstatisticsPK))) {
             return false;
         }
         return true;
@@ -121,7 +116,7 @@ public class Wagerstatistics implements Serializable {
 
     @Override
     public String toString() {
-        return "POJOs.Wagerstatistics[ index=" + index + " ]";
+        return "POJOs.Wagerstatistics[ wagerstatisticsPK=" + wagerstatisticsPK + " ]";
     }
     
 }

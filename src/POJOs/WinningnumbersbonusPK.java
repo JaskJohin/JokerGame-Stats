@@ -12,8 +12,11 @@ import javax.persistence.Embeddable;
  * @author Thanos Theodoropoulos
  */
 @Embeddable
-public class ContentPK implements Serializable {
+public class WinningnumbersbonusPK implements Serializable {
 
+    @Basic(optional = false)
+    @Column(name = "INDEX")
+    private int index;
     @Basic(optional = false)
     @Column(name = "GAMEID")
     private int gameid;
@@ -21,12 +24,21 @@ public class ContentPK implements Serializable {
     @Column(name = "DRAWID")
     private int drawid;
 
-    public ContentPK() {
+    public WinningnumbersbonusPK() {
     }
 
-    public ContentPK(int gameid, int drawid) {
+    public WinningnumbersbonusPK(int index, int gameid, int drawid) {
+        this.index = index;
         this.gameid = gameid;
         this.drawid = drawid;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public int getGameid() {
@@ -48,6 +60,7 @@ public class ContentPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
+        hash += (int) index;
         hash += (int) gameid;
         hash += (int) drawid;
         return hash;
@@ -56,10 +69,13 @@ public class ContentPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContentPK)) {
+        if (!(object instanceof WinningnumbersbonusPK)) {
             return false;
         }
-        ContentPK other = (ContentPK) object;
+        WinningnumbersbonusPK other = (WinningnumbersbonusPK) object;
+        if (this.index != other.index) {
+            return false;
+        }
         if (this.gameid != other.gameid) {
             return false;
         }
@@ -71,7 +87,7 @@ public class ContentPK implements Serializable {
 
     @Override
     public String toString() {
-        return "POJOs.ContentPK[ gameid=" + gameid + ", drawid=" + drawid + " ]";
+        return "POJOs.WinningnumbersbonusPK[ index=" + index + ", gameid=" + gameid + ", drawid=" + drawid + " ]";
     }
     
 }

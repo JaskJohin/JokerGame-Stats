@@ -1,22 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package POJOs;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -31,43 +24,45 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Pricepoints.findAll", query = "SELECT p FROM Pricepoints p")
-    , @NamedQuery(name = "Pricepoints.findByIndex", query = "SELECT p FROM Pricepoints p WHERE p.index = :index")
+    , @NamedQuery(name = "Pricepoints.findByGameid", query = "SELECT p FROM Pricepoints p WHERE p.pricepointsPK.gameid = :gameid")
+    , @NamedQuery(name = "Pricepoints.findByDrawid", query = "SELECT p FROM Pricepoints p WHERE p.pricepointsPK.drawid = :drawid")
     , @NamedQuery(name = "Pricepoints.findByAmount", query = "SELECT p FROM Pricepoints p WHERE p.amount = :amount")})
 public class Pricepoints implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "INDEX")
-    private Integer index;
+    @EmbeddedId
+    protected PricepointsPK pricepointsPK;
     @Basic(optional = false)
     @Column(name = "AMOUNT")
     private double amount;
     @JoinColumns({
-        @JoinColumn(name = "GAMEID", referencedColumnName = "GAMEID")
-        , @JoinColumn(name = "DRAWID", referencedColumnName = "DRAWID")})
-    @ManyToOne(optional = false)
+        @JoinColumn(name = "GAMEID", referencedColumnName = "GAMEID", insertable = false, updatable = false)
+        , @JoinColumn(name = "DRAWID", referencedColumnName = "DRAWID", insertable = false, updatable = false)})
+    @OneToOne(optional = false)
     private Content content;
 
     public Pricepoints() {
     }
 
-    public Pricepoints(Integer index) {
-        this.index = index;
+    public Pricepoints(PricepointsPK pricepointsPK) {
+        this.pricepointsPK = pricepointsPK;
     }
 
-    public Pricepoints(Integer index, double amount) {
-        this.index = index;
+    public Pricepoints(PricepointsPK pricepointsPK, double amount) {
+        this.pricepointsPK = pricepointsPK;
         this.amount = amount;
     }
 
-    public Integer getIndex() {
-        return index;
+    public Pricepoints(int gameid, int drawid) {
+        this.pricepointsPK = new PricepointsPK(gameid, drawid);
     }
 
-    public void setIndex(Integer index) {
-        this.index = index;
+    public PricepointsPK getPricepointsPK() {
+        return pricepointsPK;
+    }
+
+    public void setPricepointsPK(PricepointsPK pricepointsPK) {
+        this.pricepointsPK = pricepointsPK;
     }
 
     public double getAmount() {
@@ -89,7 +84,7 @@ public class Pricepoints implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (index != null ? index.hashCode() : 0);
+        hash += (pricepointsPK != null ? pricepointsPK.hashCode() : 0);
         return hash;
     }
 
@@ -100,7 +95,7 @@ public class Pricepoints implements Serializable {
             return false;
         }
         Pricepoints other = (Pricepoints) object;
-        if ((this.index == null && other.index != null) || (this.index != null && !this.index.equals(other.index))) {
+        if ((this.pricepointsPK == null && other.pricepointsPK != null) || (this.pricepointsPK != null && !this.pricepointsPK.equals(other.pricepointsPK))) {
             return false;
         }
         return true;
@@ -108,7 +103,7 @@ public class Pricepoints implements Serializable {
 
     @Override
     public String toString() {
-        return "POJOs.Pricepoints[ index=" + index + " ]";
+        return "POJOs.Pricepoints[ pricepointsPK=" + pricepointsPK + " ]";
     }
     
 }

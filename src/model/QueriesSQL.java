@@ -122,4 +122,107 @@ public class QueriesSQL {
             Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static int countMonthlyGames (String fromDateStr, String toDateStr) throws ParseException {
+        
+        //format the input String
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //parse the formatted String to Date class
+        Date fromDate = dateFormat.parse(fromDateStr);
+        Date toDate = dateFormat.parse(toDateStr);
+        //get the long representation of Epoch which is stored in the database
+        long fromEpoch = fromDate.getTime();
+        long toEpoch = toDate.getTime();
+        //connect to the database
+        connection = DbConnect.connect();
+        //compile the SQL query for the deletion of data for the requested date range
+        String montlhyDrawsCountStr = "SELECT COUNT(drawid) FROM CONTENT WHERE DRAWTIME >=? AND DRAWTIME<=?";
+        try {
+            preparedStatement = connection.prepareStatement(montlhyDrawsCountStr);
+            preparedStatement.setLong(1, fromEpoch);
+            preparedStatement.setLong(2, toEpoch);
+            ResultSet drawsCountSet = preparedStatement.executeQuery();
+            int drawsCount = 0;
+            while(drawsCountSet.next())
+                drawsCount = drawsCountSet.getInt(1);
+            preparedStatement.close();
+            connection.close();
+            return drawsCount;
+        } catch (SQLException ex) {
+            Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return 0;
+    }
+    
+    public static double sumMonthlyDivident (String fromDateStr, String toDateStr) throws ParseException {
+        //format the input String
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //parse the formatted String to Date class
+        Date fromDate = dateFormat.parse(fromDateStr);
+        Date toDate = dateFormat.parse(toDateStr);
+        //get the long representation of Epoch which is stored in the database
+        long fromEpoch = fromDate.getTime();
+        long toEpoch = toDate.getTime();
+        //connect to the database
+        connection = DbConnect.connect();
+        //compile the SQL query for the deletion of data for the requested date range
+        String monthlyDividentSumStr = "SELECT SUM(DIVIDENT) FROM "
+                + "(SELECT c.DRAWID, pc.DIVIDENT, c.DRAWTIME FROM "
+                + "CONTENT c INNER JOIN PRIZECATEGORIES pc "
+                + "ON c.DRAWID = pc.DRAWID) AS TOTAL_DIVIDENT "
+                + "WHERE DRAWTIME >=? AND DRAWTIME <=?;";
+        try {
+            preparedStatement = connection.prepareStatement(monthlyDividentSumStr);
+            preparedStatement.setLong(1, fromEpoch);
+            preparedStatement.setLong(2, toEpoch);
+            preparedStatement.executeQuery();
+            ResultSet dividentSumSet = preparedStatement.executeQuery();
+            double dividentSum = 0;
+            while(dividentSumSet.next())
+                dividentSum = dividentSumSet.getDouble(1);
+            preparedStatement.close();
+            connection.close();
+            return dividentSum;
+        } catch (SQLException ex) {
+            Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0.0;
+    }
+    
+    public static int countJackpots (String fromDateStr, String toDateStr) throws ParseException {
+        
+        //format the input String
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //parse the formatted String to Date class
+        Date fromDate = dateFormat.parse(fromDateStr);
+        Date toDate = dateFormat.parse(toDateStr);
+        //get the long representation of Epoch which is stored in the database
+        long fromEpoch = fromDate.getTime();
+        long toEpoch = toDate.getTime();
+        //connect to the database
+        connection = DbConnect.connect();
+        //compile the SQL query for the deletion of data for the requested date range
+        String montlhyJackpotCountStr = "SELECT COUNT(JACKPOT) FROM "
+                + "(SELECT c.DRAWID, pc.JACKPOT, c.DRAWTIME "
+                + "FROM CONTENT c INNER JOIN PRIZECATEGORIES pc "
+                + "ON c.DRAWID = pc.DRAWID) AS JACKPOTS "
+                + "WHERE DRAWTIME <= 1584302400000 AND DRAWTIME >= 1583438400000 AND JACKPOT = 0";
+        try {
+            preparedStatement = connection.prepareStatement(montlhyJackpotCountStr);
+            preparedStatement.setLong(1, fromEpoch);
+            preparedStatement.setLong(2, toEpoch);
+            ResultSet countJackpotSet = preparedStatement.executeQuery();
+            int jackpots = 0;
+            while(countJackpotSet.next())
+                jackpots = countJackpotSet.getInt(1);
+            preparedStatement.close();
+            connection.close();
+            return jackpots;
+        } catch (SQLException ex) {
+            Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return 0;
+    }
 }

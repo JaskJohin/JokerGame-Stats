@@ -1,15 +1,14 @@
 package plh24_ge3;
 
+import POJOs.Content;
+import POJOs.ContentPK;
 import com.google.gson.*;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
@@ -20,6 +19,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import model.AddDataController;
 import model.QueriesSQL;
 import static plh24_ge3.Helper.jokerJsonSingleDrawToObject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 
 /**
@@ -36,6 +37,8 @@ public class WindowShowData
 	private final JComboBox comboBoxYearSelect;
 	private final JRadioButton radioButtonApi;
 	private final JTable dataViewTable;
+        private static  EntityManagerFactory emf;
+        private static EntityManager em;
 
 
 	// Methods
@@ -231,24 +234,52 @@ public class WindowShowData
 	 * Gather data for the selected game and year using the DB.
 	 */
 	private void getDataFromDB(String gameId, String year) throws Exception	{
-/*            String startDate, endDate;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            SimpleDateFormat dateFormat = new SimpleDateFormat();
+            // Set the counters and sum to 0
+            int drawCount;
+            double moneySum;
+            int jackpotCount;
             
-            for(int i = 1; i<=12; i++) {
-                    startDate = year + "01" + "-0" + i;
-                    endDate = formatter.format(LocalDate.parse(startDate, formatter).plusMonths(1).minusDays(1));
-                    Date fromDate = dateFormat.parse(startDate);
-                    Date toDate = dateFormat.parse(endDate);
-                    JsonObject response = model.Utilities.GET_API("https://api.opap.gr/draws/v3.0/5104/draw-date/" + fromDate +"/" + toDate + "/draw-id");
-                    JsonArray monthlyDraws = response.getAsJsonArray();
-                    List<Integer> yearDraws = new ArrayList<>();
-                    for(Integer draw : yearDraws)
-                        QueriesSQL.checkIfRecordExists(content)
-                    
+            String startDate;
+            String endDate;
+            List<Integer> drawCountList = new ArrayList<>();
+            List<Double> dividentSumList = new ArrayList<>();
+            List<Integer> JackpotCountList = new ArrayList<>();
+            for(int i = 1; i <= 12; i++) {
+                // First empty the table cells for this month.
+                dataViewTable.setValueAt("", i, 1);
+                dataViewTable.setValueAt("", i, 2);
+                dataViewTable.setValueAt("", i, 3);
+                
+                
+                startDate = year + "01" + "-0" + i;
+                Content content = new Content();
+                JsonObject singleDrawObj;
+                ContentPK contentPK = new ContentPK();
+                LocalDate fromDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate toDate = fromDate.withDayOfMonth(fromDate.getMonth().length(fromDate.isLeapYear()));
+                endDate = toDate.toString();
+                JsonObject monthlyDrawsObj = model.Utilities.GET_API("https://api.opap.gr/draws/v3.0/5104/draw-date/" + fromDate +"/" + toDate + "/draw-id");
+                JsonArray monthlyDraws = monthlyDrawsObj.getAsJsonArray();
+                for(int j = 0; j < monthlyDraws.size(); j++){
+                    contentPK.setDrawid(monthlyDraws.get(j).getAsInt());
+                    contentPK.setGameid(Integer.parseInt(gameId));
+                    content.setContentPK(contentPK);
+                    boolean control = QueriesSQL.checkIfRecordExists(content);
+                    if(!control)  {
+                        singleDrawObj = model.Utilities.GET_API("https://api.opap.gr/draws/v3.0/" +gameId + "/" + content.getContentPK().getDrawid());
+                        AddDataController.storeDrawsDataByDrawID(singleDrawObj);
+                    }
                 }
-*/
+                drawCount = QueriesSQL.countMonthlyGames(startDate, endDate);
+                drawCountList.add(drawCount);
+                moneySum = QueriesSQL.sumMonthlyDivident(startDate, endDate);
+                dividentSumList.add(moneySum);
+                jackpotCount = QueriesSQL.countJackpots(startDate, endDate);
+                JackpotCountList.add(jackpotCount);
+            
             }
+            
+        }
 
 	// Button actions
 	/**

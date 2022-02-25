@@ -136,15 +136,13 @@ public class QueriesSQL {
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
-        String montlhyDrawsCountStr = "SELECT COUNT(drawid) FROM CONTENT WHERE DRAWTIME >=? AND DRAWTIME<=?";
+        String montlhyDrawsCountStr = "SELECT COUNT(drawid) AS GAMES_NUM FROM CONTENT WHERE DRAWTIME >=? AND DRAWTIME<=?";
         try {
             preparedStatement = connection.prepareStatement(montlhyDrawsCountStr);
             preparedStatement.setLong(1, fromEpoch);
             preparedStatement.setLong(2, toEpoch);
             ResultSet drawsCountSet = preparedStatement.executeQuery();
-            int drawsCount = 0;
-            while(drawsCountSet.next())
-                drawsCount = drawsCountSet.getInt(1);
+            int drawsCount = drawsCountSet.getObject("GAMES_NUM", Integer.class);
             preparedStatement.close();
             connection.close();
             return drawsCount;
@@ -167,10 +165,10 @@ public class QueriesSQL {
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
-        String monthlyDividentSumStr = "SELECT SUM(DIVIDENT) FROM "
+        String monthlyDividentSumStr = "SELECT SUM(DIVIDENT) AS TOTAL_DIVIDENT FROM "
                 + "(SELECT c.DRAWID, pc.DIVIDENT, c.DRAWTIME FROM "
                 + "CONTENT c INNER JOIN PRIZECATEGORIES pc "
-                + "ON c.DRAWID = pc.DRAWID) AS TOTAL_DIVIDENT "
+                + "ON c.DRAWID = pc.DRAWID) AS JOINED_T "
                 + "WHERE DRAWTIME >=? AND DRAWTIME <=?";
         try {
             preparedStatement = connection.prepareStatement(monthlyDividentSumStr);
@@ -178,9 +176,7 @@ public class QueriesSQL {
             preparedStatement.setLong(2, toEpoch);
             preparedStatement.executeQuery();
             ResultSet dividentSumSet = preparedStatement.executeQuery();
-            double dividentSum = 0;
-            while(dividentSumSet.next())
-                dividentSum = dividentSumSet.getDouble(1);
+            double dividentSum = dividentSumSet.getObject("TOTAL_DIVIDENT", Double.class);
             preparedStatement.close();
             connection.close();
             return dividentSum;
@@ -203,19 +199,17 @@ public class QueriesSQL {
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
-        String montlhyJackpotCountStr = "SELECT COUNT(JACKPOT) FROM "
+        String montlhyJackpotCountStr = "SELECT COUNT(JACKPOT) AS JACKPOTS FROM "
                 + "(SELECT c.DRAWID, pc.JACKPOT, c.DRAWTIME "
                 + "FROM CONTENT c INNER JOIN PRIZECATEGORIES pc "
-                + "ON c.DRAWID = pc.DRAWID) AS JACKPOTS "
+                + "ON c.DRAWID = pc.DRAWID) AS JOINED_T "
                 + "WHERE DRAWTIME <= 1584302400000 AND DRAWTIME >= 1583438400000 AND JACKPOT = 0";
         try {
             preparedStatement = connection.prepareStatement(montlhyJackpotCountStr);
             preparedStatement.setLong(1, fromEpoch);
             preparedStatement.setLong(2, toEpoch);
             ResultSet countJackpotSet = preparedStatement.executeQuery();
-            int jackpots = 0;
-            while(countJackpotSet.next())
-                jackpots = countJackpotSet.getInt(1);
+            int jackpots = countJackpotSet.getObject("JACKPOTS", Integer.class);
             preparedStatement.close();
             connection.close();
             return jackpots;

@@ -250,16 +250,14 @@ public class WindowShowData
                 dataViewTable.setValueAt("", i, 2);
                 dataViewTable.setValueAt("", i, 3);
                 
-                
-                startDate = year + "01" + "-0" + i;
+                startDate = year + "-01" + "-0" + i;
                 Content content = new Content();
                 JsonObject singleDrawObj;
                 ContentPK contentPK = new ContentPK();
                 LocalDate fromDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 LocalDate toDate = fromDate.withDayOfMonth(fromDate.getMonth().length(fromDate.isLeapYear()));
                 endDate = toDate.toString();
-                JsonObject monthlyDrawsObj = model.Utilities.GET_API("https://api.opap.gr/draws/v3.0/5104/draw-date/" + fromDate +"/" + toDate + "/draw-id");
-                JsonArray monthlyDraws = monthlyDrawsObj.getAsJsonArray();
+                JsonArray monthlyDraws = model.Utilities.GET_API_ARRAY("https://api.opap.gr/draws/v3.0/5104/draw-date/" + fromDate +"/" + toDate + "/draw-id");
                 for(int j = 0; j < monthlyDraws.size(); j++){
                     contentPK.setDrawid(monthlyDraws.get(j).getAsInt());
                     contentPK.setGameid(Integer.parseInt(gameId));

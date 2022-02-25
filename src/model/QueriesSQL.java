@@ -171,7 +171,7 @@ public class QueriesSQL {
                 + "(SELECT c.DRAWID, pc.DIVIDENT, c.DRAWTIME FROM "
                 + "CONTENT c INNER JOIN PRIZECATEGORIES pc "
                 + "ON c.DRAWID = pc.DRAWID) AS TOTAL_DIVIDENT "
-                + "WHERE DRAWTIME >=? AND DRAWTIME <=?;";
+                + "WHERE DRAWTIME >=? AND DRAWTIME <=?";
         try {
             preparedStatement = connection.prepareStatement(monthlyDividentSumStr);
             preparedStatement.setLong(1, fromEpoch);

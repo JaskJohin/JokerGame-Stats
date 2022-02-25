@@ -83,7 +83,8 @@ public class QueriesSQL {
         //definee a local variable to store SQL query returned value
         boolean exists = false;
         while(resultSet.next())
-            exists = resultSet.getInt(1) == 1; 
+            exists = resultSet.getInt(1) == 1;
+        resultSet.close();
         preparedStatement.close();
         connection.close();
         //inform the user for check result (for debugging)
@@ -145,6 +146,7 @@ public class QueriesSQL {
             int drawsCount = 0;
             while(drawsCountSet.next())
                 drawsCount = drawsCountSet.getInt(1);
+            drawsCountSet.close();
             preparedStatement.close();
             connection.close();
             return drawsCount;
@@ -181,6 +183,7 @@ public class QueriesSQL {
             double dividentSum = 0.0;
             while(dividentSumSet.next())
                 dividentSum = dividentSumSet.getDouble(1);
+            dividentSumSet.close();
             preparedStatement.close();
             connection.close();
             return dividentSum;
@@ -216,6 +219,7 @@ public class QueriesSQL {
             int jackpots = 0;
             while(countJackpotSet.next())
                 jackpots = countJackpotSet.getInt(1);
+            countJackpotSet.close();
             preparedStatement.close();
             connection.close();
             return jackpots;

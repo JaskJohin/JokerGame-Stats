@@ -257,7 +257,7 @@ public class WindowShowData
                 LocalDate fromDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 LocalDate toDate = fromDate.withDayOfMonth(fromDate.getMonth().length(fromDate.isLeapYear()));
                 endDate = toDate.toString();
-                JsonArray monthlyDraws = model.Utilities.GET_API_ARRAY("https://api.opap.gr/draws/v3.0/5104/draw-date/" + fromDate +"/" + toDate + "/draw-id");
+                JsonArray monthlyDraws = model.Utilities.GET_API_ARRAY("https://api.opap.gr/draws/v3.0/5104/draw-date/" + startDate +"/" + endDate + "/draw-id");
                 for(int j = 0; j < monthlyDraws.size(); j++){
                     contentPK.setDrawid(monthlyDraws.get(j).getAsInt());
                     contentPK.setGameid(Integer.parseInt(gameId));

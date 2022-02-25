@@ -142,7 +142,9 @@ public class QueriesSQL {
             preparedStatement.setLong(1, fromEpoch);
             preparedStatement.setLong(2, toEpoch);
             ResultSet drawsCountSet = preparedStatement.executeQuery();
-            int drawsCount = drawsCountSet.getObject("GAMES_NUM", Integer.class);
+            int drawsCount = 0;
+            while(drawsCountSet.next())
+                drawsCount = drawsCountSet.getInt(1);
             preparedStatement.close();
             connection.close();
             return drawsCount;
@@ -176,7 +178,9 @@ public class QueriesSQL {
             preparedStatement.setLong(2, toEpoch);
             preparedStatement.executeQuery();
             ResultSet dividentSumSet = preparedStatement.executeQuery();
-            double dividentSum = dividentSumSet.getObject("TOTAL_DIVIDENT", Double.class);
+            double dividentSum = 0.0;
+            while(dividentSumSet.next())
+                dividentSum = dividentSumSet.getDouble(1);
             preparedStatement.close();
             connection.close();
             return dividentSum;
@@ -209,7 +213,9 @@ public class QueriesSQL {
             preparedStatement.setLong(1, fromEpoch);
             preparedStatement.setLong(2, toEpoch);
             ResultSet countJackpotSet = preparedStatement.executeQuery();
-            int jackpots = countJackpotSet.getObject("JACKPOTS", Integer.class);
+            int jackpots = 0;
+            while(countJackpotSet.next())
+                jackpots = countJackpotSet.getInt(1);
             preparedStatement.close();
             connection.close();
             return jackpots;

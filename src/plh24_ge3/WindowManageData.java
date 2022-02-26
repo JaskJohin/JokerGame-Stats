@@ -773,7 +773,6 @@ public class WindowManageData
             UIManager.put("OptionPane.minimumSize", new Dimension(300, 120));
             int input = JOptionPane.showConfirmDialog(null, panel, "Επιβεβαίωση διαγραφής",
                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, icon);
-            System.out.println(input);
             return input;
         }
         

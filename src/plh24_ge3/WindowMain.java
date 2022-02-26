@@ -180,6 +180,6 @@ public class WindowMain
 	public static void main(String[] args)
 	{
 		new WindowMain();
-                model.DBTablesManager.dropDatabaseTables();
+                model.DBTablesManager.createDatabaseTables();
 	}
 }

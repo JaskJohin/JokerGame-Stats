@@ -7,8 +7,6 @@ import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +21,6 @@ import model.QueriesSQL;
 import static plh24_ge3.Helper.jokerJsonSingleDrawToObject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-
 
 /**
  * @author Athanasios Theodoropoulos
@@ -41,7 +38,6 @@ public class WindowShowData
 	private final JTable dataViewTable;
         private static  EntityManagerFactory emf;
         private static EntityManager em;
-
 
 	// Methods
 	/**
@@ -76,7 +72,6 @@ public class WindowShowData
 			comboBoxYearSelect.addItem(i);
 		}
 	}
-
 
 	/**
 	 * Gather data for the selected game and year using the api.
@@ -135,7 +130,6 @@ public class WindowShowData
 		date2 = year + "-12-31";
 		urlStrList.add("https://api.opap.gr/draws/v3.0/"+gameId+"/draw-date/"+date1+"/"+date2+"/?limit=180");
 
-
 		// Number of threads (simultaneous calls to the API)
 		int threadNum = 12;
 
@@ -172,7 +166,6 @@ public class WindowShowData
 				jsonStrList.add(jsonStr);
 			});
 		}
-
 
 		// Parce all json strings in jsonStrList
 		for (int i = 0; i < jsonStrList.size(); i++)
@@ -289,9 +282,7 @@ public class WindowShowData
                 dataViewTable.setValueAt(drawCount, i, 1);
                 dataViewTable.setValueAt(moneySumBD, i, 2);
                 dataViewTable.setValueAt(jackpotCount, i, 3);
-            
-            }
-            
+            } 
         }
 
 	// Button actions
@@ -303,7 +294,6 @@ public class WindowShowData
 	{
 		populateComboBoxYearSelect();
 	}
-
 
 	/**
 	 * Action of the buttonDownload.
@@ -342,7 +332,6 @@ public class WindowShowData
 		}
 	}
 
-
 	/**
 	 * Action of the buttonClose.
 	 * @param evt 
@@ -351,7 +340,6 @@ public class WindowShowData
 	{
 		dialog.dispose();
 	}
-
 
 	// Constructor
 	public WindowShowData()
@@ -402,7 +390,6 @@ public class WindowShowData
 
 		topPanel.add(labelTitle);
 		topPanel.add(labelTitleShadow);
-
 
 		/*
 		 * Middle panel with all the functionality

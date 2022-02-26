@@ -277,4 +277,47 @@ public class QueriesSQL {
         }
         return 0;
     }
+    
+    public static int singleNumberDelays (String fromDateStr, String toDateStr, int number) throws ParseException {
+        
+        //format the input String
+        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        //parse the formatted String to Date class
+        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
+        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
+        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
+        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
+        //get the long representation of Epoch which is stored in the database
+        long fromEpoch = instantFrom.toEpochMilli();
+        long toEpoch = instantTo.toEpochMilli();
+        //connect to the database
+        connection = DbConnect.connect();
+        //compile the SQL query for the deletion of data for the requested date range
+        String montlhyJackpotCountStr = "SELECT (SELECT MAX(DRAWID) AS max_draw_ID FROM "
+                + "(SELECT c.DRAWID, wnl.NUMBER AS NUMBERS, c.DRAWTIME FROM CONTENT c "
+                + "INNER JOIN WINNINGNUMBERSLIST wnl ON c.DRAWID = wnl.DRAWID WHERE DRAWTIME >=? AND DRAWTIME <=? ) maxDID ) - "
+                + "(SELECT MAX(DRAWID) AS max_draw_appeared FROM "
+                + "(SELECT c.DRAWID, wnl.NUMBER AS NUMBERS, c.DRAWTIME FROM CONTENT c "
+                + "INNER JOIN WINNINGNUMBERSLIST wnl ON c.DRAWID = wnl.DRAWID WHERE DRAWTIME >=? AND DRAWTIME <=? ) maxDIDappeared "
+                + "WHERE NUMBERS =? ) AS delay from SYSIBM.SYSDUMMY1";
+        try {
+            preparedStatement = connection.prepareStatement(montlhyJackpotCountStr);
+            preparedStatement.setLong(1, fromEpoch);
+            preparedStatement.setLong(2, toEpoch);
+            preparedStatement.setLong(3, fromEpoch);
+            preparedStatement.setLong(4, toEpoch);
+            preparedStatement.setInt(5, number);
+            ResultSet countODelaysSet = preparedStatement.executeQuery();
+            int delays = 0;
+            while(countODelaysSet.next())
+               delays = countODelaysSet.getInt(1);
+            countODelaysSet.close();
+            preparedStatement.close();
+            connection.close();
+            return delays;
+        } catch (SQLException ex) {
+            Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
 }

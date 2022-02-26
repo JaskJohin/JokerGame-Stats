@@ -260,7 +260,7 @@ public class WindowShowData
                 //convert both dates to String
                 endDate = toDate.toString();
                 //get the numbers of draws for current month from API
-                JsonArray monthlyDraws = model.Utilities.GET_API_ARRAY("https://api.opap.gr/draws/v3.0/5104/draw-date/" + startDate +"/" + endDate + "/draw-id");
+                JsonArray monthlyDraws = model.Utilities.GET_API_ARRAY("https://api.opap.gr/draws/v3.0/5104/draw-date/" + startDate + "/" + endDate + "/draw-id");
                 //loop to check if record exists in the database
                 for(int j = 0; j < monthlyDraws.size(); j++){
                     contentPK.setDrawid(monthlyDraws.get(j).getAsInt());
@@ -269,7 +269,7 @@ public class WindowShowData
                     boolean control = QueriesSQL.checkIfRecordExists(content);
                     //if it doesn't exists, then add it so that presented statistical data are accurate
                     if(!control)  {
-                        singleDrawObj = model.Utilities.GET_API("https://api.opap.gr/draws/v3.0/" +gameId + "/" + content.getContentPK().getDrawid());
+                        singleDrawObj = model.Utilities.GET_API("https://api.opap.gr/draws/v3.0/" + gameId + "/" + content.getContentPK().getDrawid());
                         AddDataController.storeDrawsDataByDrawID(singleDrawObj);
                     }
                 }

@@ -69,6 +69,8 @@ public class Utilities {
         
         //delete data from DB for specific date range
         //QueriesSQL.deleteDataByDateRange("2020-01-01", "2020-02-01");
+        
+        //QueriesSQL.countJackpots("2021-01-01", "2021-01-31");
 
     }
 }

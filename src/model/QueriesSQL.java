@@ -3,10 +3,14 @@ package model;
 import POJOs.Content;
 import java.sql.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Date;
 
 /**
  * @author Alexandros Dimitrakopoulos
@@ -21,7 +25,7 @@ public class QueriesSQL {
     private static Connection connection;
     private static Statement statement;
     private static PreparedStatement preparedStatement;
-    private static SimpleDateFormat dateFormat;
+    private static DateTimeFormatter dateFormat;
 
     //Method to select all table contents (for testing purposes)
     public static ResultSet selectContentAll() {
@@ -101,13 +105,15 @@ public class QueriesSQL {
     //method to delete data from the database providing a date range
     public static void deleteDataByDateRange (String fromDateStr, String toDateStr) throws ParseException {
         //format the input String
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         //parse the formatted String to Date class
-        Date fromDate = dateFormat.parse(fromDateStr);
-        Date toDate = dateFormat.parse(toDateStr);
+        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
+        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
+        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
+        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
         //get the long representation of Epoch which is stored in the database
-        long fromEpoch = fromDate.getTime();
-        long toEpoch = toDate.getTime();
+        long fromEpoch = instantFrom.toEpochMilli();
+        long toEpoch = instantTo.toEpochMilli();
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
@@ -127,13 +133,15 @@ public class QueriesSQL {
     public static int countMonthlyGames (String fromDateStr, String toDateStr) throws ParseException {
         
         //format the input String
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         //parse the formatted String to Date class
-        Date fromDate = dateFormat.parse(fromDateStr);
-        Date toDate = dateFormat.parse(toDateStr);
+        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
+        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
+        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
+        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
         //get the long representation of Epoch which is stored in the database
-        long fromEpoch = fromDate.getTime();
-        long toEpoch = toDate.getTime();
+        long fromEpoch = instantFrom.toEpochMilli();
+        long toEpoch = instantTo.toEpochMilli();
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
@@ -159,13 +167,15 @@ public class QueriesSQL {
     
     public static double sumMonthlyDivident (String fromDateStr, String toDateStr) throws ParseException {
         //format the input String
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         //parse the formatted String to Date class
-        Date fromDate = dateFormat.parse(fromDateStr);
-        Date toDate = dateFormat.parse(toDateStr);
+        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
+        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
+        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
+        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
         //get the long representation of Epoch which is stored in the database
-        long fromEpoch = fromDate.getTime();
-        long toEpoch = toDate.getTime();
+        long fromEpoch = instantFrom.toEpochMilli();
+        long toEpoch = instantTo.toEpochMilli();
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
@@ -196,21 +206,23 @@ public class QueriesSQL {
     public static int countJackpots (String fromDateStr, String toDateStr) throws ParseException {
         
         //format the input String
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         //parse the formatted String to Date class
-        Date fromDate = dateFormat.parse(fromDateStr);
-        Date toDate = dateFormat.parse(toDateStr);
+        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
+        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
+        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
+        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
         //get the long representation of Epoch which is stored in the database
-        long fromEpoch = fromDate.getTime();
-        long toEpoch = toDate.getTime();
+        long fromEpoch = instantFrom.toEpochMilli();
+        long toEpoch = instantTo.toEpochMilli();
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
-        String montlhyJackpotCountStr = "SELECT COUNT(JACKPOT) AS JACKPOTS FROM "
-                + "(SELECT c.DRAWID, pc.JACKPOT, c.DRAWTIME "
+        String montlhyJackpotCountStr = "SELECT COUNT(WINNERS) AS JACKPOTS FROM "
+                + "(SELECT c.DRAWID, pc.CATEGORYID, pc.WINNERS, c.DRAWTIME "
                 + "FROM CONTENT c INNER JOIN PRIZECATEGORIES pc "
                 + "ON c.DRAWID = pc.DRAWID) AS JOINED_T "
-                + "WHERE DRAWTIME <= 1584302400000 AND DRAWTIME >= 1583438400000 AND JACKPOT = 0";
+                + "WHERE DRAWTIME >=? AND DRAWTIME <=? AND CATEGORYID = 1 AND WINNERS = 0";
         try {
             preparedStatement = connection.prepareStatement(montlhyJackpotCountStr);
             preparedStatement.setLong(1, fromEpoch);
@@ -218,7 +230,7 @@ public class QueriesSQL {
             ResultSet countJackpotSet = preparedStatement.executeQuery();
             int jackpots = 0;
             while(countJackpotSet.next())
-                jackpots = countJackpotSet.getInt(1);
+               jackpots = countJackpotSet.getInt(1);
             countJackpotSet.close();
             preparedStatement.close();
             connection.close();

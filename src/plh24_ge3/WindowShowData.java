@@ -236,10 +236,8 @@ public class WindowShowData
 	 * Gather data for the selected game and year using the DB.
 	 */
 	private void getDataFromDB(String gameId, String year) throws Exception	{
-            // Set the counters and sum to 0
-            
-
             for(int i = 0; i < 12; i++) {
+                //variables declaration
                 int drawCount;
                 double moneySum;
                 int jackpotCount;

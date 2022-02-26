@@ -97,10 +97,10 @@ public class QueriesSQL {
         else
             System.out.println("Record doesn't exist. Adding!");
         return exists;
-    } catch (SQLException ex) {
-        Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
     //method to delete data from the database providing a date range
     public static void deleteDataByDateRange (String fromDateStr, String toDateStr) throws ParseException {
@@ -161,7 +161,6 @@ public class QueriesSQL {
         } catch (SQLException ex) {
             Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         return 0;
     }
     
@@ -238,7 +237,6 @@ public class QueriesSQL {
         } catch (SQLException ex) {
             Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         return 0;
     }
 }

@@ -764,16 +764,16 @@ public class WindowManageData
             label1.setHorizontalAlignment(SwingConstants.LEFT);
             panel.add(label1);
 
-            JLabel label2 = new JLabel("Είστε βέβαιοι;");
+            JLabel label2 = new JLabel("Αν είστε βέβαιοι, πατήστε ΟΚ;");
             label2.setVerticalAlignment(SwingConstants.TOP);
             label2.setHorizontalAlignment(SwingConstants.LEFT);
             label2.setFont(new Font("Arial", Font.BOLD, 12));
             label2.setBounds(32, 48, 200, 96);
             panel.add(label2);
-            String[] options = {"Διαγραφή", "Ακύρωση"};
             UIManager.put("OptionPane.minimumSize", new Dimension(300, 120));
             int input = JOptionPane.showConfirmDialog(null, panel, "Επιβεβαίωση διαγραφής",
                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, icon);
+            System.out.println(input);
             return input;
         }
         
@@ -783,7 +783,7 @@ public class WindowManageData
             //show a confirmation dialog    
             int choice = deletionConfirmationDialog();
             //if OK is pressed, then
-            if(choice == 1) {
+            if(choice == 0) {
                 //set date variables
                 LocalDate date1;
                 LocalDate date2;
@@ -811,7 +811,7 @@ public class WindowManageData
                 try {
                     //execute DELETE operation
                     QueriesSQL.deleteDataByDateRange(fromDate, toDate);
-
+                    System.out.println("Done!");
                 } catch (ParseException ex) {
                     Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -841,9 +841,11 @@ public class WindowManageData
                 //call the confirmation dialog
                 int choice = deletionConfirmationDialog();
                 //if answer is OK then
-                if(choice == 1)
+                if(choice == 0){
                     //calling function to delete data for selected game ID
-                    QueriesSQL.deleteDataByGameId(gameId); 
+                    QueriesSQL.deleteDataByGameId(gameId);
+                    System.out.println("Done!");
+                }
 	}
 
 

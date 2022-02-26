@@ -72,6 +72,9 @@ public class Utilities {
         
         //System.out.println(QueriesSQL.singleNumberOccurrences("2000-01-01", "2022-02-24", 14));
         //System.out.println(QueriesSQL.singleNumberDelays("2000-01-01", "2022-02-24", 1));
-
+        
+        //System.out.println(QueriesSQL.singleBonusDelays("2000-01-01", "2022-02-24", 5));
+        //System.out.println(QueriesSQL.singleBonusOccurrences("2000-01-01", "2022-02-24", 5));
+        
     }
 }

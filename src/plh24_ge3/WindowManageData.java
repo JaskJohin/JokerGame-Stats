@@ -750,34 +750,37 @@ public class WindowManageData
 	 */
         
         private int deletionConfirmationDialog() {
+            //add an icon the the Dialog box
             ImageIcon icon = new ImageIcon("src/resources/exclamation4.png");
-
+            //create a new Panel
             JPanel panel = new JPanel();
-            //panel.setBackground(Color.getHSBColor(255, 102, 102));
+            //set panel preffered size
             panel.setPreferredSize(new Dimension(400, 96));
+            // avoid setting layout so that induvidual elements can be set manually
             panel.setLayout(null);
-
+            //add a new message
             JLabel label1 = new JLabel("ΠΡΟΣΟΧΗ! Αυτή η ενέργεια θα διαγράψει δεδομένα από τη βάση");
             label1.setVerticalAlignment(SwingConstants.BOTTOM);
             label1.setBounds(32, 16, 400, 32);
             label1.setFont(new Font("Arial", Font.BOLD, 12));
             label1.setHorizontalAlignment(SwingConstants.LEFT);
             panel.add(label1);
-
+            //second line of the message
             JLabel label2 = new JLabel("Αν είστε βέβαιοι, πατήστε ΟΚ;");
             label2.setVerticalAlignment(SwingConstants.TOP);
             label2.setHorizontalAlignment(SwingConstants.LEFT);
             label2.setFont(new Font("Arial", Font.BOLD, 12));
             label2.setBounds(32, 48, 200, 96);
             panel.add(label2);
+            
             UIManager.put("OptionPane.minimumSize", new Dimension(300, 120));
+            //select the confirmation dialog buttons, title and add the other elements
             int input = JOptionPane.showConfirmDialog(null, panel, "Επιβεβαίωση διαγραφής",
                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, icon);
+            //return users choice (0 for OK, 2 for Cancel)
             return input;
         }
-        
-        
-        
+        //method to delete dat from the database for a specific date range 
         private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt) {
             //show a confirmation dialog    
             int choice = deletionConfirmationDialog();
@@ -798,7 +801,7 @@ public class WindowManageData
                         return;
                 }
 
-                // Chech if the date range is valid
+                // Check if the date range is valid
                 String errorMsgRange = "Η αρχική ημερομηνία πρέπει να είναι πριν την τελική.";
                 if (!date1.minusDays(1).isBefore(date2)) {
                         JOptionPane.showMessageDialog(null, errorMsgRange, "Λάθος είσοδος", 0);
@@ -816,7 +819,6 @@ public class WindowManageData
                 }
             }
 	}
-
 
 	/**
 	 * Action of the buttonDelAllForSelGameInDB.

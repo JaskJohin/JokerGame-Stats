@@ -239,4 +239,42 @@ public class QueriesSQL {
         }
         return 0;
     }
+    
+    public static int singleNumberOccurrences (String fromDateStr, String toDateStr, int number) throws ParseException {
+        
+        //format the input String
+        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        //parse the formatted String to Date class
+        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
+        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
+        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
+        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
+        //get the long representation of Epoch which is stored in the database
+        long fromEpoch = instantFrom.toEpochMilli();
+        long toEpoch = instantTo.toEpochMilli();
+        //connect to the database
+        connection = DbConnect.connect();
+        //compile the SQL query for the deletion of data for the requested date range
+        String montlhyJackpotCountStr = "SELECT COUNT(NUMBERS) AS occurrences FROM "
+                + "(SELECT c.DRAWID, wnl.NUMBER AS NUMBERS, c.DRAWTIME FROM CONTENT c "
+                + "INNER JOIN WINNINGNUMBERSLIST wnl ON c.DRAWID = wnl.DRAWID) "
+                + "AS JOINED_T WHERE DRAWTIME >=? AND DRAWTIME <=? AND NUMBERS =? ";
+        try {
+            preparedStatement = connection.prepareStatement(montlhyJackpotCountStr);
+            preparedStatement.setLong(1, fromEpoch);
+            preparedStatement.setLong(2, toEpoch);
+            preparedStatement.setInt(3, number);
+            ResultSet countOccurrencesSet = preparedStatement.executeQuery();
+            int occurrences = 0;
+            while(countOccurrencesSet.next())
+               occurrences = countOccurrencesSet.getInt(1);
+            countOccurrencesSet.close();
+            preparedStatement.close();
+            connection.close();
+            return occurrences;
+        } catch (SQLException ex) {
+            Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
 }

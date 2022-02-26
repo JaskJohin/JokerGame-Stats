@@ -69,6 +69,8 @@ public class Utilities {
         //QueriesSQL.deleteDataByDateRange("2020-01-01", "2020-02-01");
         
         //QueriesSQL.countJackpots("2021-01-01", "2021-01-31");
+        
+        //System.out.println(QueriesSQL.singleNumberOccurrences("2000-01-01", "2022-02-24", 14));
 
     }
 }

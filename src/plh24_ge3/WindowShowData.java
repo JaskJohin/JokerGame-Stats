@@ -265,7 +265,6 @@ public class WindowShowData
                 LocalDate toDate = fromDate.withDayOfMonth(fromDate.getMonth().length(fromDate.isLeapYear()));
                 //convert both dates to String
                 endDate = toDate.toString();
-                System.out.println(endDate);
                 //get the numbers of draws for current month from API
                 JsonArray monthlyDraws = model.Utilities.GET_API_ARRAY("https://api.opap.gr/draws/v3.0/5104/draw-date/" + startDate +"/" + endDate + "/draw-id");
                 //loop to check if record exists in the database
@@ -282,11 +281,8 @@ public class WindowShowData
                 }
                 //set values for number of games, total earnings and number of jackpots
                 drawCount = QueriesSQL.countMonthlyGames(startDate, endDate);
-                System.out.println(drawCount);
                 moneySum = QueriesSQL.sumMonthlyDivident(startDate, endDate);
-                System.out.println(moneySum);
                 jackpotCount = QueriesSQL.countJackpots(startDate, endDate);
-                System.out.println(jackpotCount);
                 //convert monyeSum to big decimal to format the number of decimal points shown
                 bd = BigDecimal.valueOf(moneySum);
                 BigDecimal moneySumBD = bd.setScale(2, RoundingMode.HALF_UP);

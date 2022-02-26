@@ -1,14 +1,12 @@
 package model;
 
 import com.google.gson.JsonArray;
-import model.AddDataController;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.net.URL;
-import model.*;
 
 /**
  * @author Alexandros Dimitrakopoulos

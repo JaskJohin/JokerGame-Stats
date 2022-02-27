@@ -780,6 +780,7 @@ public class WindowManageData
             //return users choice (0 for OK, 2 for Cancel)
             return input;
         }
+        
         //method to delete dat from the database for a specific date range 
         private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt) {
             //show a confirmation dialog    

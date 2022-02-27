@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,6 +75,7 @@ public class QueriesSQL {
             Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);          
         }
     }
+    
     //method to check if a record already exists in the database
     public static boolean checkIfRecordExists (Content content) {
     connection = DbConnect.connect();
@@ -104,16 +107,10 @@ public class QueriesSQL {
     }
     //method to delete data from the database providing a date range
     public static void deleteDataByDateRange (String fromDateStr, String toDateStr) throws ParseException {
-        //format the input String
-        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //parse the formatted String to Date class
-        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
-        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
-        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
-        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
-        //get the long representation of Epoch which is stored in the database
-        long fromEpoch = instantFrom.toEpochMilli();
-        long toEpoch = instantTo.toEpochMilli();
+        //Call respective fucntions toget the long representation of 
+        //first and last Dates to Epoch which is stored in the database
+        long fromEpoch = fromDateStrToEpoch(fromDateStr);
+        long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
@@ -129,19 +126,12 @@ public class QueriesSQL {
             Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+    //method to return the number of games carried out within a given month
     public static int countMonthlyGames (String fromDateStr, String toDateStr) throws ParseException {
-        
-        //format the input String
-        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //parse the formatted String to Date class
-        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
-        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
-        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
-        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
-        //get the long representation of Epoch which is stored in the database
-        long fromEpoch = instantFrom.toEpochMilli();
-        long toEpoch = instantTo.toEpochMilli();
+        //Call respective fucntions toget the long representation of 
+        //first and last Dates to Epoch which is stored in the database
+        long fromEpoch = fromDateStrToEpoch(fromDateStr);
+        long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
@@ -163,18 +153,12 @@ public class QueriesSQL {
         }
         return 0;
     }
-    
+    //method to return the total divident for all games within a given month
     public static double sumMonthlyDivident (String fromDateStr, String toDateStr) throws ParseException {
-        //format the input String
-        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //parse the formatted String to Date class
-        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
-        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
-        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
-        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
-        //get the long representation of Epoch which is stored in the database
-        long fromEpoch = instantFrom.toEpochMilli();
-        long toEpoch = instantTo.toEpochMilli();
+        //Call respective fucntions toget the long representation of 
+        //first and last Dates to Epoch which is stored in the database
+        long fromEpoch = fromDateStrToEpoch(fromDateStr);
+        long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
@@ -201,19 +185,12 @@ public class QueriesSQL {
         }
         return 0.0;
     }
-    
+    //method to return the multitude of Jackpots within a given date range
     public static int countJackpots (String fromDateStr, String toDateStr) throws ParseException {
-        
-        //format the input String
-        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //parse the formatted String to Date class
-        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
-        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
-        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
-        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
-        //get the long representation of Epoch which is stored in the database
-        long fromEpoch = instantFrom.toEpochMilli();
-        long toEpoch = instantTo.toEpochMilli();
+        //Call respective fucntions toget the long representation of 
+        //first and last Dates to Epoch which is stored in the database
+        long fromEpoch = fromDateStrToEpoch(fromDateStr);
+        long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
@@ -239,19 +216,12 @@ public class QueriesSQL {
         }
         return 0;
     }
-    
+    //method to return the the mulitutde of a single winning number for a given date range
     public static int singleNumberOccurrences (String fromDateStr, String toDateStr, int number) throws ParseException {
-        
-        //format the input String
-        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //parse the formatted String to Date class
-        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
-        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
-        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
-        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
-        //get the long representation of Epoch which is stored in the database
-        long fromEpoch = instantFrom.toEpochMilli();
-        long toEpoch = instantTo.toEpochMilli();
+        //Call respective fucntions toget the long representation of 
+        //first and last Dates to Epoch which is stored in the database
+        long fromEpoch = fromDateStrToEpoch(fromDateStr);
+        long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
@@ -277,19 +247,13 @@ public class QueriesSQL {
         }
         return 0;
     }
-    
+    //method to return the occurrence delay of a single winning number for a given date range
     public static int singleNumberDelays (String fromDateStr, String toDateStr, int number) throws ParseException {
         
-        //format the input String
-        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //parse the formatted String to Date class
-        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
-        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
-        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
-        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
-        //get the long representation of Epoch which is stored in the database
-        long fromEpoch = instantFrom.toEpochMilli();
-        long toEpoch = instantTo.toEpochMilli();
+        //Call respective fucntions toget the long representation of 
+        //first and last Dates to Epoch which is stored in the database
+        long fromEpoch = fromDateStrToEpoch(fromDateStr);
+        long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
@@ -320,19 +284,12 @@ public class QueriesSQL {
         }
         return 0;
     }
-    
+    //method to return the number of occurrences of a given bonus number within a given date range
     public static int singleBonusOccurrences (String fromDateStr, String toDateStr, int bonus) throws ParseException {
-        
-        //format the input String
-        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //parse the formatted String to Date class
-        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
-        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
-        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
-        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
-        //get the long representation of Epoch which is stored in the database
-        long fromEpoch = instantFrom.toEpochMilli();
-        long toEpoch = instantTo.toEpochMilli();
+        //Call respective fucntions toget the long representation of 
+        //first and last Dates to Epoch which is stored in the database
+        long fromEpoch = fromDateStrToEpoch(fromDateStr);
+        long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
@@ -358,19 +315,12 @@ public class QueriesSQL {
         }
         return 0;
     }
-    
+    //method to return the occurrence delay of a single bonus number
     public static int singleBonusDelays (String fromDateStr, String toDateStr, int bonus) throws ParseException {
-        
-        //format the input String
-        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //parse the formatted String to Date class
-        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
-        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
-        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
-        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
-        //get the long representation of Epoch which is stored in the database
-        long fromEpoch = instantFrom.toEpochMilli();
-        long toEpoch = instantTo.toEpochMilli();
+        //Call respective fucntions toget the long representation of 
+        //first and last Dates to Epoch which is stored in the database
+        long fromEpoch = fromDateStrToEpoch(fromDateStr);
+        long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
@@ -400,5 +350,97 @@ public class QueriesSQL {
             Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
+    }
+    
+    //method to get the top five numbers in terms of occurrences for a given date range
+    public static List<WinningNumberOccurence> topFiveWinningNumbersOccurred (String fromDateStr, String toDateStr) throws ParseException {
+        //Call respective fucntions toget the long representation of 
+        //first and last Dates to Epoch which is stored in the database
+        long fromEpoch = fromDateStrToEpoch(fromDateStr);
+        long toEpoch = toDateStrToEpoch(toDateStr);
+        List<WinningNumberOccurence> topFiveList = new ArrayList<>();
+        //connect to the database
+        connection = DbConnect.connect();
+        //compile the SQL query for the deletion of data for the requested date range
+        String montlhyJackpotCountStr = "SELECT NUMBERS, COUNT(NUMBERS) AS occurrences FROM "
+                + "(SELECT c.DRAWID, wnl.NUMBER AS NUMBERS, c.DRAWTIME FROM CONTENT c "
+                + "INNER JOIN WINNINGNUMBERSLIST wnl ON c.DRAWID = wnl.DRAWID) AS ALL_NUMS "
+                + "WHERE DRAWTIME >=? AND DRAWTIME <=? "
+                + "GROUP BY NUMBERS ORDER BY occurrences DESC FETCH FIRST 5 ROWS ONLY";
+        try {
+            preparedStatement = connection.prepareStatement(montlhyJackpotCountStr);
+            preparedStatement.setLong(1, fromEpoch);
+            preparedStatement.setLong(2, toEpoch);
+            ResultSet topFiveOccuredSet = preparedStatement.executeQuery();
+            while(topFiveOccuredSet.next()) {
+                WinningNumberOccurence memberOfTopFive = new WinningNumberOccurence();
+                memberOfTopFive.setWinningNumber(topFiveOccuredSet.getInt(1));
+                memberOfTopFive.setOccurrences(topFiveOccuredSet.getInt(2));
+                topFiveList.add(memberOfTopFive);
+            }
+            topFiveOccuredSet.close();
+            preparedStatement.close();
+            connection.close();
+            return topFiveList;
+        } catch (SQLException ex) {
+            Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public static List<BonusOccurrence> topFiveBonusesOccurred (String fromDateStr, String toDateStr) throws ParseException {
+        //Call respective fucntions toget the long representation of 
+        //first and last Dates to Epoch which is stored in the database
+        long fromEpoch = fromDateStrToEpoch(fromDateStr);
+        long toEpoch = toDateStrToEpoch(toDateStr);
+        List<BonusOccurrence> topFiveList = new ArrayList<>();
+        //connect to the database
+        connection = DbConnect.connect();
+        //compile the SQL query for the deletion of data for the requested date range
+        String montlhyJackpotCountStr = "SELECT BONUSES, COUNT(BONUSES) AS occurrences FROM "
+                + "(SELECT c.DRAWID, wnb.BONUS AS BONUSES, c.DRAWTIME FROM CONTENT c "
+                + "INNER JOIN WINNINGNUMBERSBONUS wnb ON c.DRAWID = wnb.DRAWID) AS ALL_BONUSES "
+                + "WHERE DRAWTIME >=? AND DRAWTIME <=? "
+                + "GROUP BY BONUSES ORDER BY occurrences DESC FETCH FIRST 5 ROWS ONLY";
+        try {
+            preparedStatement = connection.prepareStatement(montlhyJackpotCountStr);
+            preparedStatement.setLong(1, fromEpoch);
+            preparedStatement.setLong(2, toEpoch);
+            ResultSet topFiveOccuredSet = preparedStatement.executeQuery();
+            while(topFiveOccuredSet.next()) {
+                BonusOccurrence memberOfTopFive = new BonusOccurrence();
+                memberOfTopFive.setBonus(topFiveOccuredSet.getInt(1));
+                memberOfTopFive.setOccurrences(topFiveOccuredSet.getInt(2));
+                topFiveList.add(memberOfTopFive);
+            }
+            topFiveOccuredSet.close();
+            preparedStatement.close();
+            connection.close();
+            return topFiveList;
+        } catch (SQLException ex) {
+            Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    //formatter for the starting date of a given date range (starting at start of date)
+    public static long fromDateStrToEpoch (String fromDateStr) {
+        //format the input String
+        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        //parse the formatted String to Date class
+        LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
+        Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
+        long fromEpoch = instantFrom.toEpochMilli();
+        return fromEpoch;
+    }
+    
+    //formatter of the ending date of a given date range (ending at 23:59:59)
+    public static long toDateStrToEpoch (String toDateStr) {
+        //format the input String
+        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
+        Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
+        long toEpoch = instantTo.toEpochMilli();
+        return toEpoch;
     }
 }

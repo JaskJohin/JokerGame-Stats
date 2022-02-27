@@ -23,7 +23,6 @@ import static plh24_ge3.Helper.getJsonStrFromApiURL;
 import static plh24_ge3.Helper.getUrlStrForDateRange;
 import static plh24_ge3.Helper.jokerJsonSingleDrawToObject;
 
-
 /**
  * @author Athanasios Theodoropoulos
  * @author Alexandros Dimitrakopoulos

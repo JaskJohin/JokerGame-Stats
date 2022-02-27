@@ -352,7 +352,7 @@ public class QueriesSQL {
         return 0;
     }
     
-    //method to get the top five numbers in terms of occurrences for a given date range
+    //method to get the top five winning numbers in terms of occurrences for a given date range
     public static List<WinningNumberOccurence> topFiveWinningNumbersOccurred (String fromDateStr, String toDateStr) throws ParseException {
         //Call respective fucntions toget the long representation of 
         //first and last Dates to Epoch which is stored in the database
@@ -388,6 +388,7 @@ public class QueriesSQL {
         return null;
     }
     
+    //method to get the top five bonus numbers in terms of occurrences for a given date range
     public static List<BonusOccurrence> topFiveBonusesOccurred (String fromDateStr, String toDateStr) throws ParseException {
         //Call respective fucntions toget the long representation of 
         //first and last Dates to Epoch which is stored in the database

@@ -72,24 +72,30 @@ public class Utilities {
         QueriesSQL.countJackpots("2021-01-01", "2021-01-31");
         System.out.println("----------------------");
         
-        System.out.println(QueriesSQL.singleNumberOccurrences("2000-01-01", "2022-02-24", 14));
-        System.out.println(QueriesSQL.singleNumberDelays("2000-01-01", "2022-02-24", 1));
+        System.out.println("Number \t Occurences \t Delays");
+        int number = 5;
+        System.out.print("   " + number);
+        System.out.print("\t\t" + QueriesSQL.singleNumberOccurrences("2000-01-01", "2022-02-24", number));
+        System.out.println("\t    " +QueriesSQL.singleNumberDelays("2000-01-01", "2022-02-24", number));
         System.out.println("----------------------");
         
-        System.out.println(QueriesSQL.singleBonusDelays("2000-01-01", "2022-02-24", 5));
-        System.out.println(QueriesSQL.singleBonusOccurrences("2000-01-01", "2022-02-24", 5));
+        int bonus = 2;
+        System.out.println("Bonus, \t Occurences, \t Delays");
+        System.out.print("   " + bonus);
+        System.out.print("\t\t" + QueriesSQL.singleBonusDelays("2000-01-01", "2022-02-24", bonus));
+        System.out.println("\t    " + QueriesSQL.singleBonusOccurrences("2000-01-01", "2022-02-24", bonus));
         System.out.println("----------------------");
-        
-        
+
         List<WinningNumberOccurence> top5Nums = QueriesSQL.topFiveWinningNumbersOccurred("2000-01-01", "2022-02-24");
+        System.out.println("Top 5 winning numbers by occurrence");
         for(WinningNumberOccurence wnOccurrence: top5Nums) {
             System.out.print("Number: " + wnOccurrence.getWinningNumber());
             System.out.println("\tOccurrences: " + wnOccurrence.getOccurrences());
         }
-          
-        
+
         System.out.println("---------------------");
         List<BonusOccurrence> top5Bonusses = QueriesSQL.topFiveBonusesOccurred("2000-01-01", "2022-02-24");
+        System.out.println("Top 5 bonus numbers by occurrence");
         for(BonusOccurrence bonusOccurrence: top5Bonusses) {
             System.out.print("Number: " + bonusOccurrence.getBonus());
             System.out.println("\tOccurrences: " + bonusOccurrence.getOccurrences());
@@ -97,6 +103,7 @@ public class Utilities {
         
         System.out.println("---------------------");
         List<AverageDistributedPrizeCat> averagePerCat = QueriesSQL.averageDistributedPerCategory("2000-01-01", "2022-02-24");
+        System.out.println("Average distrubuted earning per Category");
         for(AverageDistributedPrizeCat average: averagePerCat) {
             System.out.print("Category ID: " + average.getCategoryId());
             System.out.println("\tDistributed: " + average.getAverageDistributed());

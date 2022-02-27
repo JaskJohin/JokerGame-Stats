@@ -704,7 +704,8 @@ public class WindowManageData
                     JsonObject jObject = new JsonParser().parse(jsonStr).getAsJsonObject();
                     //INSERT data to the database
                     AddDataController.storeDrawsDataByDrawID(jObject);
-                    return;
+                    JOptionPane.showMessageDialog(null, "Επιτυχής εισαγωγή εγγραφών",
+                                          "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
                     Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -741,6 +742,8 @@ public class WindowManageData
                         Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+                JOptionPane.showMessageDialog(null, "Επιτυχής εισαγωγή εγγραφών",
+                                          "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 	/**
@@ -780,6 +783,11 @@ public class WindowManageData
             return input;
         }
         
+        private void informationDialog(String info) {
+            
+            
+        }
+        
         //method to delete dat from the database for a specific date range 
         private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt) {
             //show a confirmation dialog    
@@ -813,7 +821,9 @@ public class WindowManageData
                 try {
                     //execute DELETE operation
                     QueriesSQL.deleteDataByDateRange(fromDate, toDate);
-                    System.out.println("Done!");
+                    //Notify the user that the data were deleted
+                    JOptionPane.showMessageDialog(null, "Επιτυχής διαγραφή",
+                                          "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                 } catch (ParseException ex) {
                     Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -845,7 +855,8 @@ public class WindowManageData
                 if(choice == 0){
                     //calling function to delete data for selected game ID
                     QueriesSQL.deleteDataByGameId(gameId);
-                    System.out.println("Done!");
+                    JOptionPane.showMessageDialog(null, "Επιτυχής διαγραφή",
+                                          "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                 }
 	}
 

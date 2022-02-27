@@ -27,7 +27,6 @@ public class QueriesSQL {
     private static Connection connection;
     private static Statement statement;
     private static PreparedStatement preparedStatement;
-    private static DateTimeFormatter dateFormat;
 
     //Method to select all table contents (for testing purposes)
     public static ResultSet selectContentAll() {
@@ -469,8 +468,6 @@ public class QueriesSQL {
     
     //formatter for the starting date of a given date range (starting at start of date)
     public static long fromDateStrToEpoch (String fromDateStr) {
-        //format the input String
-        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         //parse the formatted String to Date class
         LocalDateTime fromDate = LocalDate.parse(fromDateStr).atStartOfDay();
         Instant instantFrom = fromDate.atZone(ZoneId.systemDefault()).toInstant();
@@ -481,7 +478,6 @@ public class QueriesSQL {
     //formatter of the ending date of a given date range (ending at 23:59:59)
     public static long toDateStrToEpoch (String toDateStr) {
         //format the input String
-        dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime toDate = LocalDate.parse(toDateStr).atTime(LocalTime.MAX);
         Instant instantTo = toDate.atZone(ZoneId.systemDefault()).toInstant();
         long toEpoch = instantTo.toEpochMilli();

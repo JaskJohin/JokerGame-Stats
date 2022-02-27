@@ -705,7 +705,7 @@ public class WindowManageData
                     //INSERT data to the database
                     AddDataController.storeDrawsDataByDrawID(jObject);
                     JOptionPane.showMessageDialog(null, "Επιτυχής εισαγωγή εγγραφών",
-                                          "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+                                          "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
                     Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -719,13 +719,12 @@ public class WindowManageData
                 String errorMsg = "Δεν έχει γίνει αναζήτηση για εύρος ημερομηνιών!";
                 if (lastSearchjsonStrList.size() == 0)
                 {
-                        JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
-                        return;
+                    JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
+                    return;
                 }
 
                 // Parce all json strings in lastSearchjsonStrList
-                for (int i = 0; i <  lastSearchjsonStrList.size(); i++)
-                {
+                for (int i = 0; i <  lastSearchjsonStrList.size(); i++) {
                     try {
                         String jsonStr = lastSearchjsonStrList.get(i);
 
@@ -742,8 +741,8 @@ public class WindowManageData
                         Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                JOptionPane.showMessageDialog(null, "Επιτυχής εισαγωγή εγγραφών",
-                                          "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Επιτυχής εισαγωγή εγγραφών", 
+                        "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 	/**
@@ -783,11 +782,6 @@ public class WindowManageData
             return input;
         }
         
-        private void informationDialog(String info) {
-            
-            
-        }
-        
         //method to delete dat from the database for a specific date range 
         private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt) {
             //show a confirmation dialog    
@@ -823,7 +817,7 @@ public class WindowManageData
                     QueriesSQL.deleteDataByDateRange(fromDate, toDate);
                     //Notify the user that the data were deleted
                     JOptionPane.showMessageDialog(null, "Επιτυχής διαγραφή",
-                                          "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+                                          "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
                 } catch (ParseException ex) {
                     Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -856,7 +850,7 @@ public class WindowManageData
                     //calling function to delete data for selected game ID
                     QueriesSQL.deleteDataByGameId(gameId);
                     JOptionPane.showMessageDialog(null, "Επιτυχής διαγραφή",
-                                          "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+                                          "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
                 }
 	}
 

@@ -69,13 +69,16 @@ public class Utilities {
         //delete data from DB for specific date range
         //QueriesSQL.deleteDataByDateRange("2020-01-01", "2020-02-01");
         
-        //QueriesSQL.countJackpots("2021-01-01", "2021-01-31");
+        QueriesSQL.countJackpots("2021-01-01", "2021-01-31");
+        System.out.println("----------------------");
         
-        //System.out.println(QueriesSQL.singleNumberOccurrences("2000-01-01", "2022-02-24", 14));
-        //System.out.println(QueriesSQL.singleNumberDelays("2000-01-01", "2022-02-24", 1));
+        System.out.println(QueriesSQL.singleNumberOccurrences("2000-01-01", "2022-02-24", 14));
+        System.out.println(QueriesSQL.singleNumberDelays("2000-01-01", "2022-02-24", 1));
+        System.out.println("----------------------");
         
-        //System.out.println(QueriesSQL.singleBonusDelays("2000-01-01", "2022-02-24", 5));
-        //System.out.println(QueriesSQL.singleBonusOccurrences("2000-01-01", "2022-02-24", 5));
+        System.out.println(QueriesSQL.singleBonusDelays("2000-01-01", "2022-02-24", 5));
+        System.out.println(QueriesSQL.singleBonusOccurrences("2000-01-01", "2022-02-24", 5));
+        System.out.println("----------------------");
         
         
         List<WinningNumberOccurence> top5Nums = QueriesSQL.topFiveWinningNumbersOccurred("2000-01-01", "2022-02-24");
@@ -85,14 +88,14 @@ public class Utilities {
         }
           
         
-        System.out.println("");
+        System.out.println("---------------------");
         List<BonusOccurrence> top5Bonusses = QueriesSQL.topFiveBonusesOccurred("2000-01-01", "2022-02-24");
         for(BonusOccurrence bonusOccurrence: top5Bonusses) {
             System.out.print("Number: " + bonusOccurrence.getBonus());
             System.out.println("\tOccurrences: " + bonusOccurrence.getOccurrences());
         }
         
-        System.out.println("");
+        System.out.println("---------------------");
         List<AverageDistributedPrizeCat> averagePerCat = QueriesSQL.averageDistributedPerCategory("2000-01-01", "2022-02-24");
         for(AverageDistributedPrizeCat average: averagePerCat) {
             System.out.print("Category ID: " + average.getCategoryId());

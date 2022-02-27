@@ -262,7 +262,7 @@ public class WindowShowData
                 //get the numbers of draws for current month from API
                 JsonArray monthlyDraws = model.Utilities.GET_API_ARRAY("https://api.opap.gr/draws/v3.0/5104/draw-date/" + startDate + "/" + endDate + "/draw-id");
                 //loop to check if record exists in the database
-                for(int j = 0; j < monthlyDraws.size(); j++){
+                for(int j = 0; j < monthlyDraws.size(); j++) {
                     contentPK.setDrawid(monthlyDraws.get(j).getAsInt());
                     contentPK.setGameid(Integer.parseInt(gameId));
                     content.setContentPK(contentPK);

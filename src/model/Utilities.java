@@ -89,16 +89,16 @@ public class Utilities {
         List<WinningNumberOccurence> top5Nums = QueriesSQL.topFiveWinningNumbersOccurred("2000-01-01", "2022-02-24");
         System.out.println("Top 5 winning numbers by occurrence");
         for(WinningNumberOccurence wnOccurrence: top5Nums) {
-            System.out.print("Number: " + wnOccurrence.getWinningNumber());
-            System.out.println("\tOccurrences: " + wnOccurrence.getOccurrences());
+            System.out.print("Winning number: " + wnOccurrence.getWinningNumber());
+            System.out.println("\t\tOccurrences: " + wnOccurrence.getOccurrences());
         }
 
         System.out.println("---------------------");
         List<BonusOccurrence> top5Bonusses = QueriesSQL.topFiveBonusesOccurred("2000-01-01", "2022-02-24");
         System.out.println("Top 5 bonus numbers by occurrence");
         for(BonusOccurrence bonusOccurrence: top5Bonusses) {
-            System.out.print("Number: " + bonusOccurrence.getBonus());
-            System.out.println("\tOccurrences: " + bonusOccurrence.getOccurrences());
+            System.out.print("Bonus number: " + bonusOccurrence.getBonus());
+            System.out.println("\t\tOccurrences: " + bonusOccurrence.getOccurrences());
         }
         
         System.out.println("---------------------");

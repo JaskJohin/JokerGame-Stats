@@ -7,7 +7,6 @@ import java.net.HttpURLConnection;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.util.List;
 
 /**
@@ -78,18 +77,27 @@ public class Utilities {
         //System.out.println(QueriesSQL.singleBonusDelays("2000-01-01", "2022-02-24", 5));
         //System.out.println(QueriesSQL.singleBonusOccurrences("2000-01-01", "2022-02-24", 5));
         
-        /*
+        
         List<WinningNumberOccurence> top5Nums = QueriesSQL.topFiveWinningNumbersOccurred("2000-01-01", "2022-02-24");
         for(WinningNumberOccurence wnOccurrence: top5Nums) {
             System.out.print("Number: " + wnOccurrence.getWinningNumber());
             System.out.println("\tOccurrences: " + wnOccurrence.getOccurrences());
         }
-         */   
+          
         
+        System.out.println("");
         List<BonusOccurrence> top5Bonusses = QueriesSQL.topFiveBonusesOccurred("2000-01-01", "2022-02-24");
         for(BonusOccurrence bonusOccurrence: top5Bonusses) {
             System.out.print("Number: " + bonusOccurrence.getBonus());
             System.out.println("\tOccurrences: " + bonusOccurrence.getOccurrences());
         }
+        
+        System.out.println("");
+        List<AverageDistributedPrizeCat> averagePerCat = QueriesSQL.averageDistributedPerCategory("2000-01-01", "2022-02-24");
+        for(AverageDistributedPrizeCat average: averagePerCat) {
+            System.out.print("Category ID: " + average.getCategoryId());
+            System.out.println("\tDistributed: " + average.getAverageDistributed());
+        }
+        
     }
 }

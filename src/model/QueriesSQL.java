@@ -105,6 +105,7 @@ public class QueriesSQL {
         }
         return false;
     }
+    
     //method to delete data from the database providing a date range
     public static void deleteDataByDateRange (String fromDateStr, String toDateStr) throws ParseException {
         //Call respective fucntions toget the long representation of 
@@ -126,6 +127,7 @@ public class QueriesSQL {
             Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     //method to return the number of games carried out within a given month
     public static int countMonthlyGames (String fromDateStr, String toDateStr) throws ParseException {
         //Call respective fucntions toget the long representation of 
@@ -153,6 +155,7 @@ public class QueriesSQL {
         }
         return 0;
     }
+    
     //method to return the total divident for all games within a given month
     public static double sumMonthlyDivident (String fromDateStr, String toDateStr) throws ParseException {
         //Call respective fucntions toget the long representation of 
@@ -185,6 +188,7 @@ public class QueriesSQL {
         }
         return 0.0;
     }
+    
     //method to return the multitude of Jackpots within a given date range
     public static int countJackpots (String fromDateStr, String toDateStr) throws ParseException {
         //Call respective fucntions toget the long representation of 
@@ -216,6 +220,7 @@ public class QueriesSQL {
         }
         return 0;
     }
+    
     //method to return the the mulitutde of a single winning number for a given date range
     public static int singleNumberOccurrences (String fromDateStr, String toDateStr, int number) throws ParseException {
         //Call respective fucntions toget the long representation of 
@@ -247,6 +252,7 @@ public class QueriesSQL {
         }
         return 0;
     }
+    
     //method to return the occurrence delay of a single winning number for a given date range
     public static int singleNumberDelays (String fromDateStr, String toDateStr, int number) throws ParseException {
         
@@ -284,6 +290,7 @@ public class QueriesSQL {
         }
         return 0;
     }
+    
     //method to return the number of occurrences of a given bonus number within a given date range
     public static int singleBonusOccurrences (String fromDateStr, String toDateStr, int bonus) throws ParseException {
         //Call respective fucntions toget the long representation of 
@@ -315,6 +322,7 @@ public class QueriesSQL {
         }
         return 0;
     }
+    
     //method to return the occurrence delay of a single bonus number
     public static int singleBonusDelays (String fromDateStr, String toDateStr, int bonus) throws ParseException {
         //Call respective fucntions toget the long representation of 
@@ -418,6 +426,41 @@ public class QueriesSQL {
             preparedStatement.close();
             connection.close();
             return topFiveList;
+        } catch (SQLException ex) {
+            Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    //method to get the average winnings (distributed) per category
+    public static List<AverageDistributedPrizeCat> averageDistributedPerCategory (String fromDateStr, String toDateStr) throws ParseException {
+        //Call respective fucntions toget the long representation of 
+        //first and last Dates to Epoch which is stored in the database
+        long fromEpoch = fromDateStrToEpoch(fromDateStr);
+        long toEpoch = toDateStrToEpoch(toDateStr);
+        List<AverageDistributedPrizeCat> averageDistr = new ArrayList<>();
+        //connect to the database
+        connection = DbConnect.connect();
+        //compile the SQL query for the deletion of data for the requested date range
+        String montlhyJackpotCountStr = "SELECT prize_category, AVG(distributed) AS average_distributed FROM "
+                + "(SELECT c.DRAWID, prCat.CATEGORYID AS prize_category, c.DRAWTIME, prCat.DISTRIBUTED as distributed "
+                + "FROM CONTENT c INNER JOIN PRIZECATEGORIES prCat ON c.DRAWID = prCat.DRAWID) AS all_prCats "
+                + "WHERE DRAWTIME >=? AND DRAWTIME <=? GROUP BY prize_category ORDER BY prize_category ASC";
+        try {
+            preparedStatement = connection.prepareStatement(montlhyJackpotCountStr);
+            preparedStatement.setLong(1, fromEpoch);
+            preparedStatement.setLong(2, toEpoch);
+            ResultSet averageDistrPerCatSet = preparedStatement.executeQuery();
+            while(averageDistrPerCatSet.next()) {
+                AverageDistributedPrizeCat distributedForCat = new AverageDistributedPrizeCat();
+                distributedForCat.setCategoryId(averageDistrPerCatSet.getInt(1));
+                distributedForCat.setAverageDistributed(averageDistrPerCatSet.getInt(2));
+                averageDistr.add(distributedForCat);
+            }
+            averageDistrPerCatSet.close();
+            preparedStatement.close();
+            connection.close();
+            return averageDistr;
         } catch (SQLException ex) {
             Logger.getLogger(QueriesSQL.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -60,6 +60,8 @@ public class WindowManageData
 	private final JTable jokerSDTable;
 	private final DefaultTableModel modeljokerDRTable;
 	private final JTable jokerDRTable;
+        private JProgressBar progressBar;
+        private Dimension dim;
 
 
 	// Methods
@@ -717,7 +719,7 @@ public class WindowManageData
 
                 // Check if a search has been performed
                 String errorMsg = "Δεν έχει γίνει αναζήτηση για εύρος ημερομηνιών!";
-                if (lastSearchjsonStrList.size() == 0)
+                if (lastSearchjsonStrList.isEmpty())
                 {
                     JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
                     return;
@@ -727,7 +729,6 @@ public class WindowManageData
                 for (int i = 0; i <  lastSearchjsonStrList.size(); i++) {
                     try {
                         String jsonStr = lastSearchjsonStrList.get(i);
-
                         // Parse jsonStr into json element and get an object structure
                         JsonObject jObject = new JsonParser().parse(jsonStr).getAsJsonObject();
 

@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import static plh24_ge3.CreatePDF.DEST;
 
 /**
  * @author Athanasios Theodoropoulos

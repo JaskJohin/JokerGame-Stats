@@ -1,10 +1,16 @@
 package plh24_ge3;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import static plh24_ge3.CreatePDF.DEST;
 
 /**
  * @author Athanasios Theodoropoulos
@@ -15,6 +21,8 @@ import javax.swing.*;
 
 public class WindowShowStats
 {
+        public static final String DEST = "files/TzokerStatisticalData.pdf";
+    
 	// Variables declaration
 	private final JDialog dialog;
 
@@ -27,7 +35,22 @@ public class WindowShowStats
         //Print PDF
         private void buttonPrintPdfActionPerformed(java.awt.event.ActionEvent evt)
 	{
-                //	
+            
+            try {
+                //Χρειάζεται να περιληφθούν πεδία για καταχώριση ημερομηνιών από το χρήστη
+                //για την π[αραγωγή των στατιστικών σε συγκεκριμένο εύρος
+                
+                File file = new File(DEST);
+                file.getParentFile().mkdirs();
+                new CreatePDF().createPdf(DEST);
+                JOptionPane.showMessageDialog(null, "Το αρχείο δημιουργήθηκε",
+                                          "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ex) {
+                Logger.getLogger(WindowShowStats.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(WindowShowStats.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
 	}
         
         //Show stats in graph form

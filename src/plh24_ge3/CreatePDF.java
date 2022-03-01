@@ -10,7 +10,6 @@ import com.itextpdf.layout.font.FontProvider;
 import com.itextpdf.layout.font.FontSet;
 import com.itextpdf.layout.properties.Property;
 import com.itextpdf.layout.properties.UnitValue;
-import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import model.QueriesSQL;
@@ -19,18 +18,11 @@ import model.QueriesSQL;
  * Simple table example.
  */
 public class CreatePDF {
-    public static final String DEST = "files/chapter01/test1.pdf";
-
-    public static void main(String args[]) throws IOException, ParseException {
-        File file = new File(DEST);
-        file.getParentFile().mkdirs();
-        new CreatePDF().createPdf(DEST);
-    }
 
     public void createPdf(String dest) throws IOException, ParseException {
         String fromDate = "2020-01-01";
         String toDate = "2020-02-20";
-        Integer number;
+        Integer number, bonus;
 
         //Initialize PDF writer
         PdfWriter writer = new PdfWriter(dest);
@@ -86,8 +78,8 @@ public class CreatePDF {
         
         for(int j = 0; j < 20; j++) {
  
-            number = j + 1;
-            table2.addCell(number.toString());
+            bonus = j + 1;
+            table2.addCell(bonus.toString());
             Integer occurrences = QueriesSQL.singleBonusOccurrences(fromDate, toDate, j + 1);
             table2.addCell(occurrences.toString());
             Integer delays = QueriesSQL.singleBonusDelays(fromDate, toDate, j + 1);

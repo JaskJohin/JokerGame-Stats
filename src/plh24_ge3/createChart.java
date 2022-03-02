@@ -90,7 +90,7 @@ public class createChart extends ApplicationFrame {
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         // row keys...
         bonusOccList.forEach((bonusOcc) -> {
-            final String series = "Bonus: " + bonusOcc.getBonus();
+            final String series = "Number: " + bonusOcc.getBonus();
 
             dataset.addValue(bonusOcc.getOccurrences(), series, type);
         });

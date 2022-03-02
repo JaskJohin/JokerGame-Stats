@@ -18,7 +18,6 @@ import com.itextpdf.layout.font.FontProvider;
 import com.itextpdf.layout.font.FontSet;
 import com.itextpdf.layout.properties.Property;
 import com.itextpdf.layout.properties.UnitValue;
-import com.itextpdf.kernel.colors.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;

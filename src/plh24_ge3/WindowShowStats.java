@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import model.Utilities;
 
 /**
  * @author Athanasios Theodoropoulos
@@ -38,15 +39,18 @@ public class WindowShowStats
             try {
                 //Χρειάζεται να περιληφθούν πεδία για καταχώριση ημερομηνιών από το χρήστη
                 //για την π[αραγωγή των στατιστικών σε συγκεκριμένο εύρος
-                
+                String fromDate = "2021-01-01"; // ΝΑ ΑΝΤΙΚΑΤΑΣΤΑΘΕΙ ΜΕ INPUT ΑΠΟ ΧΡΗΣΤΗ
+                String toDate = "2021-02-20";// ΝΑ ΑΝΤΙΚΑΤΑΣΤΑΘΕΙ ΜΕ INPUT ΑΠΟ ΧΡΗΣΤΗ
+                //create a new File instance
                 File file = new File(DEST);
+                //create the directory where the file will be store (if not exists)
                 file.getParentFile().mkdirs();
-                new CreatePDF().createPdf(DEST);
+                //call the function to create the pdf with the statistics for the given date range
+                new Utilities().createPdf(fromDate, toDate, DEST);
+                //show a completion notification to the user
                 JOptionPane.showMessageDialog(null, "Το αρχείο δημιουργήθηκε",
                                           "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
-            } catch (IOException ex) {
-                Logger.getLogger(WindowShowStats.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParseException ex) {
+            } catch (IOException | ParseException ex) {
                 Logger.getLogger(WindowShowStats.class.getName()).log(Level.SEVERE, null, ex);
             }
             

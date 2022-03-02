@@ -76,7 +76,6 @@ public class createChart extends ApplicationFrame {
             final String series = "Number: " + wnOcc.getWinningNumber();
 
             dataset.addValue(wnOcc.getOccurrences(), series, type);
-            System.out.println(wnOcc.getOccurrences());
         });
         return dataset;         
     }

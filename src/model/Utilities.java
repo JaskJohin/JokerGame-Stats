@@ -130,7 +130,7 @@ public class Utilities {
                 .createPercentArray(new float[]{100f, 100f, 100f}))
                 .setVerticalAlignment(VerticalAlignment.MIDDLE);
         
-        //Add the headers. For each header define text and formatting individually
+        //Add the headers. For each header define formatting individually
         //1st column header
         Paragraph ltHeader1 = new Paragraph();
         Text textHeader1 = new Text("Αριθμός");

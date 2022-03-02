@@ -297,9 +297,9 @@ public class Utilities {
         System.out.println("\t    " + QueriesSQL.singleBonusOccurrences("2000-01-01", "2022-02-24", bonus));
         System.out.println("----------------------");
 
-        List<WinningNumberOccurence> top5Nums = QueriesSQL.topFiveWinningNumbersOccurred("2000-01-01", "2022-02-24");
+        List<WinningNumberOccurrence> top5Nums = QueriesSQL.topFiveWinningNumbersOccurred("2000-01-01", "2022-02-24");
         System.out.println("Top 5 winning numbers by occurrence");
-        for(WinningNumberOccurence wnOccurrence: top5Nums) {
+        for(WinningNumberOccurrence wnOccurrence: top5Nums) {
             System.out.print("Winning number: " + wnOccurrence.getWinningNumber());
             System.out.println("\t\tOccurrences: " + wnOccurrence.getOccurrences());
         }

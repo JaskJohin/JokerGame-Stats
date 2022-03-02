@@ -6,11 +6,11 @@ package model;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
-public class WinningNumberOccurence {
+public class WinningNumberOccurrence {
     private int winningNumber;
     private int occurrences;
 
-    public WinningNumberOccurence() {
+    public WinningNumberOccurrence() {
     }
 
     public void setWinningNumber(int winningNumber) {

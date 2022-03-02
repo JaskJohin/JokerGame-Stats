@@ -359,12 +359,12 @@ public class QueriesSQL {
     }
     
     //method to get the top five winning numbers in terms of occurrences for a given date range
-    public static List<WinningNumberOccurence> topFiveWinningNumbersOccurred (String fromDateStr, String toDateStr) throws ParseException {
+    public static List<WinningNumberOccurrence> topFiveWinningNumbersOccurred (String fromDateStr, String toDateStr) throws ParseException {
         //Call respective fucntions toget the long representation of 
         //first and last Dates to Epoch which is stored in the database
         long fromEpoch = fromDateStrToEpoch(fromDateStr);
         long toEpoch = toDateStrToEpoch(toDateStr);
-        List<WinningNumberOccurence> topFiveList = new ArrayList<>();
+        List<WinningNumberOccurrence> topFiveList = new ArrayList<>();
         //connect to the database
         connection = DbConnect.connect();
         //compile the SQL query for the deletion of data for the requested date range
@@ -379,7 +379,7 @@ public class QueriesSQL {
             preparedStatement.setLong(2, toEpoch);
             ResultSet topFiveOccuredSet = preparedStatement.executeQuery();
             while(topFiveOccuredSet.next()) {
-                WinningNumberOccurence memberOfTopFive = new WinningNumberOccurence();
+                WinningNumberOccurrence memberOfTopFive = new WinningNumberOccurrence();
                 memberOfTopFive.setWinningNumber(topFiveOccuredSet.getInt(1));
                 memberOfTopFive.setOccurrences(topFiveOccuredSet.getInt(2));
                 topFiveList.add(memberOfTopFive);

@@ -266,7 +266,8 @@ public class QueriesSQL {
                 + "INNER JOIN WINNINGNUMBERSLIST wnl ON c.DRAWID = wnl.DRAWID WHERE DRAWTIME >=? AND DRAWTIME <=? ) maxDID ) - "
                 + "(SELECT MAX(DRAWID) AS max_draw_appeared FROM "
                 + "(SELECT c.DRAWID, wnl.NUMBER AS NUMBERS, c.DRAWTIME FROM CONTENT c "
-                + "INNER JOIN WINNINGNUMBERSLIST wnl ON c.DRAWID = wnl.DRAWID WHERE DRAWTIME >=? AND DRAWTIME <=? ) maxDIDappeared "
+                + "INNER JOIN WINNINGNUMBERSLIST wnl ON c.DRAWID = wnl.DRAWID "
+                + "WHERE DRAWTIME >=? AND DRAWTIME <=? ) maxDIDappeared "
                 + "WHERE NUMBERS =? ) AS delay from SYSIBM.SYSDUMMY1";
         try {
             preparedStatement = connection.prepareStatement(montlhyJackpotCountStr);

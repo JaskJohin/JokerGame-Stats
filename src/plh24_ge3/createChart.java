@@ -43,20 +43,22 @@ public class createChart extends ApplicationFrame {
      */
     public createChart(final String title) throws ParseException {
         super(title);
-        final CategoryDataset dataset1 = createTop5WinningNDataset();
-        final CategoryDataset dataset2 = createTop5BonusNDataset();
-        final CategoryDataset dataset3 = createAverageDistrPerCategoryDataset();
+        //final CategoryDataset dataset1 = createTop5WinningNDataset();
         //final JFreeChart chart1 = createChart(dataset1, "Top 5 winning numbers", "Winning numbers", "Occurrences");
-        final JFreeChart chart2 = createChart(dataset2, "Top 5 bonus numbers", "Bonus numbers", "Occurrences");
-        //final JFreeChart chart3 = createChart(dataset3, "Average winnings per category", "Categories", "Distributed");
         //final ChartPanel chartPanel1 = new ChartPanel(chart1);
-        final ChartPanel chartPanel2 = new ChartPanel(chart2);
-        //final ChartPanel chartPanel3 = new ChartPanel(chart3);
         //chartPanel1.setPreferredSize(new Dimension(500, 270));
-        chartPanel2.setPreferredSize(new Dimension(500, 270));
-        //chartPanel3.setPreferredSize(new Dimension(500, 270));
         //setContentPane(chartPanel1);
+        
+        final CategoryDataset dataset2 = createTop5BonusNDataset();
+        final JFreeChart chart2 = createChart(dataset2, "Top 5 bonus numbers", "Bonus numbers", "Occurrences");
+        final ChartPanel chartPanel2 = new ChartPanel(chart2);
+        chartPanel2.setPreferredSize(new Dimension(700, 370));
         setContentPane(chartPanel2);
+        
+        //final CategoryDataset dataset3 = createAverageDistrPerCategoryDataset();    
+        //final JFreeChart chart3 = createChart(dataset3, "Average winnings per category", "Categories", "Distributed");
+        //final ChartPanel chartPanel3 = new ChartPanel(chart3);
+        //chartPanel3.setPreferredSize(new Dimension(500, 270));
         //setContentPane(chartPanel3);
     }
  

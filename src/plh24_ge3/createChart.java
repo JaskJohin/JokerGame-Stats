@@ -33,11 +33,8 @@ import org.jfree.ui.TextAnchor;
  * @author Xristoforos Ampelas
  */
 public class createChart extends ApplicationFrame {
-
-
     /**
      * Creates a new demo.
-     *
      * @param title  the frame title.
      * @throws java.text.ParseException
      */
@@ -64,7 +61,6 @@ public class createChart extends ApplicationFrame {
  
     /**
      * Creates a sample dataset.
-     * 
      * @return The dataset.
      */
     private CategoryDataset createTop5WinningNDataset() throws ParseException {
@@ -113,12 +109,9 @@ public class createChart extends ApplicationFrame {
         return dataset;         
     }
     
-    
     /**
      * Creates a sample chart.
-     * 
      * @param dataset a dataset.
-     * 
      * @return The chart.
      */
     private JFreeChart createChart(final CategoryDataset dataset, String title, String xAxisLabel, String yAxisLabel) {
@@ -134,7 +127,6 @@ public class createChart extends ApplicationFrame {
             true,                      // tooltips
             false                      // urls
         );
- 
  
         chart.setBackgroundPaint(Color.white);
  
@@ -182,7 +174,6 @@ public class createChart extends ApplicationFrame {
     
     /**
      * Starting point for the demonstration application.
-     *
      * @param args  ignored.
      * @throws java.text.ParseException
      */

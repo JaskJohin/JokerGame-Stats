@@ -168,16 +168,19 @@ public class AddDataController {
                     em.persist(pricePoints);
                     
                     //Store number to winning number table
-                    for(Winningnumberslist wNumElement : quintet)
+                    quintet.forEach((wNumElement) -> {
                         em.persist(wNumElement);
+                    });
 
                     //Store bonus to winning number bonus
-                    for(Winningnumbersbonus bonus: bonuses)
+                    bonuses.forEach((bonus) -> {
                         em.persist(bonus);
+                    });
 
                     //Store Prize Categories data
-                    for(Prizecategories pk: pkList)
+                    pkList.forEach((pk) -> {
                         em.persist(pk);
+                    });
                     
                     //Store wager statistics
                     em.persist(wagerStats);
@@ -334,16 +337,19 @@ public class AddDataController {
                 em.persist(pricePoints);
                 
                 //Store number to winning number table
-                for(Winningnumberslist wNumElement : quintet)
+                quintet.forEach((wNumElement) -> {
                     em.persist(wNumElement);
+                });
 
                 //Store bonus to winning number bonus
-                for(Winningnumbersbonus bonus: bonuses)
+                bonuses.forEach((bonus) -> {
                     em.persist(bonus);
+                });
 
                 //Store Prize Categories data
-                for(Prizecategories pk: pkList)
+                pkList.forEach((pk) -> {
                     em.persist(pk);
+                });
                 
                 //Store wager statistics
                 em.persist(wagerStats);

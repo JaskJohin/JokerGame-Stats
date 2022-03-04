@@ -35,15 +35,7 @@ public class StatsToChart extends ApplicationFrame {
     private final JFreeChart CHART;
     private final ChartPanel CHART_PANEL;
     
-    /**
-     * Creates a new demo.
-     * @param dataSet
-     * @param title  the frame title.
-     * @param chartTitle
-     * @param xLabel
-     * @param yLabel
-     * @throws java.text.ParseException
-     */
+    //Creates a new demo.
     public StatsToChart(final String title, CategoryDataset dataSet, String chartTitle , String xLabel, String yLabel) throws ParseException {
         super(title);
         CHART = createChart(dataSet, chartTitle, xLabel, yLabel);
@@ -52,13 +44,8 @@ public class StatsToChart extends ApplicationFrame {
         setContentPane(CHART_PANEL);
     }
  
-    /**
-     * Creates a sample dataset.
-     * @param fromDate
-     * @param toDate
-     * @return The dataset.
-     * @throws java.text.ParseException
-     */
+    // Creates a sample dataset.
+
     public static CategoryDataset createTop5WinningNDataset(String fromDate, String toDate) throws ParseException {
         List<WinningNumberOccurrence> wnOccList = QueriesSQL.topFiveWinningNumbersOccurred(fromDate, toDate);
         // column keys...
@@ -105,11 +92,8 @@ public class StatsToChart extends ApplicationFrame {
         return dataset;         
     }
     
-    /**
-     * Creates a sample chart.
-     * @param dataset a dataset.
-     * @return The chart.
-     */
+    // Creates a sample chart.
+     
     private JFreeChart createChart(final CategoryDataset dataset, String title, String xAxisLabel, String yAxisLabel) {
         
         // create the chart...

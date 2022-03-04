@@ -88,21 +88,12 @@ public class Utilities {
 
         // Initialize document
         Document document = new Document(pdf, PageSize.A4.rotate());
-
-        //Set fonts for the documents (support Greek)
-        FontSet fontSet = new FontSet();
-        fontSet.addFont("fonts/NotoSans-Bold.ttf");
-        fontSet.addFont("fonts/NotoSans-BoldItalic.ttf");
-        fontSet.addFont("fonts/NotoSans-Italic.ttf");
-        fontSet.addFont("fonts/NotoSans-Regular.ttf");
-        document.setFontProvider(new FontProvider(fontSet));
-        document.setProperty(Property.FONT, new String[]{"NotoGreekFonts"});
-        
+      
         //Create PdfFonts to be used for text formatting
-        PdfFont normalFont = PdfFontFactory.createFont("fonts/NotoSans-Regular.ttf");
-        PdfFont boldFont = PdfFontFactory.createFont("fonts/NotoSans-Bold.ttf");
-        PdfFont boldItalicFont = PdfFontFactory.createFont("fonts/NotoSans-BoldItalic.ttf");
-        PdfFont italicFont = PdfFontFactory.createFont("fonts/NotoSans-Italic.ttf");
+        PdfFont normalFont = PdfFontFactory.createFont(getClass().getResource("/resources/NotoSans-Regular.ttf").toString());
+        PdfFont boldFont = PdfFontFactory.createFont(getClass().getResource("/resources/NotoSans-Bold.ttf").toString());
+        PdfFont boldItalicFont = PdfFontFactory.createFont(getClass().getResource("/resources/NotoSans-BoldItalic.ttf").toString());
+        PdfFont italicFont = PdfFontFactory.createFont(getClass().getResource("/resources/NotoSans-Italic.ttf").toString());
         
         //initialize outer table to define to columns for the document
         Table outerTable = new Table(2).useAllAvailableWidth();

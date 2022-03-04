@@ -93,7 +93,7 @@ public class WindowShowStatz {
             } catch (ParseException ex) {
                 Logger.getLogger(WindowShowStatz.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } 
+        }
     }
 
     //Show stats in graph form

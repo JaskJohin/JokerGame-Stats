@@ -31,18 +31,22 @@ import org.jfree.ui.TextAnchor;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
-public class CreateChart extends ApplicationFrame {
+public class StatsToChart extends ApplicationFrame {
     private final JFreeChart CHART;
     private final ChartPanel CHART_PANEL;
     
     /**
      * Creates a new demo.
+     * @param dataSet
      * @param title  the frame title.
+     * @param chartTitle
+     * @param xLabel
+     * @param yLabel
      * @throws java.text.ParseException
      */
-    public CreateChart(CategoryDataset dataSet, final String title, String xLabel, String yLabel) throws ParseException {
+    public StatsToChart(final String title, CategoryDataset dataSet, String chartTitle , String xLabel, String yLabel) throws ParseException {
         super(title);
-        CHART = createChart(dataSet, title, xLabel, yLabel);
+        CHART = createChart(dataSet, chartTitle, xLabel, yLabel);
         CHART_PANEL = new ChartPanel(CHART);
         CHART_PANEL.setPreferredSize(new Dimension(700, 370));
         setContentPane(CHART_PANEL);
@@ -50,7 +54,10 @@ public class CreateChart extends ApplicationFrame {
  
     /**
      * Creates a sample dataset.
+     * @param fromDate
+     * @param toDate
      * @return The dataset.
+     * @throws java.text.ParseException
      */
     public static CategoryDataset createTop5WinningNDataset(String fromDate, String toDate) throws ParseException {
         List<WinningNumberOccurrence> wnOccList = QueriesSQL.topFiveWinningNumbersOccurred(fromDate, toDate);
@@ -156,7 +163,6 @@ public class CreateChart extends ApplicationFrame {
                 1.0f, new float[] {2.0f, 6.0f}, 0.0f
             )
         );
-        // OPTIONAL CUSTOMISATION COMPLETED.
         
         return chart;
     }

@@ -260,8 +260,8 @@ public class WindowShowGraphStats
                 String fromDate = textFieldDate1.getText();
                 String toDate = textFieldDate2.getText();
 
-                final CategoryDataset dataset1 = statsToChart.createTop5WinningNDataset(fromDate, toDate);
-                final statsToChart top5WN = new statsToChart("5 συχνότερα εμφανιζόμενοι Αριθμοί", dataset1,"Top 5 Winning Numbers", "Winning Numbers", "Occurrences");
+                final CategoryDataset dataset1 = StatsToChart.createTop5WinningNDataset(fromDate, toDate);
+                final StatsToChart top5WN = new StatsToChart("5 συχνότερα εμφανιζόμενοι Αριθμοί", dataset1,"Top 5 Winning Numbers", "Winning Numbers", "Occurrences");
                 top5WN.pack();
                 RefineryUtilities.centerFrameOnScreen(top5WN);
                 top5WN.setVisible(true);
@@ -278,8 +278,8 @@ public class WindowShowGraphStats
                     String fromDate = textFieldDate1.getText();
                     String toDate = textFieldDate2.getText();
                     
-                    final CategoryDataset dataset2 = statsToChart.createTop5BonusNDataset(fromDate, toDate);
-                    final statsToChart top5BN = new statsToChart("5 συχνότερα εμφανιζόμενοι Τζόκερ", dataset2,"Top 5 Bonus Numbers", "Bonus Numbers", "Occurrences");
+                    final CategoryDataset dataset2 = StatsToChart.createTop5BonusNDataset(fromDate, toDate);
+                    final StatsToChart top5BN = new StatsToChart("5 συχνότερα εμφανιζόμενοι Τζόκερ", dataset2,"Top 5 Bonus Numbers", "Bonus Numbers", "Occurrences");
                     top5BN.pack();
                     RefineryUtilities.centerFrameOnScreen(top5BN);
                     top5BN.setVisible(true);
@@ -296,8 +296,8 @@ public class WindowShowGraphStats
                 String fromDate = textFieldDate1.getText().toString();
                 String toDate = textFieldDate2.getText().toString();
                 
-                final CategoryDataset dataset3 = statsToChart.createAverageDistrPerCategoryDataset(fromDate, toDate);
-                final statsToChart averageDistr = new statsToChart("Μέσος όρος κερδών ανά κατηγορία", dataset3,"Average winnings per category", "Categories", "Distributed");
+                final CategoryDataset dataset3 = StatsToChart.createAverageDistrPerCategoryDataset(fromDate, toDate);
+                final StatsToChart averageDistr = new StatsToChart("Μέσος όρος κερδών ανά κατηγορία", dataset3,"Average winnings per category", "Categories", "Distributed");
                 averageDistr.pack();
                 RefineryUtilities.centerFrameOnScreen(averageDistr);
                 averageDistr.setVisible(true);    

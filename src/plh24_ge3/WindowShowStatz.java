@@ -9,8 +9,13 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -20,12 +25,15 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.JScrollBar;
+import model.Utilities;
+import static plh24_ge3.WindowShowStatz.DEST;
 
 /**
  * @author Athanasios Theodoropoulos
@@ -36,6 +44,8 @@ import javax.swing.JScrollBar;
 
 public class WindowShowStatz {
     
+    public static final String DEST = "files/TzokerStatisticalData.pdf";
+    
     // Variables declaration
     private final JTable numbersViewTable;
     private final JTable bonusNumbersViewTable;
@@ -45,7 +55,39 @@ public class WindowShowStatz {
     	private void buttonCloseActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		dialog.dispose();
+	}
+
+        //Show stats in graph form
+	private void buttonGraphStatsActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		new WindowShowGraphStats();
 	}        
+        
+        //Print PDF
+     
+        private void buttonPrintPdfActionPerformed(java.awt.event.ActionEvent evt)
+	{
+            
+            try {
+                // TO DO
+                //Χρειάζεται να περιληφθούν πεδία για καταχώριση ημερομηνιών από το χρήστη
+                //για την π[αραγωγή των στατιστικών σε συγκεκριμένο εύρος
+                String fromDate = "2021-01-01"; // ΝΑ ΑΝΤΙΚΑΤΑΣΤΑΘΕΙ ΜΕ INPUT ΑΠΟ ΧΡΗΣΤΗ
+                String toDate = "2021-02-20";// ΝΑ ΑΝΤΙΚΑΤΑΣΤΑΘΕΙ ΜΕ INPUT ΑΠΟ ΧΡΗΣΤΗ
+                //create a new File instance
+                File file = new File(DEST);
+                //create the directory where the file will be store (if not exists)
+                file.getParentFile().mkdirs();
+                //call the function to create the pdf with the statistics for the given date range
+                new Utilities().createPdf(fromDate, toDate, DEST);
+                //show a completion notification to the user
+                JOptionPane.showMessageDialog(null, "Το αρχείο δημιουργήθηκε",
+                                          "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException | ParseException ex) {
+                Logger.getLogger(WindowShowStats.class.getName()).log(Level.SEVERE, null, ex);
+            }        
+	}
+ 
         
     // Constructor
     public WindowShowStatz()
@@ -91,9 +133,11 @@ public class WindowShowStatz {
 			JLabel labelTitleShadow = new JLabel("Προβολή στατιστικών");
 			labelTitleShadow.setFont(new Font("Arial", 3, 42));
 			labelTitleShadow.setForeground(Color.BLUE);
+                         
 
 		topPanel.add(labelTitle);
 		topPanel.add(labelTitleShadow);
+                          
 
 		/*
 		 * Middle panel with all the functionality
@@ -203,6 +247,7 @@ public class WindowShowStatz {
 
 			dataViewPanel.add(new JScrollPane(numbersViewTable), BorderLayout.WEST);
                         
+                        
                         // Columns and initial data of the JTable for data per bonus number
 				String[] bonusNumbersColumns = {"Τζόκερ", "Εμφανίσεις", "Καθυστερήσεις"};
 				Object[][] bonusNumbersData = {
@@ -227,6 +272,15 @@ public class WindowShowStatz {
                                         {"19", "", ""},
                                         {"20", "", ""},                             
 				};
+                                 // Show graph stats button
+                                JButton buttonGraphStats = new JButton("Προβολή στατιστικών σε γραφική μορφή");
+                                buttonGraphStats.setPreferredSize(new Dimension(206, 20));
+                                buttonGraphStats.addActionListener(this::buttonGraphStatsActionPerformed);
+                                
+                                // Button to print stats to PDF file
+                                JButton buttonPrintPdf = new JButton("Εκτύπωση σε PDF");
+                                buttonPrintPdf.setPreferredSize(new Dimension(206, 20));
+                                buttonPrintPdf.addActionListener(this::buttonPrintPdfActionPerformed);
                                 
                                 // Center renderer for table columns
 				DefaultTableCellRenderer centerText = new DefaultTableCellRenderer();
@@ -251,10 +305,15 @@ public class WindowShowStatz {
 				bonusNumbersViewTable.setPreferredScrollableViewportSize(bonusNumbersViewTable.getPreferredSize());
 
 			dataViewPanel.add(new JScrollPane(bonusNumbersViewTable), BorderLayout.EAST);
+                        
+                       
                   
 		middlePanel.add(dateRangeAndPrintPdfPanel);
 		middlePanel.add(dataViewPanel);
 		middlePanel.add(Box.createVerticalGlue());
+                middlePanel.add(buttonGraphStats);
+                middlePanel.add(buttonPrintPdf);
+      
 
 		/*
 		 * Bottom panel with the Close button

@@ -1,6 +1,8 @@
 package plh24_ge3;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -300,7 +302,10 @@ public class WindowShowGraphStats
                 final StatsToChart averageDistr = new StatsToChart("Μέσος όρος κερδών ανά κατηγορία", dataset3,"Average winnings per category", "Categories", "Distributed");
                 averageDistr.pack();
                 RefineryUtilities.centerFrameOnScreen(averageDistr);
-                averageDistr.setVisible(true);    
+                averageDistr.setVisible(true);
+                averageDistr.setAlwaysOnTop(true);
+                averageDistr.requestFocusInWindow();
+                averageDistr.setAlwaysOnTop(false);
 
             } catch (ParseException ex) {
                     Logger.getLogger(WindowShowGraphStats.class.getName()).log(Level.SEVERE, null, ex);

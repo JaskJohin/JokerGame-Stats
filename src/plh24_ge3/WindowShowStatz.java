@@ -58,6 +58,11 @@ public class WindowShowStatz {
 	{
 		dialog.dispose();
 	}
+        
+        
+    private void buttonFetchDataActionPerformed(java.awt.event.ActionEvent evt) {
+        
+    }
 
         //Show stats in graph form
 	private void buttonGraphStatsActionPerformed(java.awt.event.ActionEvent evt)
@@ -157,7 +162,7 @@ public class WindowShowStatz {
 			dateRangeAndPrintPdfPanel.setBackground(backColor);		
 
                 // Label from
-				JLabel labelFrom = new JLabel("Από");
+				JLabel labelFrom = new JLabel("Από:");
 					//labelFrom.setBorder(BorderFactory.createEmptyBorder(0, 53, 0, 6));
 				labelFrom.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 6));
 
@@ -167,7 +172,7 @@ public class WindowShowStatz {
 				textFieldDate1.setPreferredSize(new Dimension(74, 20));
 
 				// Label up to
-				JLabel labelUpTo = new JLabel("Έως");
+				JLabel labelUpTo = new JLabel("Έως:");
 				labelUpTo.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
 
 				// Text field for date 2
@@ -175,13 +180,13 @@ public class WindowShowStatz {
 				textFieldDate2.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 				textFieldDate2.setPreferredSize(new Dimension(74, 20));
 				// Game select
-				JLabel labelGameSelect = new JLabel("Επιλέξτε παιχνίδι:");
+				JLabel labelGameSelect = new JLabel("Επιλέξτε παιχνίδι ");
 				String comboBoxGameSelectItems[] = {"Τζόκερ (id: 5104)"};
 				JComboBox comboBoxGameSelect = new JComboBox(comboBoxGameSelectItems);
 				comboBoxGameSelect.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 				comboBoxGameSelect.setBackground(backColor);
                 
-                JLabel labelDateRangeSelect = new JLabel("Εισάγετε ημερομηνίες:");
+                JLabel labelDateRangeSelect = new JLabel("Εισάγετε ημ/νίες, ");
 
 			dateRangeAndPrintPdfPanel.add(labelGameSelect);
 			dateRangeAndPrintPdfPanel.add(Box.createRigidArea(new Dimension(10,0)));
@@ -273,7 +278,12 @@ public class WindowShowStatz {
 				numbersViewTable.setPreferredScrollableViewportSize(numbersViewTable.getPreferredSize());
 
 			dataViewPanel.add(new JScrollPane(numbersViewTable), BorderLayout.WEST);
-                        
+            //show Fetch Data button
+            JButton buttonFetchData = new JButton("Αναζήτηση");
+            buttonFetchData.setSize(80, 40);
+            buttonFetchData.setBounds(40, 100, 40, 100);
+            buttonFetchData.addActionListener(this::buttonFetchDataActionPerformed);
+            dataViewPanel.add(buttonFetchData);
                         
                         // Columns and initial data of the JTable for data per bonus number
 				String[] bonusNumbersColumns = {"Τζόκερ", "Εμφανίσεις", "Καθυστερήσεις"};
@@ -299,7 +309,7 @@ public class WindowShowStatz {
                     {"19", "", ""},
                     {"20", "", ""},                             
 				};
-                     // Show graph stats button
+                    // Show graph stats button
                     JButton buttonGraphStats = new JButton("Προβολή στατιστικών σε γραφική μορφή");
                     buttonGraphStats.setPreferredSize(new Dimension(206, 20));
                     buttonGraphStats.addActionListener(this::buttonGraphStatsActionPerformed);

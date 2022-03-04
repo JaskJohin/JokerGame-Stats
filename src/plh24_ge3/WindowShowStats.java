@@ -40,7 +40,7 @@ public class WindowShowStats
                 // TO DO
                 //Χρειάζεται να περιληφθούν πεδία για καταχώριση ημερομηνιών από το χρήστη
                 //για την π[αραγωγή των στατιστικών σε συγκεκριμένο εύρος
-                String fromDate = "2021-01-01"; // ΝΑ ΑΝΤΙΚΑΤΑΣΤΑΘΕΙ ΜΕ INPUT ΑΠΟ ΧΡΗΣΤΗ
+                String fromDate = "2020-01-01"; // ΝΑ ΑΝΤΙΚΑΤΑΣΤΑΘΕΙ ΜΕ INPUT ΑΠΟ ΧΡΗΣΤΗ
                 String toDate = "2021-02-20";// ΝΑ ΑΝΤΙΚΑΤΑΣΤΑΘΕΙ ΜΕ INPUT ΑΠΟ ΧΡΗΣΤΗ
                 //create a new File instance
                 File file = new File(DEST);

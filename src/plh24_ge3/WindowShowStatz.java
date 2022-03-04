@@ -12,6 +12,7 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -52,8 +53,10 @@ public class WindowShowStatz {
     private final JTable numbersViewTable;
     private final JTable bonusNumbersViewTable;
     private final JDialog dialog;
-    private final JTextField textFieldDate1, textFieldDate2;
+    private JTextField textFieldDate1 = new JTextField("2000-01-01");
+    private JTextField  textFieldDate2 = new JTextField(LocalDate.now().toString());
     
+       
         // Close button method
     	private void buttonCloseActionPerformed(java.awt.event.ActionEvent evt)
 	{
@@ -90,7 +93,7 @@ public class WindowShowStatz {
             } catch (ParseException ex) {
                 Logger.getLogger(WindowShowStatz.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }   
+        } 
     }
 
     //Show stats in graph form
@@ -101,30 +104,25 @@ public class WindowShowStatz {
         
         //Print PDF
      
-        private void buttonPrintPdfActionPerformed(java.awt.event.ActionEvent evt)
-	{
-            
-            try {
-                // TO DO
-                //Χρειάζεται να περιληφθούν πεδία για καταχώριση ημερομηνιών από το χρήστη
-                //για την π[αραγωγή των στατιστικών σε συγκεκριμένο εύρος
-                String fromDate = "2021-01-01"; // ΝΑ ΑΝΤΙΚΑΤΑΣΤΑΘΕΙ ΜΕ INPUT ΑΠΟ ΧΡΗΣΤΗ
-                String toDate = "2021-02-20";// ΝΑ ΑΝΤΙΚΑΤΑΣΤΑΘΕΙ ΜΕ INPUT ΑΠΟ ΧΡΗΣΤΗ
-                //create a new File instance
-                File file = new File(DEST);
-                //create the directory where the file will be store (if not exists)
-                file.getParentFile().mkdirs();
-                //call the function to create the pdf with the statistics for the given date range
-                new Utilities().createPdf(fromDate, toDate, DEST);
-                //show a completion notification to the user
-                JOptionPane.showMessageDialog(null, "Το αρχείο δημιουργήθηκε",
-                                          "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
-            } catch (IOException | ParseException ex) {
-                Logger.getLogger(WindowShowStats.class.getName()).log(Level.SEVERE, null, ex);
-            }        
-	}
+    private void buttonPrintPdfActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            //inherit the dates from the window
+            String fromDate = textFieldDate1.getText();
+            String toDate = textFieldDate2.getText();
+            //create a new File instance
+            File file = new File(DEST);
+            //create the directory where the file will be store (if not exists)
+            file.getParentFile().mkdirs();
+            //call the function to create the pdf with the statistics for the given date range
+            new Utilities().createPdf(fromDate, toDate, DEST);
+            //show a completion notification to the user
+            JOptionPane.showMessageDialog(null, "Το αρχείο δημιουργήθηκε",
+                                      "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(WindowShowStats.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+    }
  
-        
     // Constructor
     public WindowShowStatz()
 	{
@@ -196,7 +194,7 @@ public class WindowShowStatz {
 				labelFrom.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 6));
 
 				// Text field for date 1
-				textFieldDate1 = new JTextField();
+				//textFieldDate1 = new JTextField();
 				textFieldDate1.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 				textFieldDate1.setPreferredSize(new Dimension(74, 20));
 
@@ -205,7 +203,7 @@ public class WindowShowStatz {
 				labelUpTo.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
 
 				// Text field for date 2
-				textFieldDate2 = new JTextField();
+				//textFieldDate2 = new JTextField();
 				textFieldDate2.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 				textFieldDate2.setPreferredSize(new Dimension(74, 20));
 				// Game select
@@ -308,7 +306,7 @@ public class WindowShowStatz {
 
 			dataViewPanel.add(new JScrollPane(numbersViewTable), BorderLayout.WEST);
             //create a button to fetch data
-            JButton buttonFetchData = new JButton("Αναζήτηση");
+            JButton buttonFetchData = new JButton("Προβολή");
             //add action to the button
             buttonFetchData.addActionListener(this::buttonFetchDataActionPerformed);
             //create a new panel to correctly position the button in the midle panel

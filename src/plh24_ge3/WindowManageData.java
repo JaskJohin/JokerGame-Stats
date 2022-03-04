@@ -753,7 +753,7 @@ public class WindowManageData
 	 */
 	private int deletionConfirmationDialog() {
 		//add an icon the the Dialog box
-		ImageIcon icon = new ImageIcon("src/resources/exclamation4.png");
+		ImageIcon icon = new ImageIcon(getClass().getResource("/resources/exclamation4.png"));
 
 		//create a new Panel
 		JPanel panel = new JPanel();

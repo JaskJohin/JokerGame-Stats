@@ -60,8 +60,8 @@ public class WindowManageData
 	private final JTable jokerSDTable;
 	private final DefaultTableModel modeljokerDRTable;
 	private final JTable jokerDRTable;
-        private JProgressBar progressBar;
-        private Dimension dim;
+	private JProgressBar progressBar;
+	private Dimension dim;
 
 
 	// Methods
@@ -688,141 +688,155 @@ public class WindowManageData
 	 */
 	private void buttonStoreInDBActionPerformed(java.awt.event.ActionEvent evt)
 	{
-            if (radioButtonSingleDraw.isSelected())
-            {
-                try {
-                    // Check if a search has been performed
-                    String errorMsg = "Δεν έχει γίνει αναζήτηση για συγκεκριμένη κλήρωση!";
-                    if (lastSearchjsonStr == null)
-                    {
-                        JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
-                        return;
-                    }
-                    
-                    // Json string from the last single draw search
-                    String jsonStr = lastSearchjsonStr;
+		if (radioButtonSingleDraw.isSelected())
+		{
+			try {
+				// Check if a search has been performed
+				String errorMsg = "Δεν έχει γίνει αναζήτηση για συγκεκριμένη κλήρωση!";
+				if (lastSearchjsonStr == null)
+				{
+					JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
+					return;
+				}
 
-                    // Parse jsonStr into json element and get an object structure
-                    JsonObject jObject = new JsonParser().parse(jsonStr).getAsJsonObject();
-                    //INSERT data to the database
-                    AddDataController.storeDrawsDataByDrawID(jObject);
-                    JOptionPane.showMessageDialog(null, "Επιτυχής εισαγωγή εγγραφών",
-                                          "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
-                } catch (Exception ex) {
-                    Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            else
-            {
-                // Αν είναι ενεργοποιημένη η επιλογή "Εύρος ημερομηνιών", τα json strings
-                // της τελευταίας αναζήτησης είναι αποθηκευμένα στο attribute lastSearchjsonStrList
+				// Json string from the last single draw search
+				String jsonStr = lastSearchjsonStr;
 
-                // Check if a search has been performed
-                String errorMsg = "Δεν έχει γίνει αναζήτηση για εύρος ημερομηνιών!";
-                if (lastSearchjsonStrList.isEmpty())
-                {
-                    JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
-                    return;
-                }
+				// Parse jsonStr into json element and get an object structure
+				JsonObject jObject = new JsonParser().parse(jsonStr).getAsJsonObject();
 
-                // Parce all json strings in lastSearchjsonStrList
-                for (int i = 0; i <  lastSearchjsonStrList.size(); i++) {
-                    try {
-                        String jsonStr = lastSearchjsonStrList.get(i);
-                        // Parse jsonStr into json element and get an object structure
-                        JsonObject jObject = new JsonParser().parse(jsonStr).getAsJsonObject();
+				//INSERT data to the database
+				AddDataController.storeDrawsDataByDrawID(jObject);
+				JOptionPane.showMessageDialog(null, "Επιτυχής εισαγωγή εγγραφών",
+								"Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
+			} catch (Exception ex) {
+				Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+		else
+		{
+			// Check if a search has been performed
+			String errorMsg = "Δεν έχει γίνει αναζήτηση για εύρος ημερομηνιών!";
+			if (lastSearchjsonStrList.isEmpty())
+			{
+				JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
+				return;
+			}
 
-                        // Get the totalElements
-                        int totalElements = jObject.get("totalElements").getAsInt();
+			// Parce all json strings in lastSearchjsonStrList
+			for (int i = 0; i <  lastSearchjsonStrList.size(); i++) {
+				try {
+					String jsonStr = lastSearchjsonStrList.get(i);
+					// Parse jsonStr into json element and get an object structure
+					JsonObject jObject = new JsonParser().parse(jsonStr).getAsJsonObject();
 
-                        // If there are no draw data, go to the next jsonStrList element
-                        if (totalElements == 0) {continue;}
-                        AddDataController.storeDrawsDataByDateRange(jObject);
-                    } catch (Exception ex) {
-                        Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                JOptionPane.showMessageDialog(null, "Επιτυχής εισαγωγή εγγραφών", 
-                        "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
+					// Get the totalElements
+					int totalElements = jObject.get("totalElements").getAsInt();
+
+					// If there are no draw data, go to the next jsonStrList element
+					if (totalElements == 0) {continue;}
+
+					AddDataController.storeDrawsDataByDateRange(jObject);
+				} catch (Exception ex) {
+					Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
+				}
+			}
+
+			JOptionPane.showMessageDialog(null, "Επιτυχής εισαγωγή εγγραφών", 
+				"Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+
+
+	/**
+	 * Dialog box to confirm deletion from DB
+	 */
+	private int deletionConfirmationDialog() {
+		//add an icon the the Dialog box
+		ImageIcon icon = new ImageIcon("src/resources/exclamation4.png");
+
+		//create a new Panel
+		JPanel panel = new JPanel();
+
+		//set panel preffered size
+		panel.setPreferredSize(new Dimension(400, 96));
+
+		// avoid setting layout so that induvidual elements can be set manually
+		panel.setLayout(null);
+
+		//add a new message
+		JLabel label1 = new JLabel("ΠΡΟΣΟΧΗ! Αυτή η ενέργεια θα διαγράψει δεδομένα από τη βάση");
+		label1.setVerticalAlignment(SwingConstants.BOTTOM);
+		label1.setBounds(32, 16, 400, 32);
+		label1.setFont(new Font("Arial", Font.BOLD, 12));
+		label1.setHorizontalAlignment(SwingConstants.LEFT);
+		panel.add(label1);
+
+		//second line of the message
+		JLabel label2 = new JLabel("Αν είστε βέβαιοι, πατήστε ΟΚ;");
+		label2.setVerticalAlignment(SwingConstants.TOP);
+		label2.setHorizontalAlignment(SwingConstants.LEFT);
+		label2.setFont(new Font("Arial", Font.BOLD, 12));
+		label2.setBounds(32, 48, 200, 96);
+		panel.add(label2);
+
+		UIManager.put("OptionPane.minimumSize", new Dimension(300, 120));
+
+		//select the confirmation dialog buttons, title and add the other elements
+		int input = JOptionPane.showConfirmDialog(null, panel, "Επιβεβαίωση διαγραφής",
+			JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, icon);
+
+		//return users choice (0 for OK, 2 for Cancel)
+		return input;
+	}
+
 	/**
 	 * Action of the buttonDelDRInDB.
+	 * Method to delete data from the database for a specific date range
 	 * @param evt 
 	 */
-        
-        private int deletionConfirmationDialog() {
-            //add an icon the the Dialog box
-            ImageIcon icon = new ImageIcon("src/resources/exclamation4.png");
-            //create a new Panel
-            JPanel panel = new JPanel();
-            //set panel preffered size
-            panel.setPreferredSize(new Dimension(400, 96));
-            // avoid setting layout so that induvidual elements can be set manually
-            panel.setLayout(null);
-            //add a new message
-            JLabel label1 = new JLabel("ΠΡΟΣΟΧΗ! Αυτή η ενέργεια θα διαγράψει δεδομένα από τη βάση");
-            label1.setVerticalAlignment(SwingConstants.BOTTOM);
-            label1.setBounds(32, 16, 400, 32);
-            label1.setFont(new Font("Arial", Font.BOLD, 12));
-            label1.setHorizontalAlignment(SwingConstants.LEFT);
-            panel.add(label1);
-            //second line of the message
-            JLabel label2 = new JLabel("Αν είστε βέβαιοι, πατήστε ΟΚ;");
-            label2.setVerticalAlignment(SwingConstants.TOP);
-            label2.setHorizontalAlignment(SwingConstants.LEFT);
-            label2.setFont(new Font("Arial", Font.BOLD, 12));
-            label2.setBounds(32, 48, 200, 96);
-            panel.add(label2);
-            
-            UIManager.put("OptionPane.minimumSize", new Dimension(300, 120));
-            //select the confirmation dialog buttons, title and add the other elements
-            int input = JOptionPane.showConfirmDialog(null, panel, "Επιβεβαίωση διαγραφής",
-                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, icon);
-            //return users choice (0 for OK, 2 for Cancel)
-            return input;
-        }
-        
-        //method to delete dat from the database for a specific date range 
-        private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt) {
-            //show a confirmation dialog    
-            int choice = deletionConfirmationDialog();
-            //if OK is pressed, then
-            if(choice == 0) {
-                //set date variables
-                LocalDate date1;
-                LocalDate date2;
+	private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt) {
+		//show a confirmation dialog    
+		int choice = deletionConfirmationDialog();
 
-                // Check if given dates are valid
-                String errorMsgDates = "Οι ημερομηνίες πρέπει να είναι της μορφής YYYY-MM-DD.";
-                //parse dates
-                try {
-                        date1 = LocalDate.parse(textFieldDBDate1.getText());
-                        date2 = LocalDate.parse(textFieldDBDate2.getText());
-                }catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, errorMsgDates, "Λάθος είσοδος", 0);
-                        return;
-                }
+		//if OK is pressed, then
+		if(choice == 0) {
+			//set date variables
+			LocalDate date1;
+			LocalDate date2;
 
-                // Check if the date range is valid
-                String errorMsgRange = "Η αρχική ημερομηνία πρέπει να είναι πριν την τελική.";
-                if (!date1.minusDays(1).isBefore(date2)) {
-                        JOptionPane.showMessageDialog(null, errorMsgRange, "Λάθος είσοδος", 0);
-                        return;
-                }
-                //get LocaDate as String
-                String fromDate = date1.toString();
-                String toDate = date2.toString();
-                try {
-                    //execute DELETE operation
-                    QueriesSQL.deleteDataByDateRange(fromDate, toDate);
-                    //Notify the user that the data were deleted
-                    JOptionPane.showMessageDialog(null, "Επιτυχής διαγραφή",
-                                          "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
-                } catch (ParseException ex) {
-                    Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+			// Check if given dates are valid
+			String errorMsgDates = "Οι ημερομηνίες πρέπει να είναι της μορφής YYYY-MM-DD.";
+
+			//parse dates
+			try {
+				date1 = LocalDate.parse(textFieldDBDate1.getText());
+				date2 = LocalDate.parse(textFieldDBDate2.getText());
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, errorMsgDates, "Λάθος είσοδος", 0);
+				return;
+			}
+
+			// Check if the date range is valid
+			String errorMsgRange = "Η αρχική ημερομηνία πρέπει να είναι πριν την τελική.";
+			if (!date1.minusDays(1).isBefore(date2)) {
+				JOptionPane.showMessageDialog(null, errorMsgRange, "Λάθος είσοδος", 0);
+				return;
+			}
+
+			//get LocaDate as String
+			String fromDate = date1.toString();
+			String toDate = date2.toString();
+			try {
+				//execute DELETE operation
+				QueriesSQL.deleteDataByDateRange(fromDate, toDate);
+				//Notify the user that the data were deleted
+				JOptionPane.showMessageDialog(null, "Επιτυχής διαγραφή",
+							"Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
+			} catch (ParseException ex) {
+				Logger.getLogger(WindowManageData.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
 	}
 
 	/**
@@ -842,17 +856,20 @@ public class WindowManageData
 			case "Τζόκερ":    gId = "5104"; break;
 			case "Extra5":    gId = "5106"; break;
 		}
-                //convert game ID to Integer
-                int gameId = Integer.parseInt(gId);
-                //call the confirmation dialog
-                int choice = deletionConfirmationDialog();
-                //if answer is OK then
-                if(choice == 0){
-                    //calling function to delete data for selected game ID
-                    QueriesSQL.deleteDataByGameId(gameId);
-                    JOptionPane.showMessageDialog(null, "Επιτυχής διαγραφή",
-                                          "Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
-                }
+
+		//convert game ID to Integer
+		int gameId = Integer.parseInt(gId);
+
+		//call the confirmation dialog
+		int choice = deletionConfirmationDialog();
+
+		//if answer is OK then
+		if(choice == 0) {
+			//calling function to delete data for selected game ID
+			QueriesSQL.deleteDataByGameId(gameId);
+			JOptionPane.showMessageDialog(null, "Επιτυχής διαγραφή",
+				"Ενημέρωση", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 
 

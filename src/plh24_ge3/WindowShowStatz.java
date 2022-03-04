@@ -33,6 +33,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.JScrollBar;
 import javax.swing.JTextField;
+import model.QueriesSQL;
 import model.Utilities;
 import static plh24_ge3.WindowShowStatz.DEST;
 
@@ -59,12 +60,40 @@ public class WindowShowStatz {
 		dialog.dispose();
 	}
         
-        
     private void buttonFetchDataActionPerformed(java.awt.event.ActionEvent evt) {
+        int wnOccurrences, wnDelays, bonusOccurrences, bonusDelays;
+        String fromDate = textFieldDate1.getText();
+        String toDate = textFieldDate2.getText();
         
+        for(int i = 0; i < 45; i++) {
+            try {
+                numbersViewTable.setValueAt("", i, 1);
+                numbersViewTable.setValueAt("", i, 2);
+                wnOccurrences = QueriesSQL.singleNumberOccurrences(fromDate, toDate, (i + 1));
+                wnDelays = QueriesSQL.singleNumberDelays(fromDate, toDate, (i + 1));
+                
+                numbersViewTable.setValueAt(wnOccurrences, i, 1);
+                numbersViewTable.setValueAt(wnDelays, i, 2);
+                } catch (ParseException ex) {
+                Logger.getLogger(WindowShowStatz.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        for(int j = 0; j < 20; j++) {
+            try {
+                bonusNumbersViewTable.setValueAt("", j, 1);
+                bonusNumbersViewTable.setValueAt("", j, 2);
+                bonusOccurrences = QueriesSQL.singleBonusOccurrences(fromDate, toDate, (j + 1));
+                bonusDelays = QueriesSQL.singleBonusDelays(fromDate, toDate, (j + 1));
+
+                bonusNumbersViewTable.setValueAt(bonusOccurrences, j, 1);
+                bonusNumbersViewTable.setValueAt(bonusDelays, j, 2);
+            } catch (ParseException ex) {
+                Logger.getLogger(WindowShowStatz.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }   
     }
 
-        //Show stats in graph form
+    //Show stats in graph form
 	private void buttonGraphStatsActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		new WindowShowGraphStats();
@@ -278,12 +307,26 @@ public class WindowShowStatz {
 				numbersViewTable.setPreferredScrollableViewportSize(numbersViewTable.getPreferredSize());
 
 			dataViewPanel.add(new JScrollPane(numbersViewTable), BorderLayout.WEST);
-            //show Fetch Data button
+            //create a button to fetch data
             JButton buttonFetchData = new JButton("Αναζήτηση");
-            buttonFetchData.setSize(80, 40);
-            buttonFetchData.setBounds(40, 100, 40, 100);
+            //add action to the button
             buttonFetchData.addActionListener(this::buttonFetchDataActionPerformed);
-            dataViewPanel.add(buttonFetchData);
+            //create a new panel to correctly position the button in the midle panel
+            JPanel splitMiddlePanel = new JPanel(new GridLayout(5, 1));
+            //create some empty space
+            JLabel top1 = new JLabel("");
+            JLabel top2 = new JLabel("");
+            JLabel bottom1 = new JLabel("");
+            JLabel bottom2 = new JLabel("");
+            //add this ampety space
+            splitMiddlePanel.add(top1);
+            splitMiddlePanel.add(top2);
+            //show Fetch Data button
+            splitMiddlePanel.add(buttonFetchData);
+            //add some more empty space
+            splitMiddlePanel.add(bottom1);
+            splitMiddlePanel.add(bottom2);
+            dataViewPanel.add(splitMiddlePanel);
                         
                         // Columns and initial data of the JTable for data per bonus number
 				String[] bonusNumbersColumns = {"Τζόκερ", "Εμφανίσεις", "Καθυστερήσεις"};

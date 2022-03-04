@@ -261,7 +261,7 @@ public class WindowShowGraphStats
                 String toDate = textFieldDate2.getText();
 
                 final CategoryDataset dataset1 = CreateChart.createTop5WinningNDataset(fromDate, toDate);
-                final CreateChart top5WN = new CreateChart(dataset1,"Top 5 Winning Numbers", "Winning Numbers", "Occurrences");
+                final CreateChart top5WN = new CreateChart("5 συχνότερα εμφανιζόμενοι Αριθμοί", dataset1,"Top 5 Winning Numbers", "Winning Numbers", "Occurrences");
                 top5WN.pack();
                 RefineryUtilities.centerFrameOnScreen(top5WN);
                 top5WN.setVisible(true);
@@ -279,7 +279,7 @@ public class WindowShowGraphStats
                     String toDate = textFieldDate2.getText();
                     
                     final CategoryDataset dataset2 = CreateChart.createTop5BonusNDataset(fromDate, toDate);
-                    final CreateChart top5BN = new CreateChart(dataset2,"Top 5 Bonus Numbers", "Bonus Numbers", "Occurrences");
+                    final CreateChart top5BN = new CreateChart("5 συχνότερα εμφανιζόμενοι Τζόκερ", dataset2,"Top 5 Bonus Numbers", "Bonus Numbers", "Occurrences");
                     top5BN.pack();
                     RefineryUtilities.centerFrameOnScreen(top5BN);
                     top5BN.setVisible(true);
@@ -297,7 +297,7 @@ public class WindowShowGraphStats
                 String toDate = textFieldDate2.getText().toString();
                 
                 final CategoryDataset dataset3 = CreateChart.createAverageDistrPerCategoryDataset(fromDate, toDate);
-                final CreateChart averageDistr = new CreateChart(dataset3,"Average winnings per category", "Categories", "Distributed");
+                final CreateChart averageDistr = new CreateChart("Μέσος όρος κερδών ανά κατηγορία", dataset3,"Average winnings per category", "Categories", "Distributed");
                 averageDistr.pack();
                 RefineryUtilities.centerFrameOnScreen(averageDistr);
                 averageDistr.setVisible(true);    

@@ -32,6 +32,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.JScrollBar;
+import javax.swing.JTextField;
 import model.Utilities;
 import static plh24_ge3.WindowShowStatz.DEST;
 
@@ -50,6 +51,7 @@ public class WindowShowStatz {
     private final JTable numbersViewTable;
     private final JTable bonusNumbersViewTable;
     private final JDialog dialog;
+    private final JTextField textFieldDate1, textFieldDate2;
     
         // Close button method
     	private void buttonCloseActionPerformed(java.awt.event.ActionEvent evt)
@@ -154,18 +156,43 @@ public class WindowShowStatz {
 			dateRangeAndPrintPdfPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, dateRangeAndPrintPdfPanel.getMinimumSize().height));
 			dateRangeAndPrintPdfPanel.setBackground(backColor);		
 
+                // Label from
+				JLabel labelFrom = new JLabel("Από");
+					//labelFrom.setBorder(BorderFactory.createEmptyBorder(0, 53, 0, 6));
+				labelFrom.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 6));
+
+				// Text field for date 1
+				textFieldDate1 = new JTextField();
+				textFieldDate1.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+				textFieldDate1.setPreferredSize(new Dimension(74, 20));
+
+				// Label up to
+				JLabel labelUpTo = new JLabel("Έως");
+				labelUpTo.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
+
+				// Text field for date 2
+				textFieldDate2 = new JTextField();
+				textFieldDate2.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+				textFieldDate2.setPreferredSize(new Dimension(74, 20));
 				// Game select
-				JLabel labelGameSelect = new JLabel("Επιλέξτε τυχερό παιχνίδι");
+				JLabel labelGameSelect = new JLabel("Επιλέξτε παιχνίδι:");
 				String comboBoxGameSelectItems[] = {"Τζόκερ (id: 5104)"};
 				JComboBox comboBoxGameSelect = new JComboBox(comboBoxGameSelectItems);
 				comboBoxGameSelect.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-				comboBoxGameSelect.setBackground(backColor);		
+				comboBoxGameSelect.setBackground(backColor);
+                
+                JLabel labelDateRangeSelect = new JLabel("Εισάγετε ημερομηνίες:");
 
 			dateRangeAndPrintPdfPanel.add(labelGameSelect);
 			dateRangeAndPrintPdfPanel.add(Box.createRigidArea(new Dimension(10,0)));
 			dateRangeAndPrintPdfPanel.add(comboBoxGameSelect);
 			dateRangeAndPrintPdfPanel.add(Box.createRigidArea(new Dimension(70,0)));
 			dateRangeAndPrintPdfPanel.add(Box.createRigidArea(new Dimension(6,0)));
+            dateRangeAndPrintPdfPanel.add(labelDateRangeSelect);
+            dateRangeAndPrintPdfPanel.add(labelFrom);
+            dateRangeAndPrintPdfPanel.add(textFieldDate1);
+            dateRangeAndPrintPdfPanel.add(labelUpTo);
+            dateRangeAndPrintPdfPanel.add(textFieldDate2);
 
 			// Data view panel
 			JPanel dataViewPanel = new JPanel();
@@ -188,39 +215,39 @@ public class WindowShowStatz {
 					{"10", "", ""},
 					{"11", "", ""},
 					{"12", "", ""},
-                                        {"13", "", ""},
-                                        {"14", "", ""},
-                                        {"15", "", ""},
-                                        {"16", "", ""},
-                                        {"17", "", ""},
-                                        {"18", "", ""},
-                                        {"19", "", ""},
-                                        {"20", "", ""},
-                                        {"21", "", ""},
-                                        {"22", "", ""},
-                                        {"23", "", ""},
-                                        {"24", "", ""},
-                                        {"25", "", ""},
-                                        {"26", "", ""},
-                                        {"27", "", ""},
-                                        {"28", "", ""},
-                                        {"29", "", ""},
-                                        {"30", "", ""},
-                                        {"31", "", ""},
-                                        {"32", "", ""},
-                                        {"33", "", ""},
-                                        {"34", "", ""},
-                                        {"35", "", ""},
-                                        {"36", "", ""},
-                                        {"37", "", ""},
-                                        {"38", "", ""},
-                                        {"39", "", ""},
-                                        {"40", "", ""},
-                                        {"41", "", ""},
-                                        {"42", "", ""},
-                                        {"43", "", ""},
-                                        {"44", "", ""},
-                                        {"45", "", ""},
+                    {"13", "", ""},
+                    {"14", "", ""},
+                    {"15", "", ""},
+                    {"16", "", ""},
+                    {"17", "", ""},
+                    {"18", "", ""},
+                    {"19", "", ""},
+                    {"20", "", ""},
+                    {"21", "", ""},
+                    {"22", "", ""},
+                    {"23", "", ""},
+                    {"24", "", ""},
+                    {"25", "", ""},
+                    {"26", "", ""},
+                    {"27", "", ""},
+                    {"28", "", ""},
+                    {"29", "", ""},
+                    {"30", "", ""},
+                    {"31", "", ""},
+                    {"32", "", ""},
+                    {"33", "", ""},
+                    {"34", "", ""},
+                    {"35", "", ""},
+                    {"36", "", ""},
+                    {"37", "", ""},
+                    {"38", "", ""},
+                    {"39", "", ""},
+                    {"40", "", ""},
+                    {"41", "", ""},
+                    {"42", "", ""},
+                    {"43", "", ""},
+                    {"44", "", ""},
+                    {"45", "", ""},
 				};
 
 				// Center renderer for table columns
@@ -263,26 +290,26 @@ public class WindowShowStatz {
 					{"10", "", ""},
 					{"11", "", ""},
 					{"12", "", ""},
-                                        {"13", "", ""},
-                                        {"14", "", ""},
-                                        {"15", "", ""},
-                                        {"16", "", ""},
-                                        {"17", "", ""},
-                                        {"18", "", ""},
-                                        {"19", "", ""},
-                                        {"20", "", ""},                             
+                    {"13", "", ""},
+                    {"14", "", ""},
+                    {"15", "", ""},
+                    {"16", "", ""},
+                    {"17", "", ""},
+                    {"18", "", ""},
+                    {"19", "", ""},
+                    {"20", "", ""},                             
 				};
-                                 // Show graph stats button
-                                JButton buttonGraphStats = new JButton("Προβολή στατιστικών σε γραφική μορφή");
-                                buttonGraphStats.setPreferredSize(new Dimension(206, 20));
-                                buttonGraphStats.addActionListener(this::buttonGraphStatsActionPerformed);
-                                
-                                // Button to print stats to PDF file
-                                JButton buttonPrintPdf = new JButton("Εκτύπωση σε PDF");
-                                buttonPrintPdf.setPreferredSize(new Dimension(206, 20));
-                                buttonPrintPdf.addActionListener(this::buttonPrintPdfActionPerformed);
-                                
-                                // Center renderer for table columns
+                     // Show graph stats button
+                    JButton buttonGraphStats = new JButton("Προβολή στατιστικών σε γραφική μορφή");
+                    buttonGraphStats.setPreferredSize(new Dimension(206, 20));
+                    buttonGraphStats.addActionListener(this::buttonGraphStatsActionPerformed);
+
+                    // Button to print stats to PDF file
+                    JButton buttonPrintPdf = new JButton("Εκτύπωση σε PDF");
+                    buttonPrintPdf.setPreferredSize(new Dimension(206, 20));
+                    buttonPrintPdf.addActionListener(this::buttonPrintPdfActionPerformed);
+
+                    // Center renderer for table columns
 				DefaultTableCellRenderer centerText = new DefaultTableCellRenderer();
 				centerText.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -298,8 +325,8 @@ public class WindowShowStatz {
 				// Disable table column re-ordering
 				bonusNumbersViewTable.getTableHeader().setReorderingAllowed(false);
                           
-                                JScrollBar scrollBar2 = new JScrollBar(JScrollBar.VERTICAL, 10, 40, 0, 100);
-                                bonusNumbersViewTable.add(scrollBar2,BorderLayout.EAST);
+                    JScrollBar scrollBar2 = new JScrollBar(JScrollBar.VERTICAL, 10, 40, 0, 100);
+                    bonusNumbersViewTable.add(scrollBar2,BorderLayout.EAST);
 
 				// Make the JScrollPane take the same size as the JTable
 				bonusNumbersViewTable.setPreferredScrollableViewportSize(bonusNumbersViewTable.getPreferredSize());
@@ -311,8 +338,8 @@ public class WindowShowStatz {
 		middlePanel.add(dateRangeAndPrintPdfPanel);
 		middlePanel.add(dataViewPanel);
 		middlePanel.add(Box.createVerticalGlue());
-                middlePanel.add(buttonGraphStats);
-                middlePanel.add(buttonPrintPdf);
+        middlePanel.add(buttonGraphStats);
+        middlePanel.add(buttonPrintPdf);
       
 
 		/*

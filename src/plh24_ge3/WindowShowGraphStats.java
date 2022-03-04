@@ -8,9 +8,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import model.AverageDistributedPrizeCat;
-import model.QueriesSQL;
+import org.jfree.data.category.CategoryDataset;
 import org.jfree.ui.RefineryUtilities;
+
 
 /**
  * @author Athanasios Theodoropoulos
@@ -256,153 +256,55 @@ public class WindowShowGraphStats
 
 	private void buttonDisplayActionPerformed1(java.awt.event.ActionEvent evt)
 	{
-		try {
-			System.out.println(textFieldDate1.getText());
-			System.out.println(textFieldDate2.getText());
-			List<Integer> numbers = new ArrayList<>();
-			List<Integer> occurency = new ArrayList<>();
+            try {
+                String fromDate = textFieldDate1.getText();
+                String toDate = textFieldDate2.getText();
 
-			for(int i=1; i<=45; i++) {
-				numbers.add(i);
-				int num = QueriesSQL.singleNumberOccurrences(textFieldDate1.getText(), textFieldDate2.getText(), i);
-				occurency.add(num);
-			}
-			System.out.println("--------------------------");
-			for(int i=1; i<=45; i++) {
-				System.out.print(numbers.get(i-1)+"     ");
-				System.out.println(occurency.get(i-1));
-			}
-			System.out.println("--------------------------");
-			int temp = 0;
-			int temp2 = 0;
-			for(int i=0; i < 45; i++) {  
-				for(int j=1; j < 45; j++) {  
-					if(occurency.get(j-1) < occurency.get(j)) {  
-						//swap elements  
-						temp = occurency.get(j-1);  
-						occurency.set(j-1, occurency.get(j));
-						occurency.set(j, temp);
+                final CategoryDataset dataset1 = CreateChart.createTop5WinningNDataset(fromDate, toDate);
+                final CreateChart top5WN = new CreateChart(dataset1,"Top 5 Winning Numbers", "Winning Numbers", "Occurrences");
+                top5WN.pack();
+                RefineryUtilities.centerFrameOnScreen(top5WN);
+                top5WN.setVisible(true);
+;
 
-						temp2 = numbers.get(j-1);  
-						numbers.set(j-1, numbers.get(j));
-						numbers.set(j, temp2);
-					}
-				}
-			}
-
-			System.out.println("*******************");
-			for(int i=1; i<=5; i++){
-				System.out.print(numbers.get(i-1)+"     ");
-				System.out.println(occurency.get(i-1));
-			}
-			System.out.println("********************");
-
-			Graph_Form chart = new Graph_Form(
-				"Numbers Vs Occurencies", "5 Most Occured Numbers", numbers, occurency);
-
-			chart.pack( );
-			RefineryUtilities.centerFrameOnScreen( chart );
-			chart.setVisible(true);
-		} catch (ParseException ex) {
-			Logger.getLogger(WindowShowGraphStats.class.getName()).log(Level.SEVERE, null, ex);
-		}
-
-		System.out.println("----------------->");
+            } catch (ParseException ex) {
+                    Logger.getLogger(WindowShowGraphStats.class.getName()).log(Level.SEVERE, null, ex);
+            }
 	}
 
 	private void buttonDisplayActionPerformed2(java.awt.event.ActionEvent evt)
 	{
 		try {
-			System.out.println(textFieldDate1.getText());
-			System.out.println(textFieldDate2.getText());
-			List<Integer> numbers = new ArrayList<>();
-			List<Integer> occurency = new ArrayList<>();
-
-			for(int i=1; i<=20; i++) {
-				numbers.add(i);
-				int num = QueriesSQL.singleBonusOccurrences(textFieldDate1.getText(), textFieldDate2.getText(), i);
-				occurency.add(num);
-			}
-			System.out.println("--------------------------");                  
-			for(int i=1; i<=20; i++) {
-				System.out.print(numbers.get(i-1)+"     ");
-				System.out.println(occurency.get(i-1));
-			}
-			System.out.println("--------------------------");
-			int temp = 0;
-			int temp2 = 0;
-			for(int i=0; i < 20; i++) {  
-				for(int j=1; j < 20; j++) {  
-					if(occurency.get(j-1) < occurency.get(j)) {  
-						//swap elements  
-						temp = occurency.get(j-1);  
-						occurency.set(j-1, occurency.get(j));
-						occurency.set(j, temp);
-
-						temp2 = numbers.get(j-1);  
-						numbers.set(j-1, numbers.get(j));
-						numbers.set(j, temp2);
-					}
-				}
-			}
-
-			System.out.println("*******************");                  
-			for(int i=1; i<=5; i++){
-				System.out.print(numbers.get(i-1)+"     ");
-				System.out.println(occurency.get(i-1));
-			}
-			System.out.println("********************");
-
-			Graph_Form chart = new Graph_Form(
-				"Joker Numbers Vs Occurencies",
-				"5 Most Occured Joker Numbers",
-				numbers, occurency);
-
-			chart.pack( );
-			RefineryUtilities.centerFrameOnScreen(chart);
-			chart.setVisible(true);
+                    String fromDate = textFieldDate1.getText();
+                    String toDate = textFieldDate2.getText();
+                    
+                    final CategoryDataset dataset2 = CreateChart.createTop5BonusNDataset(fromDate, toDate);
+                    final CreateChart top5BN = new CreateChart(dataset2,"Top 5 Bonus Numbers", "Bonus Numbers", "Occurrences");
+                    top5BN.pack();
+                    RefineryUtilities.centerFrameOnScreen(top5BN);
+                    top5BN.setVisible(true);
+                    
 		} catch (ParseException ex) {
 			Logger.getLogger(WindowShowGraphStats.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
-		System.out.println("----------------->");
 	}
 
 	private void buttonDisplayActionPerformed3(java.awt.event.ActionEvent evt)
 	{
-		try {
-			System.out.println(textFieldDate1.getText().toString());
-			System.out.println(textFieldDate2.getText().toString());
+            try {
+                
+                String fromDate = textFieldDate1.getText().toString();
+                String toDate = textFieldDate2.getText().toString();
+                
+                final CategoryDataset dataset3 = CreateChart.createAverageDistrPerCategoryDataset(fromDate, toDate);
+                final CreateChart averageDistr = new CreateChart(dataset3,"Average winnings per category", "Categories", "Distributed");
+                averageDistr.pack();
+                RefineryUtilities.centerFrameOnScreen(averageDistr);
+                averageDistr.setVisible(true);    
 
-			List<Integer> categoryId = new ArrayList<Integer>();
-			List<Long> averageDistributed = new ArrayList<Long>();
+            } catch (ParseException ex) {
+                    Logger.getLogger(WindowShowGraphStats.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-			List<AverageDistributedPrizeCat> num = QueriesSQL.averageDistributedPerCategory(textFieldDate1.getText().toString(), textFieldDate2.getText().toString());
-
-			for(int i=0; i<=7; i++) {
-				categoryId.add(num.get(i).getCategoryId());
-				averageDistributed.add(num.get(i).getAverageDistributed());
-			}
-
-			System.out.println("--------------------------");                  
-			for(int i=0; i<=7; i++){
-				System.out.print(categoryId.get(i) + "     ");
-				System.out.println(averageDistributed.get(i));
-			}
-			System.out.println("--------------------------");
-
-			Graph_Form chart = new Graph_Form(
-				"Joker Distribution Vs Category",
-				categoryId, averageDistributed,
-				"Distribution Vs Category");
-
-			chart.pack();
-			RefineryUtilities.centerFrameOnScreen(chart);
-			chart.setVisible(true);
-		} catch (ParseException ex) {
-			Logger.getLogger(WindowShowGraphStats.class.getName()).log(Level.SEVERE, null, ex);
-		}
-
-		System.out.println("----------------->");
 	}
 }

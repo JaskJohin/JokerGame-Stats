@@ -38,7 +38,7 @@ public class WindowMain
 
 	private void button3ActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		new WindowShowStatz();
+		new WindowShowStats();
 	}
 
 	private void buttonAboutActionPerformed(java.awt.event.ActionEvent evt)

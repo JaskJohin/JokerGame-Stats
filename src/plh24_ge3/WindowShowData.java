@@ -39,8 +39,8 @@ public class WindowShowData
 	private final JComboBox comboBoxYearSelect;
 	private final JRadioButton radioButtonApi;
 	private final JTable dataViewTable;
-        private static  EntityManagerFactory emf;
-        private static EntityManager em;
+	private static  EntityManagerFactory emf;
+	private static EntityManager em;
 
 	// Methods
 	/**
@@ -232,61 +232,73 @@ public class WindowShowData
 	 * Gather data for the selected game and year using the DB.
 	 */
 	private void getDataFromDB(String gameId, String year) throws Exception	{
-            for(int i = 0; i < 12; i++) {
-                //variables declaration
-                int drawCount;
-                double moneySum;
-                int jackpotCount;
-                BigDecimal bd;
-                String startDate;
-                String endDate;
-                // First empty the table cells for this month.
-                dataViewTable.setValueAt("", i, 1);
-                dataViewTable.setValueAt("", i, 2);
-                dataViewTable.setValueAt("", i, 3);
-                //if i+1 value has one digit
-                if((i + 1) < 10)
-                    startDate = year + "-0" + (i+1) + "-01";
-                else //if i+1 value has two digits
-                    startDate = year + "-" + (i+1) + "-01";
-                //create a Content object to be used for chacking if record exists in database
-                Content content = new Content();
-                JsonObject singleDrawObj;
-                ContentPK contentPK = new ContentPK();
-                //set startign date (1st day of the month
-                LocalDate fromDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                //set finishing day (last day of the month also checking if year is a leap year)
-                LocalDate toDate = fromDate.withDayOfMonth(fromDate.getMonth().length(fromDate.isLeapYear()));
-                //convert both dates to String
-                endDate = toDate.toString();
-                //get the numbers of draws for current month from API
-                JsonArray monthlyDraws = model.Utilities.GET_API_ARRAY("https://api.opap.gr/draws/v3.0/5104/draw-date/" + startDate + "/" + endDate + "/draw-id");
-                //loop to check if record exists in the database
-                for(int j = 0; j < monthlyDraws.size(); j++) {
-                    contentPK.setDrawid(monthlyDraws.get(j).getAsInt());
-                    contentPK.setGameid(Integer.parseInt(gameId));
-                    content.setContentPK(contentPK);
-                    boolean control = QueriesSQL.checkIfRecordExists(content);
-                    //if it doesn't exists, then add it so that presented statistical data are accurate
-                    if(!control)  {
-                        singleDrawObj = model.Utilities.GET_API("https://api.opap.gr/draws/v3.0/" + gameId + "/" + content.getContentPK().getDrawid());
-                        AddDataController.storeDrawsDataByDrawID(singleDrawObj);
-                    }
-                }
-                //set values for number of games, total earnings and number of jackpots
-                drawCount = QueriesSQL.countMonthlyGames(startDate, endDate);
-                moneySum = QueriesSQL.sumMonthlyDivident(startDate, endDate);
-                jackpotCount = QueriesSQL.countJackpots(startDate, endDate);
-                //convert monyeSum to big decimal to format the number of decimal points shown
-                bd = BigDecimal.valueOf(moneySum);
-                BigDecimal moneySumBD = bd.setScale(2, RoundingMode.HALF_UP);
-                
-                // Put the data for this month to dataViewTable
-                dataViewTable.setValueAt(drawCount, i, 1);
-                dataViewTable.setValueAt(moneySumBD, i, 2);
-                dataViewTable.setValueAt(jackpotCount, i, 3);
-            } 
-        }
+		for(int i = 0; i < 12; i++) {
+			//variables declaration
+			int drawCount;
+			double moneySum;
+			int jackpotCount;
+			BigDecimal bd;
+			String startDate;
+			String endDate;
+
+			// First empty the table cells for this month.
+			dataViewTable.setValueAt("", i, 1);
+			dataViewTable.setValueAt("", i, 2);
+			dataViewTable.setValueAt("", i, 3);
+
+			//if i+1 value has one digit
+			if((i + 1) < 10)
+				startDate = year + "-0" + (i+1) + "-01";
+			else //if i+1 value has two digits
+				startDate = year + "-" + (i+1) + "-01";
+
+			//create a Content object to be used for chacking if record exists in database
+			Content content = new Content();
+			JsonObject singleDrawObj;
+			ContentPK contentPK = new ContentPK();
+
+			//set startign date (1st day of the month
+			LocalDate fromDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+			//set finishing day (last day of the month also checking if year is a leap year)
+			LocalDate toDate = fromDate.withDayOfMonth(fromDate.getMonth().length(fromDate.isLeapYear()));
+
+			//convert both dates to String
+			endDate = toDate.toString();
+
+			//get the numbers of draws for current month from API
+			JsonArray monthlyDraws = model.Utilities.GET_API_ARRAY("https://api.opap.gr/draws/v3.0/5104/draw-date/" + startDate + "/" + endDate + "/draw-id");
+
+			//loop to check if record exists in the database
+			for(int j = 0; j < monthlyDraws.size(); j++) {
+				contentPK.setDrawid(monthlyDraws.get(j).getAsInt());
+				contentPK.setGameid(Integer.parseInt(gameId));
+				content.setContentPK(contentPK);
+				boolean control = QueriesSQL.checkIfRecordExists(content);
+
+				//if it doesn't exists, then add it so that presented statistical data are accurate
+				if(!control) {
+					singleDrawObj = model.Utilities.GET_API("https://api.opap.gr/draws/v3.0/" + gameId + "/" + content.getContentPK().getDrawid());
+					AddDataController.storeDrawsDataByDrawID(singleDrawObj);
+				}
+			}
+
+			//set values for number of games, total earnings and number of jackpots
+			drawCount = QueriesSQL.countMonthlyGames(startDate, endDate);
+			moneySum = QueriesSQL.sumMonthlyDivident(startDate, endDate);
+			jackpotCount = QueriesSQL.countJackpots(startDate, endDate);
+
+			//convert monyeSum to big decimal to format the number of decimal points shown
+			bd = BigDecimal.valueOf(moneySum);
+			BigDecimal moneySumBD = bd.setScale(2, RoundingMode.HALF_UP);
+
+			// Put the data for this month to dataViewTable
+			dataViewTable.setValueAt(drawCount, i, 1);
+			dataViewTable.setValueAt(moneySumBD, i, 2);
+			dataViewTable.setValueAt(jackpotCount, i, 3);
+		} 
+	}
+
 
 	// Button actions
 	/**
@@ -327,11 +339,11 @@ public class WindowShowData
 		}
 		else
 		{
-                    try {
-                        getDataFromDB(gameId, year);
-                    } catch (Exception ex) {
-                        Logger.getLogger(WindowShowData.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+			try {
+				getDataFromDB(gameId, year);
+			} catch (Exception ex) {
+				Logger.getLogger(WindowShowData.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		}
 	}
 
@@ -343,6 +355,7 @@ public class WindowShowData
 	{
 		dialog.dispose();
 	}
+
 
 	// Constructor
 	public WindowShowData()
@@ -393,6 +406,7 @@ public class WindowShowData
 
 		topPanel.add(labelTitle);
 		topPanel.add(labelTitleShadow);
+
 
 		/*
 		 * Middle panel with all the functionality

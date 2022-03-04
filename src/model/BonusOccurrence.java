@@ -6,6 +6,7 @@ package model;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 public class BonusOccurrence {
     
     private int bonus;
@@ -29,5 +30,4 @@ public class BonusOccurrence {
     public void setOccurrences(int occurrences) {
         this.occurrences = occurrences;
     }
-
 }

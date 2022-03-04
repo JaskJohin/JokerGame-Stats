@@ -33,8 +33,10 @@ import java.util.List;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 public class Utilities {
-    //method to retrieve data from OPAP API where data root is JsonObject
+    
+    //Method to retrieve data from OPAP API where data root is JsonObject
     public static JsonObject GET_API(String urlToCall) throws Exception {
  
         StringBuilder result = new StringBuilder();
@@ -53,7 +55,7 @@ public class Utilities {
         return jsonObj;
     }
     
-    //method to retrieve data from OPAP API where data root is JsonArray
+    //Method to retrieve data from OPAP API where data root is JsonArray
     public static JsonArray GET_API_ARRAY(String urlToCall) throws Exception {
  
         StringBuilder result = new StringBuilder();
@@ -72,8 +74,9 @@ public class Utilities {
         return jsonArr;
     }
     
-    //method to create pdf file from statistical data
+    //Method to create pdf file from statistical data
     public void createPdf(String fromDate, String toDate, String dest) throws IOException, ParseException {
+        
         //Variable declaration
         Integer number, bonus;
 
@@ -86,7 +89,7 @@ public class Utilities {
         // Initialize document
         Document document = new Document(pdf, PageSize.A4.rotate());
 
-        //set Fonts for the documents (support Greek)
+        //Set fonts for the documents (support Greek)
         FontSet fontSet = new FontSet();
         fontSet.addFont("fonts/NotoSans-Bold.ttf");
         fontSet.addFont("fonts/NotoSans-BoldItalic.ttf");
@@ -94,7 +97,8 @@ public class Utilities {
         fontSet.addFont("fonts/NotoSans-Regular.ttf");
         document.setFontProvider(new FontProvider(fontSet));
         document.setProperty(Property.FONT, new String[]{"NotoGreekFonts"});
-        //create PdfFonts to be used for text formatting
+        
+        //Create PdfFonts to be used for text formatting
         PdfFont normalFont = PdfFontFactory.createFont("fonts/NotoSans-Regular.ttf");
         PdfFont boldFont = PdfFontFactory.createFont("fonts/NotoSans-Bold.ttf");
         PdfFont boldItalicFont = PdfFontFactory.createFont("fonts/NotoSans-BoldItalic.ttf");
@@ -102,30 +106,35 @@ public class Utilities {
         
         //initialize outer table to define to columns for the document
         Table outerTable = new Table(2).useAllAvailableWidth();
-        //initialize the left column of the outer table
+        
+        //Initialize the left column of the outer table
         Cell left = new Cell();
-        //outer Table cells will have no border
+        
+        //Outer Table cells will have no border
         left.setBorder(Border.NO_BORDER);
-        //add a description of the contents of the table
+        
+        //Add a description of the contents of the table
         Paragraph par1 = new Paragraph();
         Text text1 = new Text("Εμφανίσεις και καθυστερήσεις αριθμών");
         text1.setFont(boldFont);
         text1.setFontSize(16);
         par1.add(text1);
-        //add some more information for the date range 
+        
+        //Add some more information for the date range 
         //for which statistical data are presented for winning numbers
         Paragraph par2 = new Paragraph();
         Text text2 = new Text("κληρώσεις: " + fromDate + " - " + toDate);
         text2.setFont(italicFont);
         text2.setFontSize(12);
         par2.add(text2);
-        //add both paragraphs to the table cell
+        
+        //Add both paragraphs to the table cell
         left.add(par1);
         left.add(par2);
-        //add a blank line
+        //Add a blank line
         left.add(new Paragraph("\n").setFontSize(14));
         
-        //create a nested Table to store the winning number statistics
+        //Create a nested Table to store the winning number statistics
         Table nestedTable1 = new Table(UnitValue
                 .createPercentArray(new float[]{100f, 100f, 100f}))
                 .setVerticalAlignment(VerticalAlignment.MIDDLE);
@@ -138,14 +147,14 @@ public class Utilities {
         textHeader1.setFontSize(13);
         ltHeader1.add(textHeader1);
         nestedTable1.addHeaderCell(ltHeader1);
-        //2nd cloumn header
+        //2nd column header
         Paragraph ltHeader2 = new Paragraph();
         Text textHeader2 = new Text("Εμφανίσεις");
         textHeader2.setFont(boldItalicFont);
         textHeader2.setFontSize(13);
         ltHeader2.add(textHeader2);
         nestedTable1.addHeaderCell(ltHeader2);
-        //third column header
+        //3rd column header
         Paragraph ltHeader3 = new Paragraph();
         Text textHeader3 = new Text("Καθυστερήσεις");
         textHeader3.setFont(boldItalicFont);
@@ -153,7 +162,7 @@ public class Utilities {
         ltHeader3.add(textHeader3);
         nestedTable1.addHeaderCell(ltHeader3);
         
-        //and add the statistical data for the 45 (winning) numbers
+        //Add the statistical data for the 45 (winning) numbers
         for(int i = 0; i < 45; i++) {
             number = i + 1;
             Paragraph p1 = new Paragraph();
@@ -177,14 +186,15 @@ public class Utilities {
             p3.add(t3);
             nestedTable1.addCell(p3);     
         }
-        //add the nested Table to the left cell (column)
+        
+        //Add the nested table to the left cell (column)
         left.add(nestedTable1);
         
-        //Create the right Cell
+        //Create the right cell
         Cell right = new Cell();
-        //also with no border
         right.setBorder(Border.NO_BORDER);
-        //same as above but now for the right table 
+        
+        //Same as above but now for the right table 
         //in which bonus statistics will be displayed
         Paragraph par3 = new Paragraph();
         Text text3 = new Text("Εμφανίσεις και καθυστερήσεις Τζόκερ");
@@ -206,21 +216,24 @@ public class Utilities {
         Table nestedTable2 = new Table(UnitValue
                 .createPercentArray(new float[]{100f, 100f, 100f}))
                 .setVerticalAlignment(VerticalAlignment.MIDDLE);
-        //add 1st column header
+        
+        //Add 1st column header
         Paragraph rtHeader1 = new Paragraph();
         Text textHeaderRight1 = new Text("Αριθμός Τζόκερ");
         textHeaderRight1.setFont(boldItalicFont);
         textHeaderRight1.setFontSize(13);
         rtHeader1.add(textHeaderRight1);
         nestedTable2.addHeaderCell(rtHeader1);
-        //add 2nd column header
+        
+        //Add 2nd column header
         Paragraph rtextHeaderRight2 = new Paragraph();
         Text textHeaderRight2 = new Text("Εμφανίσεις");
         textHeaderRight2.setFont(boldItalicFont);
         textHeaderRight2.setFontSize(13);
         rtextHeaderRight2.add(textHeaderRight2);
         nestedTable2.addHeaderCell(rtextHeaderRight2);
-        //add 3rd column header
+        
+        //Add 3rd column header
         Paragraph rtextHeaderRight3 = new Paragraph();
         Text textHeaderRight3 = new Text("Καθυστερήσεις");
         textHeaderRight3.setFont(boldItalicFont);
@@ -228,7 +241,7 @@ public class Utilities {
         rtextHeaderRight3.add(textHeaderRight3);
         nestedTable2.addHeaderCell(rtextHeaderRight3);
 
-        //add the bonus statistical data
+        //Add the bonus statistical data
         for(int j = 0; j < 20; j++) {
             bonus = j + 1;
             Paragraph p1 = new Paragraph();
@@ -252,14 +265,17 @@ public class Utilities {
             p3.add(t3);
             nestedTable2.addCell(p3);
         } 
-        //add the 2nd nested table to the right cell (column)
+        
+        //Add the 2nd nested table to the right cell (column)
         right.add(nestedTable2);
         
-        //add both left and right cells to the outer Table
+        //Add both left and right cells to the outer table
         outerTable.addCell(left);
         outerTable.addCell(right);
-        //and also the outer table to the document
+        
+        //Also the outer table to the document
         document.add(outerTable);
+        
         //Close document
         document.close();
     }
@@ -318,7 +334,6 @@ public class Utilities {
         for(AverageDistributedPrizeCat average: averagePerCat) {
             System.out.print("Category ID: " + average.getCategoryId());
             System.out.println("\tDistributed: " + average.getAverageDistributed());
-        }
-        
+        }        
     }
 }

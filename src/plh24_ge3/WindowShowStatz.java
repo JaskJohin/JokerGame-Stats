@@ -37,7 +37,8 @@ import javax.swing.JScrollBar;
 public class WindowShowStatz {
     
     // Variables declaration
-    private final JTable dataViewTable;
+    private final JTable numbersViewTable;
+    private final JTable bonusNumbersViewTable;
     private final JDialog dialog;
     
         // Close button method
@@ -105,7 +106,7 @@ public class WindowShowStatz {
 			// Date range selection & print to PDF
 			JPanel dateRangeAndPrintPdfPanel = new JPanel();
 			dateRangeAndPrintPdfPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-			dateRangeAndPrintPdfPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
+			dateRangeAndPrintPdfPanel.setLayout(new FlowLayout(1, 5, 5));  // align,hgap,vgap (1,5,5)
 			dateRangeAndPrintPdfPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, dateRangeAndPrintPdfPanel.getMinimumSize().height));
 			dateRangeAndPrintPdfPanel.setBackground(backColor);		
 
@@ -129,8 +130,8 @@ public class WindowShowStatz {
 			dataViewPanel.setBackground(backColor);
 
 				// Columns and initial data of the JTable for data per number
-				String[] columns = {"Αριθμός", "Εμφανίσεις", "Καθυστερήσεις"};
-				Object[][] data = {
+				String[] numbersColumns = {"Αριθμός", "Εμφανίσεις", "Καθυστερήσεις"};
+				Object[][] numbersData = {
 					{"1", "", ""},
 					{"2", "", ""},
 					{"3", "", ""},
@@ -179,29 +180,78 @@ public class WindowShowStatz {
 				};
 
 				// Center renderer for table columns
+				DefaultTableCellRenderer centerText1 = new DefaultTableCellRenderer();
+				centerText1.setHorizontalAlignment(SwingConstants.CENTER);
+
+				// JTable for Joker single draw
+				numbersViewTable = new JTable(numbersData, numbersColumns);
+				numbersViewTable.getColumnModel().getColumn(0).setCellRenderer(centerText1);
+				numbersViewTable.getColumnModel().getColumn(1).setCellRenderer(centerText1);
+				numbersViewTable.getColumnModel().getColumn(2).setCellRenderer(centerText1);
+		
+				// Make table cells unselectable and uneditable
+				numbersViewTable.setEnabled(false);
+
+				// Disable table column re-ordering
+				numbersViewTable.getTableHeader().setReorderingAllowed(false);
+                          
+                                JScrollBar scrollBar1 = new JScrollBar(JScrollBar.VERTICAL, 10, 40, 0, 100);
+                                numbersViewTable.add(scrollBar1,BorderLayout.EAST);
+
+				// Make the JScrollPane take the same size as the JTable
+				numbersViewTable.setPreferredScrollableViewportSize(numbersViewTable.getPreferredSize());
+
+			dataViewPanel.add(new JScrollPane(numbersViewTable), BorderLayout.WEST);
+                        
+                        // Columns and initial data of the JTable for data per bonus number
+				String[] bonusNumbersColumns = {"Τζόκερ", "Εμφανίσεις", "Καθυστερήσεις"};
+				Object[][] bonusNumbersData = {
+					{"1", "", ""},
+					{"2", "", ""},
+					{"3", "", ""},
+					{"4", "", ""},
+					{"5", "", ""},
+					{"6", "", ""},
+					{"7", "", ""},
+					{"8", "", ""},
+					{"9", "", ""},
+					{"10", "", ""},
+					{"11", "", ""},
+					{"12", "", ""},
+                                        {"13", "", ""},
+                                        {"14", "", ""},
+                                        {"15", "", ""},
+                                        {"16", "", ""},
+                                        {"17", "", ""},
+                                        {"18", "", ""},
+                                        {"19", "", ""},
+                                        {"20", "", ""},                             
+				};
+                                
+                                // Center renderer for table columns
 				DefaultTableCellRenderer centerText = new DefaultTableCellRenderer();
 				centerText.setHorizontalAlignment(SwingConstants.CENTER);
 
 				// JTable for Joker single draw
-				dataViewTable = new JTable(data, columns);
-				dataViewTable.getColumnModel().getColumn(0).setCellRenderer(centerText);
-				dataViewTable.getColumnModel().getColumn(1).setCellRenderer(centerText);
-				dataViewTable.getColumnModel().getColumn(2).setCellRenderer(centerText);
+				bonusNumbersViewTable = new JTable(bonusNumbersData, bonusNumbersColumns);
+				bonusNumbersViewTable.getColumnModel().getColumn(0).setCellRenderer(centerText);
+				bonusNumbersViewTable.getColumnModel().getColumn(1).setCellRenderer(centerText);
+				bonusNumbersViewTable.getColumnModel().getColumn(2).setCellRenderer(centerText);
 		
 				// Make table cells unselectable and uneditable
-				dataViewTable.setEnabled(false);
+				bonusNumbersViewTable.setEnabled(false);
 
 				// Disable table column re-ordering
-				dataViewTable.getTableHeader().setReorderingAllowed(false);
-                                
-                                JScrollBar scrollBar = new JScrollBar(JScrollBar.VERTICAL, 10, 40, 0, 100);
-                                dataViewTable.add(scrollBar,BorderLayout.EAST);
+				bonusNumbersViewTable.getTableHeader().setReorderingAllowed(false);
+                          
+                                JScrollBar scrollBar2 = new JScrollBar(JScrollBar.VERTICAL, 10, 40, 0, 100);
+                                bonusNumbersViewTable.add(scrollBar2,BorderLayout.EAST);
 
 				// Make the JScrollPane take the same size as the JTable
-				dataViewTable.setPreferredScrollableViewportSize(dataViewTable.getPreferredSize());
+				bonusNumbersViewTable.setPreferredScrollableViewportSize(bonusNumbersViewTable.getPreferredSize());
 
-			dataViewPanel.add(new JScrollPane(dataViewTable), BorderLayout.NORTH);
-                        
+			dataViewPanel.add(new JScrollPane(bonusNumbersViewTable), BorderLayout.EAST);
+                  
 		middlePanel.add(dateRangeAndPrintPdfPanel);
 		middlePanel.add(dataViewPanel);
 		middlePanel.add(Box.createVerticalGlue());

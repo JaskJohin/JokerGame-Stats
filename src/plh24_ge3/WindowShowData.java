@@ -31,6 +31,7 @@ import javax.persistence.EntityManagerFactory;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 public class WindowShowData
 {
 	// Variables declaration
@@ -77,7 +78,7 @@ public class WindowShowData
 	}
 
 	/**
-	 * Gather data for the selected game and year using the api.
+	 * Gather data for the selected game and year using the .
 	 */
 	private void getDataFromApi(String gameId, String year)
 	{
@@ -356,7 +357,6 @@ public class WindowShowData
 		dialog.dispose();
 	}
 
-
 	// Constructor
 	public WindowShowData()
 	{
@@ -451,7 +451,6 @@ public class WindowShowData
 			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(6,0)));
 			gameSelectAndDLPanel.add(comboBoxYearSelect);
 
-
 			// Choose search method label panel
 			JPanel chooseMethodLabelPanel = new JPanel();
 			chooseMethodLabelPanel.setBorder(BorderFactory.createEmptyBorder(12, 0, 0, 0));
@@ -463,7 +462,6 @@ public class WindowShowData
 				JLabel labelChooseMethod = new JLabel("Επιλέξτε από που θέλετε να αντληθούν τα δεδομένα");
 
 			chooseMethodLabelPanel.add(labelChooseMethod);
-
 
 			// API method panel
 			JPanel apiMethodPanel = new JPanel();

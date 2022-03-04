@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 @Entity
 @Table(name = "CONTENT")
 @XmlRootElement
@@ -185,6 +186,5 @@ public class Content implements Serializable {
     @Override
     public String toString() {
         return "POJOs.Content[ contentPK=" + contentPK + " ]";
-    }
-    
+    }    
 }

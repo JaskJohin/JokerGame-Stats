@@ -11,6 +11,7 @@ import javax.persistence.Embeddable;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 @Embeddable
 public class PrizecategoriesPK implements Serializable {
 
@@ -88,6 +89,5 @@ public class PrizecategoriesPK implements Serializable {
     @Override
     public String toString() {
         return "POJOs.PrizecategoriesPK[ gameid=" + gameid + ", drawid=" + drawid + ", categoryid=" + categoryid + " ]";
-    }
-    
+    }    
 }

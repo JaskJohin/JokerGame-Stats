@@ -11,6 +11,7 @@ import javax.persistence.Embeddable;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 @Embeddable
 public class PricepointsPK implements Serializable {
 
@@ -72,6 +73,5 @@ public class PricepointsPK implements Serializable {
     @Override
     public String toString() {
         return "POJOs.PricepointsPK[ gameid=" + gameid + ", drawid=" + drawid + " ]";
-    }
-    
+    }    
 }

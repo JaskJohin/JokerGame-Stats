@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 @Entity
 @Table(name = "PRICEPOINTS")
 @XmlRootElement
@@ -90,7 +91,7 @@ public class Pricepoints implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in case the id fields are not set
         if (!(object instanceof Pricepoints)) {
             return false;
         }
@@ -104,6 +105,5 @@ public class Pricepoints implements Serializable {
     @Override
     public String toString() {
         return "POJOs.Pricepoints[ pricepointsPK=" + pricepointsPK + " ]";
-    }
-    
+    }    
 }

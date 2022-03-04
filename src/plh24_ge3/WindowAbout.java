@@ -29,6 +29,7 @@ import javax.swing.JTextArea;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 public class WindowAbout
 {
 	// Variables declaration
@@ -118,7 +119,6 @@ public class WindowAbout
 
 		JLabel labelLicense = new JLabel("Αυτό το πρόγραμμα διατείθεται υπό την άδεια FreeBSD.");
 		labelLicense.setFont(new Font("Arial", 0, 12));
-
 
 		// Text area with the license
 		JTextArea textAreaLicense = new JTextArea();

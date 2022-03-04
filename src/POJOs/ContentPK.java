@@ -11,6 +11,7 @@ import javax.persistence.Embeddable;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 @Embeddable
 public class ContentPK implements Serializable {
 
@@ -72,6 +73,5 @@ public class ContentPK implements Serializable {
     @Override
     public String toString() {
         return "POJOs.ContentPK[ gameid=" + gameid + ", drawid=" + drawid + " ]";
-    }
-    
+    }    
 }

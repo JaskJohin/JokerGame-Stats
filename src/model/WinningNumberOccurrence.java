@@ -6,6 +6,7 @@ package model;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 public class WinningNumberOccurrence {
     private int winningNumber;
     private int occurrences;
@@ -27,6 +28,5 @@ public class WinningNumberOccurrence {
 
     public int getOccurrences() {
         return occurrences;
-    }
-    
+    }    
 }

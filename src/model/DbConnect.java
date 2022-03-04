@@ -10,6 +10,7 @@ import java.util.logging.Logger;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 public class DbConnect {
     //attributes declaration
     private static Connection connection;
@@ -29,12 +30,11 @@ public class DbConnect {
         return connection;
     }
     
-    //method to check if a table already exists in the database
+    //Method to whether a table already exists in the database
     public static boolean tableExists(Connection connection, String tableName) throws SQLException {
         dbMeta = connection.getMetaData();
         resultSet = dbMeta.getTables(null, null, tableName, new String[] {"TABLE"});
 
         return resultSet.next();
-    }
-            
+    }            
 }

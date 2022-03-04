@@ -12,11 +12,13 @@ import java.util.logging.Logger;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 public class DBTablesManager {
     
     private static Connection connection;
     private static Statement statement;
     private static String createTableSQL, dropTableSQL;
+    
     /*---------------------CREATE TABLES SECTION-----------------------*/
     //Content Table constructor
     public static void createContentTable() {

@@ -46,8 +46,10 @@ package plh24_ge3;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 public class JokerDrawData
 {
+    
 	// Attributes
 	private final int drawId;
 	private final String drawDate;
@@ -74,7 +76,6 @@ public class JokerDrawData
 	private final double prizeTier2_1dividend;
 	private final int prizeTier1_1winners;
 	private final double prizeTier1_1dividend;
-
 
 	// Constructor
 	/**
@@ -143,6 +144,7 @@ public class JokerDrawData
 	}
 
 	// Methods
+        
 	/**
 	 * Get the draw id.
 	 * @return An int representing the draw id.

@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 @Entity
 @Table(name = "PRIZECATEGORIES")
 @XmlRootElement
@@ -183,6 +184,5 @@ public class Prizecategories implements Serializable {
     @Override
     public String toString() {
         return "POJOs.Prizecategories[ prizecategoriesPK=" + prizecategoriesPK + " ]";
-    }
-    
+    }    
 }

@@ -6,6 +6,7 @@ package model;
  * @author Xristoforos Ampelas
  * @author Thanos Theodoropoulos
  */
+
 public class AverageDistributedPrizeCat {
     private int categoryId;
     private long averageDistributed;
@@ -27,7 +28,5 @@ public class AverageDistributedPrizeCat {
 
     public void setAverageDistributed(long averageDistributed) {
         this.averageDistributed = averageDistributed;
-    }
-    
-    
+    } 
 }

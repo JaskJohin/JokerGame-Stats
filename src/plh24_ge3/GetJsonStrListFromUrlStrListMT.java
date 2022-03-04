@@ -4,24 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 import static plh24_ge3.Helper.getJsonStrFromApiURL;
 
-
 /**
  * Connect to API "https://api.opap.gr/draws/v3.0/{gameId}/draw-date/{fromDate}/{toDate}"
  * and get the json strings that the API returns.
  * Each thread handles a specified range of urlStrList elements.
+ * 
  * @author Athanasios Theodoropoulos
  * @author Alexandros Dimitrakopoulos
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
+
 class GetJsonStrListFromUrlStrListMT extends Thread
 {
+    
 	// Variables declaration
 	private int index1 = 0;
 	private int index2 = 0;
 	private final List<String> urlStrList;
 	private final List<String> jsonStrList = new ArrayList<>();
-
 
 	// Constructor
 	/**
@@ -49,7 +50,6 @@ class GetJsonStrListFromUrlStrListMT extends Thread
 		{
 			// URL string
 			String urlStr = urlStrList.get(i);
-
 			try
 			{
 				// Get json string from the API

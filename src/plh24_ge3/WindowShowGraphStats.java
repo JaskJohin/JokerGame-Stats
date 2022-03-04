@@ -293,8 +293,8 @@ public class WindowShowGraphStats
 	{
             try {
                 
-                String fromDate = textFieldDate1.getText().toString();
-                String toDate = textFieldDate2.getText().toString();
+                String fromDate = textFieldDate1.getText();
+                String toDate = textFieldDate2.getText();
                 
                 final CategoryDataset dataset3 = StatsToChart.createAverageDistrPerCategoryDataset(fromDate, toDate);
                 final StatsToChart averageDistr = new StatsToChart("Μέσος όρος κερδών ανά κατηγορία", dataset3,"Average winnings per category", "Categories", "Distributed");

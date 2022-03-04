@@ -303,9 +303,6 @@ public class WindowShowGraphStats
                 averageDistr.pack();
                 RefineryUtilities.centerFrameOnScreen(averageDistr);
                 averageDistr.setVisible(true);
-                averageDistr.setAlwaysOnTop(true);
-                averageDistr.requestFocusInWindow();
-                averageDistr.setAlwaysOnTop(false);
 
             } catch (ParseException ex) {
                     Logger.getLogger(WindowShowGraphStats.class.getName()).log(Level.SEVERE, null, ex);

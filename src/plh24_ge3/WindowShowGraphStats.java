@@ -1,8 +1,6 @@
 package plh24_ge3;
 
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -307,6 +305,5 @@ public class WindowShowGraphStats
             } catch (ParseException ex) {
                     Logger.getLogger(WindowShowGraphStats.class.getName()).log(Level.SEVERE, null, ex);
             }
-
 	}
 }

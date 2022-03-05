@@ -1,5 +1,8 @@
 package model;
 
+import POJOs.WinningNumberOccurrence;
+import POJOs.BonusOccurrence;
+import POJOs.AverageDistributedPrizeCat;
 import POJOs.Content;
 import java.sql.*;
 import java.text.ParseException;

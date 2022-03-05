@@ -1,4 +1,4 @@
-package model;
+package POJOs;
 
 /**
  * @author Alexandros Dimitrakopoulos

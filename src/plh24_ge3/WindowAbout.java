@@ -29,7 +29,6 @@ import javax.swing.JTextArea;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
-
 public class WindowAbout
 {
 	// Variables declaration

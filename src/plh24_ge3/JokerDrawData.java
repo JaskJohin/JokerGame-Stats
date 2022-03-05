@@ -46,10 +46,8 @@ package plh24_ge3;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
-
 public class JokerDrawData
 {
-    
 	// Attributes
 	private final int drawId;
 	private final String drawDate;
@@ -144,7 +142,6 @@ public class JokerDrawData
 	}
 
 	// Methods
-        
 	/**
 	 * Get the draw id.
 	 * @return An int representing the draw id.

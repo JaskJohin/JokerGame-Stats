@@ -23,7 +23,6 @@ import java.util.List;
  * @author Odysseas Raftopoulos
  * @author Xristoforos Ampelas
  */
-
 public class Helper
 {
 	// Methods
@@ -96,7 +95,7 @@ public class Helper
 		double prizeTier2_1dividend;
 		int prizeTier1_1winners;
 		double prizeTier1_1dividend;
-      
+
 		// Get the drawId
 		drawId = jObject.get("drawId").getAsInt();
 

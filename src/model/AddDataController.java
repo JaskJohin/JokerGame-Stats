@@ -3,6 +3,8 @@ package model;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import POJOs.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import javax.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class AddDataController {
     //Attributes declaration
     private static  EntityManagerFactory emf;
     private static EntityManager em;
+    private static final double DRACHMAS_PER_EURO = 340.75;
     
     //Method to create Entity Manager and Factory for the database
     public static void createEMandEMF() {
@@ -134,9 +137,17 @@ public class AddDataController {
                     prizecatPK.setGameid(content.getContentPK().getGameid());
                     prizecatPK.setDrawid(content.getContentPK().getDrawid());
                     prizeCategory.setPrizecategoriesPK(prizecatPK);
-                    prizeCategory.setDivident(prizeCatArray.get(l).getAsJsonObject().get("divident").getAsDouble());
                     prizeCategory.setWinners(prizeCatArray.get(l).getAsJsonObject().get("winners").getAsInt());
-                    prizeCategory.setDistributed(prizeCatArray.get(l).getAsJsonObject().get("distributed").getAsDouble());
+                    if(content.getContentPK().getDrawid() > 209) {
+                        prizeCategory.setDivident(prizeCatArray.get(l).getAsJsonObject().get("divident").getAsDouble());
+                        prizeCategory.setDistributed(prizeCatArray.get(l).getAsJsonObject().get("distributed").getAsDouble());
+                    }
+                    else {
+                        prizeCategory.setDivident(BigDecimal.valueOf(prizeCatArray.get(l).getAsJsonObject().get("divident")
+                                .getAsDouble()/DRACHMAS_PER_EURO).setScale(2, RoundingMode.HALF_UP).doubleValue());
+                        prizeCategory.setDistributed(BigDecimal.valueOf(prizeCatArray.get(l).getAsJsonObject().get("distributed")
+                                .getAsDouble()/DRACHMAS_PER_EURO).setScale(2, RoundingMode.HALF_UP).doubleValue());
+                    }
                     prizeCategory.setJackpot(prizeCatArray.get(l).getAsJsonObject().get("jackpot").getAsDouble());
                     prizeCategory.setFixed(prizeCatArray.get(l).getAsJsonObject().get("fixed").getAsDouble());
                     prizeCategory.setCategorytype(prizeCatArray.get(l).getAsJsonObject().get("categoryType").getAsInt());
@@ -303,9 +314,17 @@ public class AddDataController {
                 prizecatPK.setGameid(content.getContentPK().getGameid());
                 prizecatPK.setDrawid(content.getContentPK().getDrawid());
                 prizeCategory.setPrizecategoriesPK(prizecatPK);
-                prizeCategory.setDivident(prizeCatArray.get(l).getAsJsonObject().get("divident").getAsDouble());
                 prizeCategory.setWinners(prizeCatArray.get(l).getAsJsonObject().get("winners").getAsInt());
-                prizeCategory.setDistributed(prizeCatArray.get(l).getAsJsonObject().get("distributed").getAsDouble());
+                if(content.getContentPK().getDrawid() > 209) {
+                    prizeCategory.setDivident(prizeCatArray.get(l).getAsJsonObject().get("divident").getAsDouble());
+                    prizeCategory.setDistributed(prizeCatArray.get(l).getAsJsonObject().get("distributed").getAsDouble());
+                }
+                else {
+                    prizeCategory.setDivident(BigDecimal.valueOf(prizeCatArray.get(l).getAsJsonObject().get("divident")
+                            .getAsDouble()/DRACHMAS_PER_EURO).setScale(2, RoundingMode.HALF_UP).doubleValue());
+                    prizeCategory.setDistributed(BigDecimal.valueOf(prizeCatArray.get(l).getAsJsonObject().get("distributed")
+                            .getAsDouble()/DRACHMAS_PER_EURO).setScale(2, RoundingMode.HALF_UP).doubleValue());
+                }
                 prizeCategory.setJackpot(prizeCatArray.get(l).getAsJsonObject().get("jackpot").getAsDouble());
                 prizeCategory.setFixed(prizeCatArray.get(l).getAsJsonObject().get("fixed").getAsDouble());
                 prizeCategory.setCategorytype(prizeCatArray.get(l).getAsJsonObject().get("categoryType").getAsInt());

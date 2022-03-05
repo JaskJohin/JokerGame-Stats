@@ -1,3 +1,5 @@
+*.pdf
+files/
 jokerStatData/
 **/nbproject/private/
 **/nbproject/Makefile-*.mk

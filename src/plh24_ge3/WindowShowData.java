@@ -601,7 +601,7 @@ public class WindowShowData
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new Dimension(870, 520));
+		mainPanel.setPreferredSize(new Dimension(870, 510));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
@@ -618,7 +618,7 @@ public class WindowShowData
 		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new Dimension(880, 550));
+		dialog.setMinimumSize(new Dimension(880, 540));
 		dialog.setResizable(false);
 		dialog.setIconImages(icons);
 

@@ -61,8 +61,6 @@ public class WindowManageData
 	private final JTable jokerSDTable;
 	private final DefaultTableModel modeljokerDRTable;
 	private final JTable jokerDRTable;
-	private JProgressBar progressBar;
-	private Dimension dim;
 
 
 	// Methods

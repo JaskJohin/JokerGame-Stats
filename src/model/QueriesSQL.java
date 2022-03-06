@@ -286,7 +286,7 @@ public class QueriesSQL {
         //(in our case this is the drawId) and choosing new titles for each column. 
         //Then perform two distinct SELECT operations as below:
         //initially select the maximum drawiD in the dataset (this returns the drawId of the last draw)
-        //then sSELECT the maximum drawId for which the input number argument has appeared 
+        //then SELECT the maximum drawId for which the input number argument has appeared 
         //(this returns the drawId of the draw where the input argument last appeared)
         //Finally subtract the second number from the first one to find the number of draws 
         //for which there is no occurrence of the input number argument
@@ -371,7 +371,7 @@ public class QueriesSQL {
         //(in our case this is the drawId) and choosing new titles for each column. 
         //Then perform two distinct SELECT operations as below:
         //initially select the maximum drawiD in the dataset (this returns the drawId of the last draw)
-        //then sSELECT the maximum drawId for which the input bonus argument has occurred 
+        //then SELECT the maximum drawId for which the input bonus argument has occurred 
         //(this returns the drawId of the draw where the input argument last appeared)
         //Finally subtract the second number from the first one to find the number of draws 
         //for which there is no occurrence of the input bonus argument
@@ -500,7 +500,7 @@ public class QueriesSQL {
         //First of all data from Content and PrizeCategories tables must be combined
         //this is done using a JOIN operation based on common key 
         //(in our case this is the drawId) and choosing new titles for each column.
-        //Then SLECT from the newly created table the PRIZECATEGORY and at the same time
+        //Then SΕLECT from the newly created table the PRIZECATEGORY and at the same time
         //calculate the average distributed earnings for the selected date range.
         //Finally, group the result by prize category in ascending order
         String montlhyJackpotCountStr = "SELECT prize_category, AVG(distributed) AS average_distributed FROM "

@@ -22,8 +22,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import model.AddDataController;
 import model.QueriesSQL;
 import static plh24_ge3.Helper.jokerJsonSingleDrawToObject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  * @author Athanasios Theodoropoulos

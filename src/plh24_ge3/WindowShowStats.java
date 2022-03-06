@@ -40,6 +40,8 @@ import POJOs.BonusOccurrence;
 import model.QueriesSQL;
 import model.Utilities;
 import POJOs.WinningNumberOccurrence;
+import java.awt.FlowLayout;
+import javax.swing.OverlayLayout;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -641,24 +643,28 @@ public class WindowShowStats
 		 * Top panel with the window title
 		 */
 		JPanel topPanel = new JPanel();
-		topPanel.setBorder(BorderFactory.createEmptyBorder(6, 30, 0, 0));
-		topPanel.setLayout(new GridLayout(0, 1, 0, -76));
-		topPanel.setPreferredSize(new Dimension(500, 89));
-		topPanel.setMinimumSize(new Dimension(500, 89));
-		topPanel.setMaximumSize(new Dimension(500, 89));
+		topPanel.setBorder(BorderFactory.createEmptyBorder(8, 0, 18, 0));
+		topPanel.setLayout(new FlowLayout(1, 0, 0));
 		topPanel.setBackground(backColor);
 
-			// Labels with the title
-			JLabel labelTitle = new JLabel("Προβολή στατιστικών");
-			labelTitle.setFont(new Font("Arial", 3, 42));
-			labelTitle.setForeground(Color.ORANGE);
+			JPanel titlePanel = new JPanel();
+			titlePanel.setLayout(new OverlayLayout(titlePanel));
+			titlePanel.setBackground(backColor);
 
-			JLabel labelTitleShadow = new JLabel("Προβολή στατιστικών");
-			labelTitleShadow.setFont(new Font("Arial", 3, 42));
-			labelTitleShadow.setForeground(Color.BLUE);
+				// Labels with the title
+				JLabel labelTitle = new JLabel("Προβολή στατιστικών");
+				labelTitle.setFont(new Font(null, 3, 42));
+				labelTitle.setForeground(Color.ORANGE);
 
-		topPanel.add(labelTitle);
-		topPanel.add(labelTitleShadow);
+				JLabel labelTitleShadow = new JLabel("Προβολή στατιστικών");
+				labelTitleShadow.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+				labelTitleShadow.setFont(new Font(null, 3, 42));
+				labelTitleShadow.setForeground(Color.BLUE);
+
+			titlePanel.add(labelTitle);
+			titlePanel.add(labelTitleShadow);
+
+		topPanel.add(titlePanel);
 
 
 		/*
@@ -956,7 +962,7 @@ public class WindowShowStats
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new Dimension(1052, 560));
+		mainPanel.setPreferredSize(new Dimension(1150, 560));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
@@ -973,7 +979,7 @@ public class WindowShowStats
 		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new Dimension(1060, 590));
+		dialog.setMinimumSize(new Dimension(1160, 590));
 		dialog.setIconImages(icons);
 
 		// Find firstDrawDate

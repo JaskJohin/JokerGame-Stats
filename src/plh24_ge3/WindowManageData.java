@@ -47,6 +47,7 @@ public class WindowManageData
 	private final JComboBox comboBoxPredefinedRange;
 	private final JTextField textFieldDBDate1;
 	private final JTextField textFieldDBDate2;
+	private final JButton buttonDelAllForSelGameInDB;
 	private final JPanel viewPanelCards;
 	private final JLabel labelDrawValue;
 	private final JLabel labelDateValue;
@@ -198,6 +199,17 @@ public class WindowManageData
 	}
 
 
+	/**
+	 * Sets the text of buttonDelAllForSelGameInDB according to what game is selected
+	 * in comboBoxGameSelect. This method is called when the window is first opened and
+	 * every time a different game is selected.
+	 */
+	private void setTextOfButtonDelAllForSelGameInDB()
+	{
+		String text = "Διαγραφή όλων για το " + comboBoxGameSelect.getSelectedItem().toString();
+		buttonDelAllForSelGameInDB.setText(text);
+	}
+
 	/** 
 	 * Uses the API "https://api.opap.gr/draws/v3.0/{gameId}/last-result-and-active" to
 	 * find the dates of the last and next draws of the selected game and shows it in
@@ -264,7 +276,7 @@ public class WindowManageData
 
 
 			// Populate labelDrawInfo
-			String text = "Η τελευταία κλήρωση για το " + gName + " έγινε " + lastDrawDate +
+			String text = "Η τελευταία κλήρωση του " + gName + " έγινε " + lastDrawDate +
 				". Η επόμενη θα γίνει " + nextDrawDate + ".";
 			labelDrawInfo.setText(text);
 		}
@@ -473,7 +485,6 @@ public class WindowManageData
 	}
 
 
-
 	// Button actions
 	/**
 	 * Action of the comboBoxGameSelect.
@@ -486,6 +497,7 @@ public class WindowManageData
 		CompletableFuture.runAsync(() -> findIdOfFirstDraw());    // Run asynchronously
 		CompletableFuture.runAsync(() -> findLastDrawId(false));  // Run asynchronously
 		CompletableFuture.runAsync(() -> showDrawInfo());         // Run asynchronously
+		setTextOfButtonDelAllForSelGameInDB();
 	}
 
 
@@ -914,24 +926,28 @@ public class WindowManageData
 		 * Top panel with the window title
 		 */
 		JPanel topPanel = new JPanel();
-		topPanel.setBorder(BorderFactory.createEmptyBorder(6, 30, 0, 0));
-		topPanel.setLayout(new GridLayout(0, 1, 0, -76));
-		topPanel.setPreferredSize(new Dimension(514, 89));
-		topPanel.setMinimumSize(new Dimension(514, 89));
-		topPanel.setMaximumSize(new Dimension(514, 89));
+		topPanel.setBorder(BorderFactory.createEmptyBorder(8, 0, 18, 0));
+		topPanel.setLayout(new FlowLayout(1, 0, 0));
 		topPanel.setBackground(backColor);
 
-			// Labels with the title
-			JLabel labelTitle = new JLabel("Διαχείριση δεδομένων");
-			labelTitle.setFont(new Font("Arial", 3, 42));
-			labelTitle.setForeground(Color.ORANGE);
+			JPanel titlePanel = new JPanel();
+			titlePanel.setLayout(new OverlayLayout(titlePanel));
+			titlePanel.setBackground(backColor);
 
-			JLabel labelTitleShadow = new JLabel("Διαχείριση δεδομένων");
-			labelTitleShadow.setFont(new Font("Arial", 3, 42));
-			labelTitleShadow.setForeground(Color.BLUE);
+				// Labels with the title
+				JLabel labelTitle = new JLabel("Διαχείριση δεδομένων");
+				labelTitle.setFont(new Font(null, 3, 42));
+				labelTitle.setForeground(Color.ORANGE);
 
-		topPanel.add(labelTitle);
-		topPanel.add(labelTitleShadow);
+				JLabel labelTitleShadow = new JLabel("Διαχείριση δεδομένων");
+				labelTitleShadow.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+				labelTitleShadow.setFont(new Font(null, 3, 42));
+				labelTitleShadow.setForeground(Color.BLUE);
+
+			titlePanel.add(labelTitle);
+			titlePanel.add(labelTitleShadow);
+
+		topPanel.add(titlePanel);
 
 
 		/*
@@ -944,8 +960,8 @@ public class WindowManageData
 
 			// Game selection & download panel
 			JPanel gameSelectAndDLPanel = new JPanel();
-			gameSelectAndDLPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 			gameSelectAndDLPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
+			gameSelectAndDLPanel.setLayout(new BoxLayout(gameSelectAndDLPanel, BoxLayout.X_AXIS));
 			gameSelectAndDLPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameSelectAndDLPanel.getMinimumSize().height));
 			gameSelectAndDLPanel.setBackground(backColor);
 
@@ -955,6 +971,7 @@ public class WindowManageData
 				// ComboBox game select
 				String opapGames[] = {"Τζόκερ"};
 				comboBoxGameSelect = new JComboBox(opapGames);
+				comboBoxGameSelect.setMaximumSize(new Dimension(comboBoxGameSelect.getMinimumSize().width, comboBoxGameSelect.getMinimumSize().height));
 				comboBoxGameSelect.addActionListener(this::comboBoxGameSelectActionPerformed);
 				comboBoxGameSelect.setBackground(backColor);
 
@@ -967,15 +984,15 @@ public class WindowManageData
 
 				// Label with info of the last and next draw
 				labelDrawInfo = new JLabel();
-				labelDrawInfo.setBorder(BorderFactory.createEmptyBorder(0, 68, 0, 0));
 				labelDrawInfo.setFont(new Font("Arial", 0, 12));
 				labelDrawInfo.setForeground(Color.DARK_GRAY);
 
 			gameSelectAndDLPanel.add(labelGameSelect);
 			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(10,0)));
 			gameSelectAndDLPanel.add(comboBoxGameSelect);
-			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(70,0)));
+			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(50,0)));
 			gameSelectAndDLPanel.add(buttonDownload);
+			gameSelectAndDLPanel.add(Box.createHorizontalGlue());
 			gameSelectAndDLPanel.add(labelDrawInfo);
 
 
@@ -1018,7 +1035,7 @@ public class WindowManageData
 
 				// Button to find latest draw
 				JButton buttonFindLatestDraw = new JButton("Εύρεση τελευταίας κλήρωσης");
-				buttonFindLatestDraw.setPreferredSize(new Dimension(206, 20));
+				buttonFindLatestDraw.setPreferredSize(new Dimension(buttonFindLatestDraw.getMinimumSize().width, 20));
 				buttonFindLatestDraw.addActionListener(this::buttonFindLatestDrawActionPerformed);
 
 			singleDrawMethodPanel.add(radioButtonSingleDraw);
@@ -1055,7 +1072,7 @@ public class WindowManageData
 				// Text field for date 1
 				textFieldDate1 = new JTextField();
 				textFieldDate1.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
-				textFieldDate1.setPreferredSize(new Dimension(74, 20));
+				textFieldDate1.setPreferredSize(new Dimension(80, 20));
 
 				// Label up to
 				JLabel labelUpTo = new JLabel("Έως");
@@ -1064,7 +1081,7 @@ public class WindowManageData
 				// Text field for date 2
 				textFieldDate2 = new JTextField();
 				textFieldDate2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
-				textFieldDate2.setPreferredSize(new Dimension(74, 20));
+				textFieldDate2.setPreferredSize(new Dimension(80, 20));
 
 				// Label predefined date range
 				JLabel labelPredefinedRange = new JLabel("Προκαθορισμένες επιλογές");
@@ -1075,7 +1092,7 @@ public class WindowManageData
 					"Τελευταίο 3μηνο", "Τελευταίο έτος", "Τελευταία 5ετία",
 					"Πρώτο έτος", "Πρώτη 5ετία", "Όλες οι κληρώσεις"};
 				comboBoxPredefinedRange = new JComboBox(dateRanges);
-				comboBoxPredefinedRange.setPreferredSize(new Dimension(152, 20));
+				comboBoxPredefinedRange.setPreferredSize(new Dimension(comboBoxPredefinedRange.getMinimumSize().width, 20));
 				comboBoxPredefinedRange.addActionListener(this::comboBoxPredefinedRangeActionPerformed);
 				comboBoxPredefinedRange.setSelectedIndex(0);
 				comboBoxPredefinedRange.setBackground(backColor);
@@ -1106,7 +1123,7 @@ public class WindowManageData
 				buttonStoreInDB.addActionListener(this::buttonStoreInDBActionPerformed);
 
 				// Button delete all in date range
-				JButton buttonDelDRInDB = new JButton("Διαγραφή των κληρώσεων στο εύρος");
+				JButton buttonDelDRInDB = new JButton("Διαγραφή κληρώσεων στο εύρος");
 				buttonDelDRInDB.addActionListener(this::buttonDelDRInDBActionPerformed);
 
 				// Label from
@@ -1116,7 +1133,7 @@ public class WindowManageData
 				// Text field for date 1
 				textFieldDBDate1 = new JTextField("2000-01-01");
 				textFieldDBDate1.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
-				textFieldDBDate1.setPreferredSize(new Dimension(74, 20));
+				textFieldDBDate1.setPreferredSize(new Dimension(80, 20));
 
 				// Label up to
 				JLabel labelDBUpTo = new JLabel("Έως");
@@ -1125,10 +1142,11 @@ public class WindowManageData
 				// Text field for date 2
 				textFieldDBDate2 = new JTextField(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now()));
 				textFieldDBDate2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
-				textFieldDBDate2.setPreferredSize(new Dimension(74, 20));
+				textFieldDBDate2.setPreferredSize(new Dimension(80, 20));
 
 				// Button delete all for selected game
-				JButton buttonDelAllForSelGameInDB = new JButton("Διαγραφή όλων για το επιλεγμένο παιχνίδι");
+				buttonDelAllForSelGameInDB = new JButton("Διαγραφή όλων για το Powerspin");
+				buttonDelAllForSelGameInDB.setPreferredSize(new Dimension(buttonDelAllForSelGameInDB.getMinimumSize().width, 26));
 				buttonDelAllForSelGameInDB.addActionListener(this::buttonDelAllForSelGameInDBActionPerformed);
 
 			dbPanel.add(labelDBManagement);
@@ -1436,7 +1454,7 @@ public class WindowManageData
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new Dimension(1198, 630));
+		mainPanel.setPreferredSize(new Dimension(1286, 630));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
@@ -1453,7 +1471,7 @@ public class WindowManageData
 		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new Dimension(1206, 650));
+		dialog.setMinimumSize(new Dimension(1296, 650));
 		dialog.setIconImages(icons);
 
 		// Find firstDrawDate & lastDrawId in advance, populate textFieldDrawId
@@ -1461,6 +1479,7 @@ public class WindowManageData
 		CompletableFuture.runAsync(() -> findIdOfFirstDraw());    // Run asynchronously
 		CompletableFuture.runAsync(() -> findLastDrawId(true));   // Run asynchronously
 		CompletableFuture.runAsync(() -> showDrawInfo());         // Run asynchronously
+		setTextOfButtonDelAllForSelGameInDB();
 
 		dialog.setVisible(true);
 	}

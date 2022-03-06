@@ -122,15 +122,13 @@ public class WindowAbout
 			JLabel labelName = new JLabel("Joker stats");
 			labelName.setFont(new Font("Arial", 1, 32));
 			labelName.setForeground(Color.WHITE);
-			labelName.setPreferredSize(new java.awt.Dimension(190, 40));
 			labelName.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 			labelName.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 
 			JLabel labelVer = new JLabel("v1.0");
 			labelVer.setFont(new Font("Arial", 0, 16));
 			labelVer.setForeground(Color.WHITE);
-			labelVer.setPreferredSize(new java.awt.Dimension(40, 40));
-			labelVer.setBorder(BorderFactory.createEmptyBorder(0, 0, 4, 0));
+			labelVer.setBorder(BorderFactory.createEmptyBorder(0, 10, 4, 0));
 			labelVer.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 
 		topPanel.add(labelIcon);
@@ -294,11 +292,11 @@ public class WindowAbout
 			JPanel middlePanelLicense = new JPanel();    // Panel with the license text
 			middlePanelLicense.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
 			middlePanelLicense.setLayout(new GridLayout(0, 1, 0, 16));
-			middlePanelLicense.setPreferredSize(new java.awt.Dimension(596, 213));
 			middlePanelLicense.setBackground(backColor);
 
 				// Text area with the license
 				JTextArea textAreaLicense = new JTextArea();
+				textAreaLicense.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 				textAreaLicense.setLineWrap(true);
 				textAreaLicense.setWrapStyleWord(true);
 				textAreaLicense.setEditable(false);
@@ -323,11 +321,11 @@ public class WindowAbout
 		bottomPanel.setBackground(backColor);
 
 			buttonLicense = new JButton("Άδεια");
-			buttonLicense.setPreferredSize(new java.awt.Dimension(116, 26));
+			buttonLicense.setPreferredSize(new java.awt.Dimension(126, 26));
 			buttonLicense.addActionListener(this::buttonLicenseActionPerformed);
 
 			JButton buttonClose = new JButton("Κλείσιμο");
-			buttonClose.setPreferredSize(new java.awt.Dimension(116, 26));
+			buttonClose.setPreferredSize(new java.awt.Dimension(126, 26));
 			buttonClose.addActionListener(this::buttonCloseActionPerformed);
 
 		bottomPanel.add(buttonLicense);

@@ -3,6 +3,7 @@ package plh24_ge3;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -16,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.OverlayLayout;
 
 /**
  * @author Athanasios Theodoropoulos
@@ -80,24 +82,27 @@ public class WindowMain
 		 * Top panel with the window title
 		 */
 		JPanel topPanel = new JPanel();
-		topPanel.setBorder(BorderFactory.createEmptyBorder(6, 30, 0, 0));
-		topPanel.setLayout(new GridLayout(0, 1, 0, -76));
-		topPanel.setPreferredSize(new Dimension(374, 89));
-		topPanel.setMinimumSize(new Dimension(374, 89));
-		topPanel.setMaximumSize(new Dimension(374, 89));
+		topPanel.setLayout(new FlowLayout(1, 0, 0));
 		topPanel.setBackground(backColor);
 
-			// Labels with the title
-			JLabel labelTitle = new JLabel("Τζόκερ stats");
-			labelTitle.setFont(new Font("Arial", 3, 53));
-			labelTitle.setForeground(Color.ORANGE);
+			JPanel titlePanel = new JPanel();
+			titlePanel.setLayout(new OverlayLayout(titlePanel));
+			titlePanel.setBackground(backColor);
 
-			JLabel labelTitleShadow = new JLabel("Τζόκερ stats");
-			labelTitleShadow.setFont(new Font("Arial", 3, 53));
-			labelTitleShadow.setForeground(Color.BLUE);
+				// Labels with the title
+				JLabel labelTitle = new JLabel("Τζόκερ stats");
+				labelTitle.setFont(new Font(null, 3, 53));
+				labelTitle.setForeground(Color.ORANGE);
 
-		topPanel.add(labelTitle);
-		topPanel.add(labelTitleShadow);
+				JLabel labelTitleShadow = new JLabel("Τζόκερ stats");
+				labelTitleShadow.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+				labelTitleShadow.setFont(new Font(null, 3, 53));
+				labelTitleShadow.setForeground(Color.BLUE);
+
+			titlePanel.add(labelTitle);
+			titlePanel.add(labelTitleShadow);
+
+		topPanel.add(titlePanel);
 
 		/*
 		 * Middle panel with the main buttons
@@ -158,9 +163,9 @@ public class WindowMain
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
 		mainPanel.add(bottomPanel);
-		mainPanel.setPreferredSize(new Dimension(394, 369));
-		mainPanel.setMinimumSize(new Dimension(394, 369));
-		mainPanel.setMaximumSize(new Dimension(394, 369));
+		mainPanel.setPreferredSize(new Dimension(464, 369));
+		mainPanel.setMinimumSize(new Dimension(464, 369));
+		mainPanel.setMaximumSize(new Dimension(464, 369));
 
 		/*
 		 * Main window

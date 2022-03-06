@@ -137,7 +137,9 @@ public class QueriesSQL {
         long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
-        //compile the SQL query for the deletion of data for the requested date range
+        //compile the SQL query for the selection of data
+        //selection is performed by querying the table "content" 
+        //defining restrictions for the date range within which data shall be retrieved
         String montlhyDrawsCountStr = "SELECT COUNT(drawid) AS GAMES_NUM FROM CONTENT WHERE DRAWTIME >=? AND DRAWTIME<=?";
         try {
             preparedStatement = connection.prepareStatement(montlhyDrawsCountStr);
@@ -165,7 +167,11 @@ public class QueriesSQL {
         long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
-        //compile the SQL query for the deletion of data for the requested date range
+        //compile the SQL query for the selection of data. SQL query logic:
+        //First of all data from Content and PrizeCategories tables must be combined
+        //this is done using a JOIN operation based on common key 
+        //(in our case this is the drawId) and choosing titles for each column. 
+        //Then SELECT from the created, new table the required data for the required date range
         String monthlyDividentSumStr = "SELECT SUM(DIVIDENT) AS TOTAL_DIVIDENT FROM "
                 + "(SELECT c.DRAWID, pc.DIVIDENT, c.DRAWTIME FROM "
                 + "CONTENT c INNER JOIN PRIZECATEGORIES pc "
@@ -198,7 +204,13 @@ public class QueriesSQL {
         long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
-        //compile the SQL query for the deletion of data for the requested date range
+        //compile the SQL query for the selection of data. SQL query logic:
+        //First of all data from Content and PrizeCategories tables must be combined
+        //this is done using a JOIN operation based on common key 
+        //(in our case this is the drawId) and choosing titles for each column. 
+        //Then SELECT from the created, new table using COUNT operation for the number 
+        //of winners where the date range is the desired one 
+        //and the category ID is 1 (based on the definition of Jackpot).
         String montlhyJackpotCountStr = "SELECT COUNT(WINNERS) AS JACKPOTS FROM "
                 + "(SELECT c.DRAWID, pc.CATEGORYID, pc.WINNERS, c.DRAWTIME "
                 + "FROM CONTENT c INNER JOIN PRIZECATEGORIES pc "
@@ -230,7 +242,12 @@ public class QueriesSQL {
         long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
-        //compile the SQL query for the deletion of data for the requested date range
+        //compile the SQL query for the selection of data. SQL query logic:
+        //First of all data from Content and WinningNumbersList tables must be combined
+        //this is done using a JOIN operation based on common key 
+        //in our case this is the drawId) and choosing titles for each column. 
+        //Then SELECT from the created, new table the data between the desired date range 
+        //counting the occurences of the input, number argument. 
         String montlhyJackpotCountStr = "SELECT COUNT(NUMBERS) AS occurrences FROM "
                 + "(SELECT c.DRAWID, wnl.NUMBER AS NUMBERS, c.DRAWTIME FROM CONTENT c "
                 + "INNER JOIN WINNINGNUMBERSLIST wnl ON c.DRAWID = wnl.DRAWID) "
@@ -263,10 +280,20 @@ public class QueriesSQL {
         long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
-        //compile the SQL query for the deletion of data for the requested date range
+        //compile the SQL query for the selection of data. SQL query logic:
+        //First of all data from Content and WinningNumbersList tables must be combined
+        //this is done using a JOIN operation based on common key 
+        //(in our case this is the drawId) and choosing new titles for each column. 
+        //Then perform two distinct SELECT operations as below:
+        //initially select the maximum drawiD in the dataset (this returns the drawId of the last draw)
+        //then sSELECT the maximum drawId for which the input number argument has appeared 
+        //(this returns the drawId of the draw where the input argument last appeared)
+        //Finally subtract the second number from the first one to find the number of draws 
+        //for which there is no occurrence of the input number argument
         String montlhyJackpotCountStr = "SELECT (SELECT MAX(DRAWID) AS max_draw_ID FROM "
                 + "(SELECT c.DRAWID, wnl.NUMBER AS NUMBERS, c.DRAWTIME FROM CONTENT c "
-                + "INNER JOIN WINNINGNUMBERSLIST wnl ON c.DRAWID = wnl.DRAWID WHERE DRAWTIME >=? AND DRAWTIME <=? ) maxDID ) - "
+                + "INNER JOIN WINNINGNUMBERSLIST wnl ON c.DRAWID = wnl.DRAWID "
+                + "WHERE DRAWTIME >=? AND DRAWTIME <=? ) maxDID ) - "
                 + "(SELECT MAX(DRAWID) AS max_draw_appeared FROM "
                 + "(SELECT c.DRAWID, wnl.NUMBER AS NUMBERS, c.DRAWTIME FROM CONTENT c "
                 + "INNER JOIN WINNINGNUMBERSLIST wnl ON c.DRAWID = wnl.DRAWID "
@@ -301,7 +328,12 @@ public class QueriesSQL {
         long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
-        //compile the SQL query for the deletion of data for the requested date range
+        //compile the SQL query for the selection of data. SQL query logic:
+        //First of all data from Content and WinningNumbersBonius tables must be combined
+        //this is done using a JOIN operation based on common key 
+        //(in our case this is the drawId) and choosing titles for each column. 
+        //Then SELECT from the created, new table the data between the desired date range 
+        //counting the occurences of the input, bonus argument.
         String montlhyJackpotCountStr = "SELECT COUNT(BONUSES) AS occurrences FROM "
                 + "(SELECT c.DRAWID, wnb.BONUS AS BONUSES, c.DRAWTIME FROM CONTENT c "
                 + "INNER JOIN WINNINGNUMBERSBONUS wnb ON c.DRAWID = wnb.DRAWID) "
@@ -333,7 +365,16 @@ public class QueriesSQL {
         long toEpoch = toDateStrToEpoch(toDateStr);
         //connect to the database
         connection = DbConnect.connect();
-        //compile the SQL query for the deletion of data for the requested date range
+        //compile the SQL query for the selection of data. SQL query logic:
+        //First of all data from Content and WinningNumbersBonus tables must be combined
+        //this is done using a JOIN operation based on common key 
+        //(in our case this is the drawId) and choosing new titles for each column. 
+        //Then perform two distinct SELECT operations as below:
+        //initially select the maximum drawiD in the dataset (this returns the drawId of the last draw)
+        //then sSELECT the maximum drawId for which the input bonus argument has occurred 
+        //(this returns the drawId of the draw where the input argument last appeared)
+        //Finally subtract the second number from the first one to find the number of draws 
+        //for which there is no occurrence of the input bonus argument
         String montlhyJackpotCountStr = "SELECT (SELECT MAX(DRAWID) AS max_draw_ID FROM "
                 + "(SELECT c.DRAWID, wnb.BONUS AS BONUSES, c.DRAWTIME FROM CONTENT c "
                 + "INNER JOIN WINNINGNUMBERSBONUS wnb ON c.DRAWID = wnb.DRAWID WHERE DRAWTIME >=? AND DRAWTIME <=? ) maxDID ) - "
@@ -371,7 +412,13 @@ public class QueriesSQL {
         List<WinningNumberOccurrence> topFiveList = new ArrayList<>();
         //connect to the database
         connection = DbConnect.connect();
-        //compile the SQL query for the deletion of data for the requested date range
+        //compile the SQL query for the selection of data. SQL query logic:
+        //First of all data from Content and WinningNumbersList tables must be combined
+        //this is done using a JOIN operation based on common key 
+        //(in our case this is the drawId) and choosing new titles for each column.
+        //Then SELECT from the new table the NUMBER and at the same time COUNT the numbers
+        //and return the result ordered by the number of winning numebr occurences
+        //showing only the first 5 table records
         String montlhyJackpotCountStr = "SELECT NUMBERS, COUNT(NUMBERS) AS occurrences FROM "
                 + "(SELECT c.DRAWID, wnl.NUMBER AS NUMBERS, c.DRAWTIME FROM CONTENT c "
                 + "INNER JOIN WINNINGNUMBERSLIST wnl ON c.DRAWID = wnl.DRAWID) AS ALL_NUMS "
@@ -407,7 +454,13 @@ public class QueriesSQL {
         List<BonusOccurrence> topFiveList = new ArrayList<>();
         //connect to the database
         connection = DbConnect.connect();
-        //compile the SQL query for the deletion of data for the requested date range
+        //compile the SQL query for the selection of data. SQL query logic:
+        //First of all data from Content and WinningNumbersBonus tables must be combined
+        //this is done using a JOIN operation based on common key 
+        //(in our case this is the drawId) and choosing new titles for each column.
+        //Then SELECT from the new table the BONUSES and at the same time COUNT the bonuses
+        //and return the result ordered by the number of bonus occurrenes 
+        //showing only the first 5 table records
         String montlhyJackpotCountStr = "SELECT BONUSES, COUNT(BONUSES) AS occurrences FROM "
                 + "(SELECT c.DRAWID, wnb.BONUS AS BONUSES, c.DRAWTIME FROM CONTENT c "
                 + "INNER JOIN WINNINGNUMBERSBONUS wnb ON c.DRAWID = wnb.DRAWID) AS ALL_BONUSES "
@@ -443,7 +496,13 @@ public class QueriesSQL {
         List<AverageDistributedPrizeCat> averageDistr = new ArrayList<>();
         //connect to the database
         connection = DbConnect.connect();
-        //compile the SQL query for the deletion of data for the requested date range
+        //compile the SQL query for the selection of data. SQL query logic:
+        //First of all data from Content and PrizeCategories tables must be combined
+        //this is done using a JOIN operation based on common key 
+        //(in our case this is the drawId) and choosing new titles for each column.
+        //Then SLECT from the newly created table the PRIZECATEGORY and at the same time
+        //calculate the average distributed earnings for the selected date range.
+        //Finally, group the result by prize category in ascending order
         String montlhyJackpotCountStr = "SELECT prize_category, AVG(distributed) AS average_distributed FROM "
                 + "(SELECT c.DRAWID, prCat.CATEGORYID AS prize_category, c.DRAWTIME, prCat.DISTRIBUTED as distributed "
                 + "FROM CONTENT c INNER JOIN PRIZECATEGORIES prCat ON c.DRAWID = prCat.DRAWID) AS all_prCats "

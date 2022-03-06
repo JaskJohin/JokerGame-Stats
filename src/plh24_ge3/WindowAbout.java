@@ -5,6 +5,8 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -68,6 +70,20 @@ public class WindowAbout
 		authorList.add("Χριστόφορος Αμπελάς");
 		Collections.shuffle(authorList);
 
+		// License text
+		String licenceText = "Copyright 2022, Athanasios Theodoropoulos, Alexandros Dimitrakopoulos, Odysseas Raftopoulos, Xristoforos Ampelas\n" +
+		"All rights reserved.\n" +
+		"\n" +
+		"Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n" +
+		"\n" +
+		"1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n" +
+		"\n" +
+		"2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n" +
+		"\n" +
+		"3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n" +
+		"\n" +
+		"THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
+
 		// Icons list
 		final List<Image> icons = new ArrayList<>();
 		try
@@ -90,118 +106,233 @@ public class WindowAbout
 		// Background color
 		Color backColor = new java.awt.Color(244, 244, 250);
 
-		// Labels
-		JLabel labelName = new JLabel("Joker stats");
-		labelName.setFont(new Font("Arial", 1, 32));
-		labelName.setForeground(Color.WHITE);
-		labelName.setPreferredSize(new java.awt.Dimension(190, 40));
-		labelName.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 
-		JLabel labelVer = new JLabel("v1.0");
-		labelVer.setFont(new Font("Arial", 0, 16));
-		labelVer.setForeground(Color.WHITE);
-		labelVer.setPreferredSize(new java.awt.Dimension(40, 40));
-		labelVer.setBorder(BorderFactory.createEmptyBorder(0, 0, 4, 0));
-		labelVer.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-
-		JLabel labelDescription = new JLabel("Αναζήτηση και προβολή κληρώσεων και στατιστικών του παιχνιδιού Τζόκερ.");
-		labelDescription.setFont(new Font("Arial", 0, 12));
-
-		JLabel labelAuthors = new JLabel("Δημιουργοί:  " + authorList.get(0));
-		labelAuthors.setFont(new Font("Arial", 0, 12));
-		JLabel labelAuthor1 = new JLabel("                       " + authorList.get(1));
-		labelAuthor1.setFont(new Font("Arial", 0, 12));
-		JLabel labelAuthor2 = new JLabel("                       " + authorList.get(2));
-		labelAuthor2.setFont(new Font("Arial", 0, 12));
-		JLabel labelAuthor3 = new JLabel("                       " + authorList.get(3));
-		labelAuthor3.setFont(new Font("Arial", 0, 12));
-
-		JLabel labelLicense = new JLabel("Αυτό το πρόγραμμα διατείθεται υπό την άδεια FreeBSD.");
-		labelLicense.setFont(new Font("Arial", 0, 12));
-
-		// Text area with the license
-		JTextArea textAreaLicense = new JTextArea();
-		textAreaLicense.setLineWrap(true);
-		textAreaLicense.setWrapStyleWord(true);
-		textAreaLicense.setEditable(false);
-		String licenceText = "Copyright 2022, Athanasios Theodoropoulos, Alexandros Dimitrakopoulos, Odysseas Raftopoulos, Xristoforos Ampelas\n" +
-		"All rights reserved.\n" +
-		"\n" +
-		"Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n" +
-		"\n" +
-		"1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n" +
-		"\n" +
-		"2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n" +
-		"\n" +
-		"3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n" +
-		"\n" +
-		"THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
-		textAreaLicense.setText(licenceText);
-		textAreaLicense.setCaretPosition(0);
-
-		// Scroll pane to enclose the textAreaLicense
-		JScrollPane scrollPane = new JScrollPane(textAreaLicense);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-		// Buttons
-		JButton buttonClose = new JButton("Κλείσιμο");
-		buttonClose.setPreferredSize(new java.awt.Dimension(116, 26));
-		buttonClose.addActionListener(this::buttonCloseActionPerformed);
-
-		buttonLicense = new JButton("Άδεια");
-		buttonLicense.setPreferredSize(new java.awt.Dimension(116, 26));
-		buttonLicense.addActionListener(this::buttonLicenseActionPerformed);
-
-		// Panels
+		// Top panel
 		JPanel topPanel = new JPanel();    // Panel with the window title label
 		topPanel.setBorder(BorderFactory.createEmptyBorder(6, 20, 4, 0));
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 		topPanel.setBackground(new java.awt.Color(78, 116, 221));
+
+			// Labels
+			JLabel labelName = new JLabel("Joker stats");
+			labelName.setFont(new Font("Arial", 1, 32));
+			labelName.setForeground(Color.WHITE);
+			labelName.setPreferredSize(new java.awt.Dimension(190, 40));
+			labelName.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+
+			JLabel labelVer = new JLabel("v1.0");
+			labelVer.setFont(new Font("Arial", 0, 16));
+			labelVer.setForeground(Color.WHITE);
+			labelVer.setPreferredSize(new java.awt.Dimension(40, 40));
+			labelVer.setBorder(BorderFactory.createEmptyBorder(0, 0, 4, 0));
+			labelVer.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+
 		topPanel.add(labelName);
 		topPanel.add(labelVer);
 		topPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
 
-		JPanel authorsPanel = new JPanel();    // Just the authors
-		authorsPanel.setLayout(new GridLayout(0, 1, 0, 0));
-		authorsPanel.setBackground(backColor);
-		authorsPanel.add(labelAuthors);
-		authorsPanel.add(labelAuthor1);
-		authorsPanel.add(labelAuthor2);
-		authorsPanel.add(labelAuthor3);
 
-		JPanel middlePanelInfo = new JPanel();    // Panel: discription, authors, license
-		middlePanelInfo.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
-		middlePanelInfo.setLayout(new GridLayout(0, 1, 0, 16));
-		middlePanelInfo.setPreferredSize(new java.awt.Dimension(596, 213));
-		middlePanelInfo.setBackground(backColor);
-		middlePanelInfo.add(labelDescription);
-		middlePanelInfo.add(authorsPanel);
-		middlePanelInfo.add(labelLicense);
-
-		JPanel middlePanelLicense = new JPanel();    // Panel with the license text
-		middlePanelLicense.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
-		middlePanelLicense.setLayout(new GridLayout(0, 1, 0, 16));
-		middlePanelLicense.setPreferredSize(new java.awt.Dimension(596, 213));
-		middlePanelLicense.setBackground(backColor);
-		middlePanelLicense.add(scrollPane);
-
-		middlePanelCards = new JPanel();    // CardLayout: Info / License
+		// CardLayout: Info / License panel
+		middlePanelCards = new JPanel();    
 		middlePanelCards.setLayout(new CardLayout());
+
+			// Middle panel with discription, authors, license
+			JPanel middlePanelInfo = new JPanel();
+			middlePanelInfo.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
+			middlePanelInfo.setLayout(new BoxLayout(middlePanelInfo, BoxLayout.Y_AXIS));
+			middlePanelInfo.setBackground(backColor);
+
+				// Description label
+				JPanel labelDescriptionPanel = new JPanel(new FlowLayout(0, 0, 0));
+				labelDescriptionPanel.setBackground(backColor);
+					JLabel labelDescription = new JLabel("Αναζήτηση και προβολή κληρώσεων και στατιστικών του παιχνιδιού Τζόκερ.");
+					labelDescription.setFont(new Font("Arial", 0, 12));
+				labelDescriptionPanel.add(labelDescription);
+				labelDescriptionPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelDescriptionPanel.getMinimumSize().height));
+
+
+				// Authors labels
+				JPanel labelAuthorsPanel = new JPanel(new FlowLayout(0, 0, 0));
+				labelAuthorsPanel.setBackground(backColor);
+					JLabel labelAuthors = new JLabel("Δημιουργοί:");
+					labelAuthors.setFont(new Font("Arial", 0, 12));
+				labelAuthorsPanel.add(labelAuthors);
+				labelAuthorsPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelAuthorsPanel.getMinimumSize().height + 1));
+
+				JPanel author1Panel = new JPanel(new FlowLayout(0, 0, 0));
+				author1Panel.setBackground(backColor);
+					JLabel labelAuthor1 = new JLabel("    " + authorList.get(0));
+					labelAuthor1.setFont(new Font("Arial", 0, 12));
+				author1Panel.add(labelAuthor1);
+				author1Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, author1Panel.getMinimumSize().height + 1));
+
+				JPanel author2Panel = new JPanel(new FlowLayout(0, 0, 0));
+				author2Panel.setBackground(backColor);
+					JLabel labelAuthor2 = new JLabel("    " + authorList.get(1));
+					labelAuthor2.setFont(new Font("Arial", 0, 12));
+				author2Panel.add(labelAuthor2);
+				author2Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, author2Panel.getMinimumSize().height + 1));
+
+				JPanel author3Panel = new JPanel(new FlowLayout(0, 0, 0));
+				author3Panel.setBackground(backColor);
+					JLabel labelAuthor3 = new JLabel("    " + authorList.get(2));
+					labelAuthor3.setFont(new Font("Arial", 0, 12));
+				author3Panel.add(labelAuthor3);
+				author3Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, author3Panel.getMinimumSize().height + 1));
+
+				JPanel author4Panel = new JPanel(new FlowLayout(0, 0, 0));
+				author4Panel.setBackground(backColor);
+					JLabel labelAuthor4 = new JLabel("    " + authorList.get(3));
+					labelAuthor4.setFont(new Font("Arial", 0, 12));
+				author4Panel.add(labelAuthor4);
+				author4Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, author4Panel.getMinimumSize().height + 1));
+
+
+				// Libraries labels
+				JPanel labelLibrariesPanel = new JPanel(new FlowLayout(0, 0, 0));
+				labelLibrariesPanel.setBackground(backColor);
+					JLabel labelLibraries = new JLabel("Χρησιμοποιούνται οι βιβλιοθήκες:");
+					labelLibraries.setFont(new Font("Arial", 0, 12));
+				labelLibrariesPanel.add(labelLibraries);
+				labelLibrariesPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelLibrariesPanel.getMinimumSize().height));
+
+				JPanel library1Panel = new JPanel(new FlowLayout(0, 0, 0));
+				library1Panel.setBackground(backColor);
+					JLabel labelLibrary1 = new JLabel("    " + "EclipseLink      (Eclipse Public License v1.0)");
+					labelLibrary1.setFont(new Font("Arial", 0, 12));
+				library1Panel.add(labelLibrary1);
+				library1Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library1Panel.getMinimumSize().height + 1));
+
+				JPanel library2Panel = new JPanel(new FlowLayout(0, 0, 0));
+				library2Panel.setBackground(backColor);
+					JLabel labelLibrary2 = new JLabel("    " + "Apache Derby  (Apache License 2.0)");
+					labelLibrary2.setFont(new Font("Arial", 0, 12));
+				library2Panel.add(labelLibrary2);
+				library2Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library2Panel.getMinimumSize().height + 1));
+
+				JPanel library3Panel = new JPanel(new FlowLayout(0, 0, 0));
+				library3Panel.setBackground(backColor);
+					JLabel labelLibrary3 = new JLabel("    " + "Gson                 (Apache License 2.0)");
+					labelLibrary3.setFont(new Font("Arial", 0, 12));
+				library3Panel.add(labelLibrary3);
+				library3Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library3Panel.getMinimumSize().height + 1));
+
+				JPanel library4Panel = new JPanel(new FlowLayout(0, 0, 0));
+				library4Panel.setBackground(backColor);
+					JLabel labelLibrary4 = new JLabel("    " + "OkHttp               (Apache License 2.0)");
+					labelLibrary4.setFont(new Font("Arial", 0, 12));
+				library4Panel.add(labelLibrary4);
+				library4Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library4Panel.getMinimumSize().height + 1));
+
+				JPanel library5Panel = new JPanel(new FlowLayout(0, 0, 0));
+				library5Panel.setBackground(backColor);
+					JLabel labelLibrary5 = new JLabel("    " + "Okio                   (Apache License 2.0)");
+					labelLibrary5.setFont(new Font("Arial", 0, 12));
+				library5Panel.add(labelLibrary5);
+				library5Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library5Panel.getMinimumSize().height + 1));
+
+				JPanel library6Panel = new JPanel(new FlowLayout(0, 0, 0));
+				library6Panel.setBackground(backColor);
+					JLabel labelLibrary6 = new JLabel("    " + "JFreeChart       (GNU Lesser General Public Licence v2.1)");
+					labelLibrary6.setFont(new Font("Arial", 0, 12));
+				library6Panel.add(labelLibrary6);
+				library6Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library6Panel.getMinimumSize().height + 1));
+
+				JPanel library7Panel = new JPanel(new FlowLayout(0, 0, 0));
+				library7Panel.setBackground(backColor);
+					JLabel labelLibrary7 = new JLabel("    " + "iTextPDF 7        (Affero General Public License v3)");
+					labelLibrary7.setFont(new Font("Arial", 0, 12));
+				library7Panel.add(labelLibrary7);
+				library7Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library7Panel.getMinimumSize().height + 1));
+
+				JPanel library8Panel = new JPanel(new FlowLayout(0, 0, 0));
+				library8Panel.setBackground(backColor);
+					JLabel labelLibrary8 = new JLabel("    " + "SLF4J                (MIT license)");
+					labelLibrary8.setFont(new Font("Arial", 0, 12));
+				library8Panel.add(labelLibrary8);
+				library8Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library8Panel.getMinimumSize().height + 1));
+
+
+				// License label
+				JPanel labelLicensePanel = new JPanel(new FlowLayout(0, 0, 0));
+				labelLicensePanel.setBackground(backColor);
+					JLabel labelLicense = new JLabel("Αυτό το πρόγραμμα διατείθεται υπό την άδεια FreeBSD.");
+					labelLicense.setFont(new Font("Arial", 0, 12));
+				labelLicensePanel.add(labelLicense);
+				labelLicensePanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelLicensePanel.getMinimumSize().height));
+
+			middlePanelInfo.add(Box.createRigidArea(new Dimension(0, 18)));
+			middlePanelInfo.add(labelDescriptionPanel);
+			middlePanelInfo.add(Box.createRigidArea(new Dimension(0, 20)));
+			middlePanelInfo.add(labelAuthorsPanel);
+			middlePanelInfo.add(author1Panel);
+			middlePanelInfo.add(author2Panel);
+			middlePanelInfo.add(author3Panel);
+			middlePanelInfo.add(author4Panel);
+			middlePanelInfo.add(Box.createRigidArea(new Dimension(0, 20)));
+			middlePanelInfo.add(labelLibrariesPanel);
+			middlePanelInfo.add(library1Panel);
+			middlePanelInfo.add(library2Panel);
+			middlePanelInfo.add(library3Panel);
+			middlePanelInfo.add(library4Panel);
+			middlePanelInfo.add(library5Panel);
+			middlePanelInfo.add(library6Panel);
+			middlePanelInfo.add(library7Panel);
+			middlePanelInfo.add(library8Panel);
+			middlePanelInfo.add(Box.createRigidArea(new Dimension(0, 20)));
+			middlePanelInfo.add(labelLicensePanel);
+
+
+			// License text panel
+			JPanel middlePanelLicense = new JPanel();    // Panel with the license text
+			middlePanelLicense.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
+			middlePanelLicense.setLayout(new GridLayout(0, 1, 0, 16));
+			middlePanelLicense.setPreferredSize(new java.awt.Dimension(596, 213));
+			middlePanelLicense.setBackground(backColor);
+
+				// Text area with the license
+				JTextArea textAreaLicense = new JTextArea();
+				textAreaLicense.setLineWrap(true);
+				textAreaLicense.setWrapStyleWord(true);
+				textAreaLicense.setEditable(false);
+
+				textAreaLicense.setText(licenceText);
+				textAreaLicense.setCaretPosition(0);
+
+				// Scroll pane to enclose the textAreaLicense
+				JScrollPane scrollPane = new JScrollPane(textAreaLicense);
+				scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+			middlePanelLicense.add(scrollPane);
+
 		middlePanelCards.add(middlePanelInfo, "Info");
 		middlePanelCards.add(middlePanelLicense, "License");
 
-		JPanel bottomPanel = new JPanel();    // Panel with License and Close buttons
+
+		// Bottom panel with License and Close buttons
+		JPanel bottomPanel = new JPanel();
 		bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
 		bottomPanel.setBackground(backColor);
+
+			buttonLicense = new JButton("Άδεια");
+			buttonLicense.setPreferredSize(new java.awt.Dimension(116, 26));
+			buttonLicense.addActionListener(this::buttonLicenseActionPerformed);
+
+			JButton buttonClose = new JButton("Κλείσιμο");
+			buttonClose.setPreferredSize(new java.awt.Dimension(116, 26));
+			buttonClose.addActionListener(this::buttonCloseActionPerformed);
+
 		bottomPanel.add(buttonLicense);
 		bottomPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
 		bottomPanel.add(buttonClose);
 
-		JPanel mainPanel = new JPanel();    // Main panel
+
+		// Main panel
+		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new java.awt.Dimension(596, 362));
+		mainPanel.setPreferredSize(new java.awt.Dimension(596, 450));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanelCards);

@@ -39,8 +39,6 @@ public class WindowShowData
 	private final JComboBox comboBoxYearSelect;
 	private final JRadioButton radioButtonApi;
 	private final JTable dataViewTable;
-	private static  EntityManagerFactory emf;
-	private static EntityManager em;
 
 	// Methods
 	/**

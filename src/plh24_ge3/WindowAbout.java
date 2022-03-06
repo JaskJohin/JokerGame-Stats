@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -109,15 +110,20 @@ public class WindowAbout
 
 		// Top panel
 		JPanel topPanel = new JPanel();    // Panel with the window title label
-		topPanel.setBorder(BorderFactory.createEmptyBorder(6, 20, 4, 0));
+		topPanel.setBorder(BorderFactory.createEmptyBorder(4, 20, 4, 0));
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 		topPanel.setBackground(new java.awt.Color(78, 116, 221));
 
 			// Labels
+			JLabel labelIcon = new JLabel();
+			labelIcon.setIcon(new ImageIcon(icons.get(6)));
+			labelIcon.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+
 			JLabel labelName = new JLabel("Joker stats");
 			labelName.setFont(new Font("Arial", 1, 32));
 			labelName.setForeground(Color.WHITE);
 			labelName.setPreferredSize(new java.awt.Dimension(190, 40));
+			labelName.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 			labelName.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 
 			JLabel labelVer = new JLabel("v1.0");
@@ -127,6 +133,7 @@ public class WindowAbout
 			labelVer.setBorder(BorderFactory.createEmptyBorder(0, 0, 4, 0));
 			labelVer.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 
+		topPanel.add(labelIcon);
 		topPanel.add(labelName);
 		topPanel.add(labelVer);
 		topPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
@@ -332,7 +339,7 @@ public class WindowAbout
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new java.awt.Dimension(596, 450));
+		mainPanel.setPreferredSize(new java.awt.Dimension(596, 460));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanelCards);

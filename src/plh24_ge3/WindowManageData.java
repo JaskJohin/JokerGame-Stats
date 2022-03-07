@@ -2,6 +2,8 @@ package plh24_ge3;
 
 import com.google.gson.*;
 import java.awt.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -698,6 +700,18 @@ public class WindowManageData
 	 */
 	private void buttonStoreInDBActionPerformed(java.awt.event.ActionEvent evt)
 	{
+		// Check if Java DB server is started
+		try
+		{
+			DriverManager.getConnection("jdbc:derby://localhost/opapGameStatistics");
+		}
+		catch (SQLException ex)
+		{
+			String errorMsg = "Ο server της βάσης δεδομένων δεν είναι ενεργοποιημένος.";
+			JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα σύνδεσης στη ΒΔ", 0);
+			return;
+		}
+
 		if (radioButtonSingleDraw.isSelected())
 		{
 			try {
@@ -806,6 +820,19 @@ public class WindowManageData
 	 * @param evt 
 	 */
 	private void buttonDelDRInDBActionPerformed(java.awt.event.ActionEvent evt) {
+
+		// Check if Java DB server is started
+		try
+		{
+			DriverManager.getConnection("jdbc:derby://localhost/opapGameStatistics");
+		}
+		catch (SQLException ex)
+		{
+			String errorMsg = "Ο server της βάσης δεδομένων δεν είναι ενεργοποιημένος.";
+			JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα σύνδεσης στη ΒΔ", 0);
+			return;
+		}
+
 		//show a confirmation dialog    
 		int choice = deletionConfirmationDialog();
 
@@ -854,6 +881,19 @@ public class WindowManageData
 	 * @param evt 
 	 */
 	private void buttonDelAllForSelGameInDBActionPerformed(java.awt.event.ActionEvent evt) {
+
+		// Check if Java DB server is started
+		try
+		{
+			DriverManager.getConnection("jdbc:derby://localhost/opapGameStatistics");
+		}
+		catch (SQLException ex)
+		{
+			String errorMsg = "Ο server της βάσης δεδομένων δεν είναι ενεργοποιημένος.";
+			JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα σύνδεσης στη ΒΔ", 0);
+			return;
+		}
+
 		// Get selected game id
 		String gId = null;
 

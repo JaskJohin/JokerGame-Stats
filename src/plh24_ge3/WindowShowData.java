@@ -9,6 +9,8 @@ import com.google.gson.JsonParser;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -228,6 +230,19 @@ public class WindowShowData
 	 * Gather data for the selected game and year using the DB.
 	 */
 	private void getDataFromDB(String gameId, String year) throws Exception	{
+
+		// Check if Java DB server is started
+		try
+		{
+			DriverManager.getConnection("jdbc:derby://localhost/opapGameStatistics");
+		}
+		catch (SQLException ex)
+		{
+			String errorMsg = "Ο server της βάσης δεδομένων δεν είναι ενεργοποιημένος.";
+			JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα σύνδεσης στη ΒΔ", 0);
+			return;
+		}
+
 		for(int i = 0; i < 12; i++) {
 			//variables declaration
 			int drawCount;

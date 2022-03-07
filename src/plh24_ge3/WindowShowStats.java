@@ -41,6 +41,8 @@ import model.QueriesSQL;
 import model.Utilities;
 import POJOs.WinningNumberOccurrence;
 import java.awt.FlowLayout;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import javax.swing.OverlayLayout;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -445,6 +447,18 @@ public class WindowShowStats
 	 */
 	private void buttonFetchDataActionPerformed(java.awt.event.ActionEvent evt)
 	{
+		// Check if Java DB server is started
+		try
+		{
+			DriverManager.getConnection("jdbc:derby://localhost/opapGameStatistics");
+		}
+		catch (SQLException ex)
+		{
+			String errorMsg = "Ο server της βάσης δεδομένων δεν είναι ενεργοποιημένος.";
+			JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα σύνδεσης στη ΒΔ", 0);
+			return;
+		}
+
 		// Get selected game id
 		String gameId = null;
 		switch (comboBoxGameSelect.getSelectedItem().toString())
@@ -509,7 +523,6 @@ public class WindowShowStats
 
 		// Create Chart 3
 		createChart3(gameId, textFieldDate1.getText(), textFieldDate2.getText());
-
 	}
 
 
@@ -549,6 +562,18 @@ public class WindowShowStats
 		if (searchDate1.isEmpty())
 		{
 			JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα", 0);
+			return;
+		}
+
+		// Check if Java DB server is started
+		try
+		{
+			DriverManager.getConnection("jdbc:derby://localhost/opapGameStatistics");
+		}
+		catch (SQLException ex)
+		{
+			errorMsg = "Ο server της βάσης δεδομένων δεν είναι ενεργοποιημένος.";
+			JOptionPane.showMessageDialog(null, errorMsg, "Σφάλμα σύνδεσης στη ΒΔ", 0);
 			return;
 		}
 

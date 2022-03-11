@@ -2,6 +2,7 @@ package plh24_ge3;
 
 import com.google.gson.*;
 import java.awt.*;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -960,6 +961,19 @@ public class WindowManageData
 		}
 
 
+		// Font
+		Font fontNotoSansRegular = null;
+		try
+		{
+			fontNotoSansRegular = Font.createFont(Font.PLAIN, getClass().getResourceAsStream("/resources/NotoSans-Regular.ttf"));
+		}
+		catch (FontFormatException | IOException ex)
+		{
+			System.err.println(ex);
+			fontNotoSansRegular = new Font(null, 0, 22);  // Fallback, not suppose to happen
+		}
+
+
 		/*
 		 * Top panel with the window title
 		 */
@@ -978,7 +992,7 @@ public class WindowManageData
 				labelTitle.setForeground(Color.ORANGE);
 
 				JLabel labelTitleShadow = new JLabel("Διαχείριση δεδομένων");
-				labelTitleShadow.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+				labelTitleShadow.setBorder(BorderFactory.createEmptyBorder(5, 1, 0, 0));
 				labelTitleShadow.setFont(new Font(null, 3, 42));
 				labelTitleShadow.setForeground(Color.BLUE);
 
@@ -997,11 +1011,11 @@ public class WindowManageData
 		middlePanel.setBackground(backColor);
 
 			// Game selection & download panel
-			JPanel gameSelectAndDLPanel = new JPanel();
-			gameSelectAndDLPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
-			gameSelectAndDLPanel.setLayout(new BoxLayout(gameSelectAndDLPanel, BoxLayout.X_AXIS));
-			gameSelectAndDLPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameSelectAndDLPanel.getMinimumSize().height));
-			gameSelectAndDLPanel.setBackground(backColor);
+			JPanel gameSelectPanel = new JPanel();
+			gameSelectPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
+			gameSelectPanel.setLayout(new BoxLayout(gameSelectPanel, BoxLayout.X_AXIS));
+			gameSelectPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameSelectPanel.getMinimumSize().height));
+			gameSelectPanel.setBackground(backColor);
 
 				// Label game select
 				JLabel labelGameSelect = new JLabel("Επιλέξτε τυχερό παιχνίδι");
@@ -1013,190 +1027,209 @@ public class WindowManageData
 				comboBoxGameSelect.addActionListener(this::comboBoxGameSelectActionPerformed);
 				comboBoxGameSelect.setBackground(backColor);
 
-				// Button download
-				JButton buttonDownload = new JButton("Αναζήτηση και προβολή δεδομένων");
-				buttonDownload.addActionListener((evt) ->
-				{
-					CompletableFuture.runAsync(() -> this.buttonDownloadActionPerformed(evt));
-				});
-
 				// Label with info of the last and next draw
 				labelDrawInfo = new JLabel();
 				labelDrawInfo.setFont(new Font("Arial", 0, 12));
 				labelDrawInfo.setForeground(Color.DARK_GRAY);
 
-			gameSelectAndDLPanel.add(labelGameSelect);
-			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(10,0)));
-			gameSelectAndDLPanel.add(comboBoxGameSelect);
-			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(50,0)));
-			gameSelectAndDLPanel.add(buttonDownload);
-			gameSelectAndDLPanel.add(Box.createHorizontalGlue());
-			gameSelectAndDLPanel.add(labelDrawInfo);
+			gameSelectPanel.add(labelGameSelect);
+			gameSelectPanel.add(Box.createRigidArea(new Dimension(10,0)));
+			gameSelectPanel.add(comboBoxGameSelect);
+			gameSelectPanel.add(Box.createRigidArea(new Dimension(50,0)));
+			gameSelectPanel.add(Box.createHorizontalGlue());
+			gameSelectPanel.add(labelDrawInfo);
 
 
 			// Choose search method label panel
 			JPanel chooseMethodLabelPanel = new JPanel();
-			chooseMethodLabelPanel.setBorder(BorderFactory.createEmptyBorder(12, 0, 0, 0));
+			chooseMethodLabelPanel.setBorder(BorderFactory.createEmptyBorder(12, 0, 6, 0));
 			chooseMethodLabelPanel.setLayout(new FlowLayout(0, 0, 0));
-			chooseMethodLabelPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, chooseMethodLabelPanel.getMinimumSize().height));
 			chooseMethodLabelPanel.setBackground(backColor);
 
 				// Label choose method
 				JLabel labelChooseMethod = new JLabel("Επιλέξτε τρόπο αναζήτησης κληρώσεων");
 
 			chooseMethodLabelPanel.add(labelChooseMethod);
+			chooseMethodLabelPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, chooseMethodLabelPanel.getMinimumSize().height));
 
 
-			// Single draw method panel
-			JPanel singleDrawMethodPanel = new JPanel();
-			singleDrawMethodPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
-			singleDrawMethodPanel.setLayout(new FlowLayout(0, 0, 0));
-			singleDrawMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, singleDrawMethodPanel.getMinimumSize().height));
-			singleDrawMethodPanel.setBackground(backColor);
+			// Choose search method and download panel
+			JPanel chooseMethodAndDLPanel = new JPanel();
+			chooseMethodAndDLPanel.setLayout(new BoxLayout(chooseMethodAndDLPanel, BoxLayout.X_AXIS));
+			chooseMethodAndDLPanel.setBackground(backColor);
+			
+				// Choose search method panel
+				JPanel chooseMethodPanel = new JPanel();
+				chooseMethodPanel.setLayout(new BoxLayout(chooseMethodPanel, BoxLayout.Y_AXIS));
+				chooseMethodPanel.setBackground(backColor);
 
-				// Radio button for single draw
-				radioButtonSingleDraw = new JRadioButton();
-				radioButtonSingleDraw.setText("Συγκεκριμένη κλήρωση");
-				radioButtonSingleDraw.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-				radioButtonSingleDraw.addActionListener(this::radioButtonSingleDrawActionPerformed);
-				radioButtonSingleDraw.setBackground(backColor);
-				radioButtonSingleDraw.setSelected(false);
+					// Single draw method panel
+					JPanel singleDrawMethodPanel = new JPanel();
+					singleDrawMethodPanel.setLayout(new FlowLayout(0, 0, 0));
+					singleDrawMethodPanel.setBackground(backColor);
 
-				// Label draw id
-				JLabel labelDrawId = new JLabel("Αριθμός κλήρωσης");
-				labelDrawId.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 6));
+						// Radio button for single draw
+						radioButtonSingleDraw = new JRadioButton();
+						radioButtonSingleDraw.setText("Συγκεκριμένη κλήρωση");
+						radioButtonSingleDraw.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+						radioButtonSingleDraw.addActionListener(this::radioButtonSingleDrawActionPerformed);
+						radioButtonSingleDraw.setBackground(backColor);
+						radioButtonSingleDraw.setSelected(false);
 
-				// Text field for draw id
-				textFieldDrawId = new JTextField();
-				textFieldDrawId.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
-				textFieldDrawId.setPreferredSize(new Dimension(58, 20));
+						// Label draw id
+						JLabel labelDrawId = new JLabel("Αριθμός κλήρωσης");
+						labelDrawId.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 6));
 
-				// Button to find latest draw
-				JButton buttonFindLatestDraw = new JButton("Εύρεση τελευταίας κλήρωσης");
-				buttonFindLatestDraw.setPreferredSize(new Dimension(buttonFindLatestDraw.getMinimumSize().width, 20));
-				buttonFindLatestDraw.addActionListener(this::buttonFindLatestDrawActionPerformed);
+						// Text field for draw id
+						textFieldDrawId = new JTextField();
+						textFieldDrawId.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+						textFieldDrawId.setPreferredSize(new Dimension(58, 20));
 
-			singleDrawMethodPanel.add(radioButtonSingleDraw);
-			singleDrawMethodPanel.add(labelDrawId);
-			singleDrawMethodPanel.add(textFieldDrawId);
-			singleDrawMethodPanel.add(Box.createRigidArea(new Dimension(79,0)));
-			singleDrawMethodPanel.add(buttonFindLatestDraw);
+						// Button to find latest draw
+						JButton buttonFindLatestDraw = new JButton("Εύρεση τελευταίας κλήρωσης");
+						buttonFindLatestDraw.setPreferredSize(new Dimension(buttonFindLatestDraw.getMinimumSize().width, 20));
+						buttonFindLatestDraw.addActionListener(this::buttonFindLatestDrawActionPerformed);
+
+					singleDrawMethodPanel.add(radioButtonSingleDraw);
+					singleDrawMethodPanel.add(labelDrawId);
+					singleDrawMethodPanel.add(textFieldDrawId);
+					singleDrawMethodPanel.add(Box.createRigidArea(new Dimension(91,0)));
+					singleDrawMethodPanel.add(buttonFindLatestDraw);
+					singleDrawMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, singleDrawMethodPanel.getMinimumSize().height));
 
 
-			// Date range method panel
-			JPanel dateRangeMethodPanel = new JPanel();
-			dateRangeMethodPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
-			dateRangeMethodPanel.setLayout(new FlowLayout(0, 0, 0));
-			dateRangeMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, dateRangeMethodPanel.getMinimumSize().height));
-			dateRangeMethodPanel.setBackground(backColor);
+					// Date range method panel
+					JPanel dateRangeMethodPanel = new JPanel();
+					dateRangeMethodPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+					dateRangeMethodPanel.setLayout(new FlowLayout(0, 0, 0));
+					dateRangeMethodPanel.setBackground(backColor);
 
-				// Radio button for date range
-				JRadioButton radioButtonDateRange = new JRadioButton();
-				radioButtonDateRange.setText("Εύρος ημερομηνιών");
-				radioButtonDateRange.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-				radioButtonDateRange.addActionListener(this::radioButtonDateRangeActionPerformed);
-				radioButtonDateRange.setBackground(backColor);
-				radioButtonDateRange.setSelected(true);
+						// Radio button for date range
+						JRadioButton radioButtonDateRange = new JRadioButton();
+						radioButtonDateRange.setText("Εύρος ημερομηνιών");
+						radioButtonDateRange.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+						radioButtonDateRange.addActionListener(this::radioButtonDateRangeActionPerformed);
+						radioButtonDateRange.setBackground(backColor);
+						radioButtonDateRange.setSelected(true);
 
-				// Group radio butttons
-				ButtonGroup groupChooseMethod = new ButtonGroup();
-				groupChooseMethod.add(radioButtonSingleDraw);
-				groupChooseMethod.add(radioButtonDateRange);
+						// Group radio butttons
+						ButtonGroup groupChooseMethod = new ButtonGroup();
+						groupChooseMethod.add(radioButtonSingleDraw);
+						groupChooseMethod.add(radioButtonDateRange);
 
-				// Label from
-				JLabel labelFrom = new JLabel("Από");
-				labelFrom.setBorder(BorderFactory.createEmptyBorder(0, 53, 0, 6));
+						// Label from
+						JLabel labelFrom = new JLabel("Από");
+						labelFrom.setBorder(BorderFactory.createEmptyBorder(0, 53, 0, 6));
 
-				// Text field for date 1
-				textFieldDate1 = new JTextField();
-				textFieldDate1.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
-				textFieldDate1.setPreferredSize(new Dimension(80, 20));
+						// Text field for date 1
+						textFieldDate1 = new JTextField();
+						textFieldDate1.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+						textFieldDate1.setPreferredSize(new Dimension(80, 20));
 
-				// Label up to
-				JLabel labelUpTo = new JLabel("Έως");
-				labelUpTo.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
+						// Label up to
+						JLabel labelUpTo = new JLabel("Έως");
+						labelUpTo.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
 
-				// Text field for date 2
-				textFieldDate2 = new JTextField();
-				textFieldDate2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
-				textFieldDate2.setPreferredSize(new Dimension(80, 20));
+						// Text field for date 2
+						textFieldDate2 = new JTextField();
+						textFieldDate2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+						textFieldDate2.setPreferredSize(new Dimension(80, 20));
 
-				// Label predefined date range
-				JLabel labelPredefinedRange = new JLabel("Προκαθορισμένες επιλογές");
-				labelPredefinedRange.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 6));
+						// Label predefined date range
+						JLabel labelPredefinedRange = new JLabel("Προκαθορισμένες επιλογές");
+						labelPredefinedRange.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 6));
 
-				// ComboBox quick select
-				String dateRanges[] = {"Τελευταία εβδομάδα", "Τελευταίος μήνας",
-					"Τελευταίο 3μηνο", "Τελευταίο έτος", "Τελευταία 5ετία",
-					"Πρώτο έτος", "Πρώτη 5ετία", "Όλες οι κληρώσεις"};
-				comboBoxPredefinedRange = new JComboBox(dateRanges);
-				comboBoxPredefinedRange.setPreferredSize(new Dimension(comboBoxPredefinedRange.getMinimumSize().width, 20));
-				comboBoxPredefinedRange.addActionListener(this::comboBoxPredefinedRangeActionPerformed);
-				comboBoxPredefinedRange.setSelectedIndex(0);
-				comboBoxPredefinedRange.setBackground(backColor);
+						// ComboBox quick select
+						String dateRanges[] = {"Τελευταία εβδομάδα", "Τελευταίος μήνας",
+							"Τελευταίο 3μηνο", "Τελευταίο έτος", "Τελευταία 5ετία",
+							"Πρώτο έτος", "Πρώτη 5ετία", "Όλες οι κληρώσεις"};
+						comboBoxPredefinedRange = new JComboBox(dateRanges);
+						comboBoxPredefinedRange.setPreferredSize(new Dimension(comboBoxPredefinedRange.getMinimumSize().width, 20));
+						comboBoxPredefinedRange.addActionListener(this::comboBoxPredefinedRangeActionPerformed);
+						comboBoxPredefinedRange.setSelectedIndex(0);
+						comboBoxPredefinedRange.setBackground(backColor);
 
-			dateRangeMethodPanel.add(radioButtonDateRange);
-			dateRangeMethodPanel.add(labelFrom);
-			dateRangeMethodPanel.add(textFieldDate1);
-			dateRangeMethodPanel.add(labelUpTo);
-			dateRangeMethodPanel.add(textFieldDate2);
-			dateRangeMethodPanel.add(labelPredefinedRange);
-			dateRangeMethodPanel.add(Box.createRigidArea(new Dimension(4,0)));
-			dateRangeMethodPanel.add(comboBoxPredefinedRange);
+					dateRangeMethodPanel.add(radioButtonDateRange);
+					dateRangeMethodPanel.add(labelFrom);
+					dateRangeMethodPanel.add(textFieldDate1);
+					dateRangeMethodPanel.add(labelUpTo);
+					dateRangeMethodPanel.add(textFieldDate2);
+					dateRangeMethodPanel.add(labelPredefinedRange);
+					dateRangeMethodPanel.add(Box.createRigidArea(new Dimension(4,0)));
+					dateRangeMethodPanel.add(comboBoxPredefinedRange);
+					dateRangeMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, dateRangeMethodPanel.getMinimumSize().height));
+
+				chooseMethodPanel.add(singleDrawMethodPanel);
+				chooseMethodPanel.add(dateRangeMethodPanel);
+
+
+				// Button download
+				JButton buttonDownload = new JButton("Αναζήτηση και προβολή δεδομένων");
+				buttonDownload.setPreferredSize(new Dimension(buttonDownload.getMinimumSize().width, 46));
+				buttonDownload.setMaximumSize(new Dimension(buttonDownload.getMinimumSize().width, 46));
+				buttonDownload.addActionListener((evt) ->
+				{
+					CompletableFuture.runAsync(() -> this.buttonDownloadActionPerformed(evt));
+				});
+
+			chooseMethodAndDLPanel.add(chooseMethodPanel);
+			chooseMethodAndDLPanel.add(buttonDownload);
 
 
 			// Data base panel
-			JPanel dbPanel = new JPanel();
-			dbPanel.setBorder(BorderFactory.createEmptyBorder(18, 0, 0, 0));
-			dbPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
-			dbPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, dbPanel.getMinimumSize().height));
-			dbPanel.setBackground(backColor);
+			JPanel dbPanelBorder = new JPanel();
+			dbPanelBorder.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
+			dbPanelBorder.setBorder(BorderFactory.createTitledBorder(null, "Διαχείρηση βάσης δεδομένων", 0, 0, new Font(null, 0, 12)));
+			dbPanelBorder.setBackground(backColor);
 
-				// Label DB management
-				JLabel labelDBManagement = new JLabel("Διαχείρηση βάσης δεδομένων");
-				labelDBManagement.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 16));
+				JPanel dbPanel = new JPanel();
+				dbPanel.setBorder(BorderFactory.createEmptyBorder(1, 8, 8, 8));
+				dbPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
+				dbPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, dbPanel.getMinimumSize().height));
+				dbPanel.setBackground(backColor);
 
-				// Button store in DB
-				JButton buttonStoreInDB = new JButton("Αποθήκευση δεδομένων");
-				buttonStoreInDB.addActionListener(this::buttonStoreInDBActionPerformed);
+					// Button store in DB
+					JButton buttonStoreInDB = new JButton("Αποθήκευση δεδομένων");
+					buttonStoreInDB.addActionListener(this::buttonStoreInDBActionPerformed);
 
-				// Button delete all in date range
-				JButton buttonDelDRInDB = new JButton("Διαγραφή κληρώσεων στο εύρος");
-				buttonDelDRInDB.addActionListener(this::buttonDelDRInDBActionPerformed);
+					// Button delete all in date range
+					JButton buttonDelDRInDB = new JButton("Διαγραφή κληρώσεων στο εύρος");
+					buttonDelDRInDB.addActionListener(this::buttonDelDRInDBActionPerformed);
 
-				// Label from
-				JLabel labelDBFrom = new JLabel("Από");
-				labelDBFrom.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
+					// Label from
+					JLabel labelDBFrom = new JLabel("Από");
+					labelDBFrom.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
 
-				// Text field for date 1
-				textFieldDBDate1 = new JTextField("2000-01-01");
-				textFieldDBDate1.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
-				textFieldDBDate1.setPreferredSize(new Dimension(80, 20));
+					// Text field for date 1
+					textFieldDBDate1 = new JTextField("2000-01-01");
+					textFieldDBDate1.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+					textFieldDBDate1.setPreferredSize(new Dimension(80, 20));
 
-				// Label up to
-				JLabel labelDBUpTo = new JLabel("Έως");
-				labelDBUpTo.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
+					// Label up to
+					JLabel labelDBUpTo = new JLabel("Έως");
+					labelDBUpTo.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 6));
 
-				// Text field for date 2
-				textFieldDBDate2 = new JTextField(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now()));
-				textFieldDBDate2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
-				textFieldDBDate2.setPreferredSize(new Dimension(80, 20));
+					// Text field for date 2
+					textFieldDBDate2 = new JTextField(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now()));
+					textFieldDBDate2.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+					textFieldDBDate2.setPreferredSize(new Dimension(80, 20));
 
-				// Button delete all for selected game
-				buttonDelAllForSelGameInDB = new JButton("Διαγραφή όλων για το Powerspin");
-				buttonDelAllForSelGameInDB.setPreferredSize(new Dimension(buttonDelAllForSelGameInDB.getMinimumSize().width, 26));
-				buttonDelAllForSelGameInDB.addActionListener(this::buttonDelAllForSelGameInDBActionPerformed);
+					// Button delete all for selected game
+					buttonDelAllForSelGameInDB = new JButton("Διαγραφή όλων για το Powerspin");
+					buttonDelAllForSelGameInDB.setPreferredSize(new Dimension(buttonDelAllForSelGameInDB.getMinimumSize().width, 26));
+					buttonDelAllForSelGameInDB.addActionListener(this::buttonDelAllForSelGameInDBActionPerformed);
 
-			dbPanel.add(labelDBManagement);
-			dbPanel.add(buttonStoreInDB);
-			dbPanel.add(Box.createRigidArea(new Dimension(20,0)));
-			dbPanel.add(buttonDelDRInDB);
-			dbPanel.add(labelDBFrom);
-			dbPanel.add(textFieldDBDate1);
-			dbPanel.add(labelDBUpTo);
-			dbPanel.add(textFieldDBDate2);
-			dbPanel.add(Box.createRigidArea(new Dimension(20,0)));
-			dbPanel.add(buttonDelAllForSelGameInDB);
+				dbPanel.add(buttonStoreInDB);
+				dbPanel.add(Box.createRigidArea(new Dimension(20,0)));
+				dbPanel.add(buttonDelDRInDB);
+				dbPanel.add(labelDBFrom);
+				dbPanel.add(textFieldDBDate1);
+				dbPanel.add(labelDBUpTo);
+				dbPanel.add(textFieldDBDate2);
+				dbPanel.add(Box.createRigidArea(new Dimension(20,0)));
+				dbPanel.add(buttonDelAllForSelGameInDB);
+
+			dbPanelBorder.add(dbPanel);
 
 
 			// Data view panel
@@ -1207,122 +1240,127 @@ public class WindowManageData
 
 				// Panel: Joker single draw
 				JPanel jokerSingleDrawPanel = new JPanel();
-				jokerSingleDrawPanel.setLayout(new FlowLayout(0, 0, 0));
+				jokerSingleDrawPanel.setLayout(new BorderLayout());
 				jokerSingleDrawPanel.setBackground(backColor);
 
-					JPanel jokerSDLeftPanel = new JPanel();
-					jokerSDLeftPanel.setLayout(new BoxLayout(jokerSDLeftPanel, BoxLayout.Y_AXIS));
-					jokerSDLeftPanel.setBackground(backColor);
+					JPanel jokerSDNorthPanel = new JPanel();
+					jokerSDNorthPanel.setBackground(backColor);
 
-						JPanel drawNumPanel = new JPanel();
-						drawNumPanel.setLayout(new FlowLayout(0, 0, 0));
-						drawNumPanel.setBackground(backColor);
+						JPanel jokerSDLabelsPanel = new JPanel();
+						jokerSDLabelsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+						jokerSDLabelsPanel.setLayout(new BoxLayout(jokerSDLabelsPanel, BoxLayout.Y_AXIS));
+						jokerSDLabelsPanel.setBackground(backColor);
 
-							JLabel labelDraw = new JLabel("Κλήρωση");
-							labelDraw.setBorder(BorderFactory.createEmptyBorder(0, 68, 0, 0));
-							labelDraw.setFont(new Font("Arial", 0, 14));
-							labelDraw.setForeground(Color.DARK_GRAY);
+							JPanel drawNumPanel = new JPanel();
+							drawNumPanel.setLayout(new FlowLayout(0, 0, 0));
+							drawNumPanel.setBackground(backColor);
 
-							labelDrawValue = new JLabel("");
-							labelDrawValue.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
-							labelDrawValue.setFont(new Font("Arial", 0, 14));
-							labelDrawValue.setForeground(Color.DARK_GRAY);
+								JLabel labelDraw = new JLabel("Κλήρωση");
+								labelDraw.setBorder(BorderFactory.createEmptyBorder(0, 68, 0, 0));
+								labelDraw.setFont(new Font("Arial", 0, 14));
+								labelDraw.setForeground(Color.DARK_GRAY);
 
-						drawNumPanel.add(labelDraw);
-						drawNumPanel.add(labelDrawValue);
+								labelDrawValue = new JLabel("");
+								labelDrawValue.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
+								labelDrawValue.setFont(new Font("Arial", 0, 14));
+								labelDrawValue.setForeground(Color.DARK_GRAY);
 
-						JPanel drawDatePanel = new JPanel();
-						drawDatePanel.setLayout(new FlowLayout(0, 0, 0));
-						drawDatePanel.setBackground(backColor);
+							drawNumPanel.add(labelDraw);
+							drawNumPanel.add(labelDrawValue);
 
-							labelDateValue = new JLabel("");
-							labelDateValue.setBorder(BorderFactory.createEmptyBorder(4, 78, 0, 0));
-							labelDateValue.setPreferredSize(new Dimension(180, 16));
-							labelDateValue.setFont(new Font("Arial", 0, 14));
-							labelDateValue.setForeground(Color.DARK_GRAY);
+							JPanel drawDatePanel = new JPanel();
+							drawDatePanel.setLayout(new FlowLayout(0, 0, 0));
+							drawDatePanel.setBackground(backColor);
 
-						drawDatePanel.add(labelDateValue);
+								labelDateValue = new JLabel("");
+								labelDateValue.setBorder(BorderFactory.createEmptyBorder(4, 78, 0, 0));
+								labelDateValue.setPreferredSize(new Dimension(180, 16));
+								labelDateValue.setFont(new Font("Arial", 0, 14));
+								labelDateValue.setForeground(Color.DARK_GRAY);
 
-						JPanel winColumnPanel = new JPanel();
-						winColumnPanel.setLayout(new FlowLayout(0, 0, 0));
-						winColumnPanel.setBackground(backColor);
+							drawDatePanel.add(labelDateValue);
 
-							JLabel labelWinColumn = new JLabel("Νικήτρια στήλη");
-							labelWinColumn.setBorder(BorderFactory.createEmptyBorder(14, 55, 6, 0));
-							labelWinColumn.setFont(new Font("Arial", 0, 18));
+							JPanel winColumnPanel = new JPanel();
+							winColumnPanel.setLayout(new FlowLayout(0, 0, 0));
+							winColumnPanel.setBackground(backColor);
 
-						winColumnPanel.add(labelWinColumn);
+								JLabel labelWinColumn = new JLabel("Νικήτρια στήλη");
+								labelWinColumn.setBorder(BorderFactory.createEmptyBorder(14, 55, 6, 0));
+								labelWinColumn.setFont(new Font("Arial", 0, 18));
 
-						JPanel winColumnValuePanel = new JPanel();
-						winColumnValuePanel.setBorder(BorderFactory.createEmptyBorder(0, 7, 0, 0));
-						winColumnValuePanel.setLayout(new FlowLayout(0, 0, 0));
-						winColumnValuePanel.setBackground(backColor);
+							winColumnPanel.add(labelWinColumn);
 
-							labelwinNum1Value = new JLabel("", SwingConstants.CENTER);
-							labelwinNum1Value.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-							labelwinNum1Value.setPreferredSize(new Dimension(36, 16));
-							labelwinNum1Value.setFont(new Font("Arial", 0, 18));
-							labelwinNum1Value.setForeground(new Color(32,32,192));
+							JPanel winColumnValuePanel = new JPanel();
+							winColumnValuePanel.setBorder(BorderFactory.createEmptyBorder(0, 7, 0, 0));
+							winColumnValuePanel.setLayout(new FlowLayout(0, 0, 0));
+							winColumnValuePanel.setBackground(backColor);
 
-							labelwinNum2Value = new JLabel("", SwingConstants.CENTER);
-							labelwinNum2Value.setPreferredSize(new Dimension(36, 16));
-							labelwinNum2Value.setFont(new Font("Arial", 0, 18));
-							labelwinNum2Value.setForeground(new Color(32,32,192));
+								labelwinNum1Value = new JLabel("", SwingConstants.CENTER);
+								labelwinNum1Value.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+								labelwinNum1Value.setPreferredSize(new Dimension(36, 16));
+								labelwinNum1Value.setFont(new Font("Arial", 0, 18));
+								labelwinNum1Value.setForeground(new Color(32,32,192));
 
-							labelwinNum3Value = new JLabel("", SwingConstants.CENTER);
-							labelwinNum3Value.setPreferredSize(new Dimension(36, 16));
-							labelwinNum3Value.setFont(new Font("Arial", 0, 18));
-							labelwinNum3Value.setForeground(new Color(32,32,192));
+								labelwinNum2Value = new JLabel("", SwingConstants.CENTER);
+								labelwinNum2Value.setPreferredSize(new Dimension(36, 16));
+								labelwinNum2Value.setFont(new Font("Arial", 0, 18));
+								labelwinNum2Value.setForeground(new Color(32,32,192));
 
-							labelwinNum4Value = new JLabel("", SwingConstants.CENTER);
-							labelwinNum4Value.setPreferredSize(new Dimension(36, 16));
-							labelwinNum4Value.setFont(new Font("Arial", 0, 18));
-							labelwinNum4Value.setForeground(new Color(32,32,192));
+								labelwinNum3Value = new JLabel("", SwingConstants.CENTER);
+								labelwinNum3Value.setPreferredSize(new Dimension(36, 16));
+								labelwinNum3Value.setFont(new Font("Arial", 0, 18));
+								labelwinNum3Value.setForeground(new Color(32,32,192));
 
-							labelwinNum5Value = new JLabel("", SwingConstants.CENTER);
-							labelwinNum5Value.setPreferredSize(new Dimension(36, 16));
-							labelwinNum5Value.setFont(new Font("Arial", 0, 18));
-							labelwinNum5Value.setForeground(new Color(32,32,192));
+								labelwinNum4Value = new JLabel("", SwingConstants.CENTER);
+								labelwinNum4Value.setPreferredSize(new Dimension(36, 16));
+								labelwinNum4Value.setFont(new Font("Arial", 0, 18));
+								labelwinNum4Value.setForeground(new Color(32,32,192));
 
-							labelwinNum6Value = new JLabel("", SwingConstants.CENTER);
-							labelwinNum6Value.setPreferredSize(new Dimension(36, 16));
-							labelwinNum6Value.setFont(new Font("Arial", 0, 18));
-							labelwinNum6Value.setForeground(new Color(210,105,0));
+								labelwinNum5Value = new JLabel("", SwingConstants.CENTER);
+								labelwinNum5Value.setPreferredSize(new Dimension(36, 16));
+								labelwinNum5Value.setFont(new Font("Arial", 0, 18));
+								labelwinNum5Value.setForeground(new Color(32,32,192));
 
-						winColumnValuePanel.add(labelwinNum1Value);
-						winColumnValuePanel.add(labelwinNum2Value);
-						winColumnValuePanel.add(labelwinNum3Value);
-						winColumnValuePanel.add(labelwinNum4Value);
-						winColumnValuePanel.add(labelwinNum5Value);
-						winColumnValuePanel.add(labelwinNum6Value);
+								labelwinNum6Value = new JLabel("", SwingConstants.CENTER);
+								labelwinNum6Value.setPreferredSize(new Dimension(36, 16));
+								labelwinNum6Value.setFont(new Font("Arial", 0, 18));
+								labelwinNum6Value.setForeground(new Color(210,105,0));
 
-						JPanel totalColumnsPanel = new JPanel();
-						totalColumnsPanel.setLayout(new FlowLayout(0, 0, 0));
-						totalColumnsPanel.setBackground(backColor);
+							winColumnValuePanel.add(labelwinNum1Value);
+							winColumnValuePanel.add(labelwinNum2Value);
+							winColumnValuePanel.add(labelwinNum3Value);
+							winColumnValuePanel.add(labelwinNum4Value);
+							winColumnValuePanel.add(labelwinNum5Value);
+							winColumnValuePanel.add(labelwinNum6Value);
 
-							JLabel labelTotalColumns = new JLabel("Σύνολο στηλών:");
-							labelTotalColumns.setBorder(BorderFactory.createEmptyBorder(14, 34, 0, 0));
-							labelTotalColumns.setFont(new Font("Arial", 0, 14));
-							labelTotalColumns.setForeground(Color.DARK_GRAY);
+							JPanel totalColumnsPanel = new JPanel();
+							totalColumnsPanel.setLayout(new FlowLayout(0, 0, 0));
+							totalColumnsPanel.setBackground(backColor);
 
-							labelTotalColumnsValue = new JLabel("");
-							labelTotalColumnsValue.setBorder(BorderFactory.createEmptyBorder(14, 4, 0, 0));
-							labelTotalColumnsValue.setFont(new Font("Arial", 0, 14));
-							labelTotalColumnsValue.setForeground(Color.DARK_GRAY);
+								JLabel labelTotalColumns = new JLabel("Σύνολο στηλών:");
+								labelTotalColumns.setBorder(BorderFactory.createEmptyBorder(14, 34, 0, 0));
+								labelTotalColumns.setFont(new Font("Arial", 0, 14));
+								labelTotalColumns.setForeground(Color.DARK_GRAY);
 
-						totalColumnsPanel.add(labelTotalColumns);
-						totalColumnsPanel.add(labelTotalColumnsValue);
+								labelTotalColumnsValue = new JLabel("");
+								labelTotalColumnsValue.setBorder(BorderFactory.createEmptyBorder(14, 4, 0, 0));
+								labelTotalColumnsValue.setFont(new Font("Arial", 0, 14));
+								labelTotalColumnsValue.setForeground(Color.DARK_GRAY);
 
-					jokerSDLeftPanel.add(drawNumPanel);
-					jokerSDLeftPanel.add(drawDatePanel);
-					jokerSDLeftPanel.add(winColumnPanel);
-					jokerSDLeftPanel.add(winColumnValuePanel);
-					jokerSDLeftPanel.add(totalColumnsPanel);
+							totalColumnsPanel.add(labelTotalColumns);
+							totalColumnsPanel.add(labelTotalColumnsValue);
 
-					JPanel jokerSDRightPanel = new JPanel();
-					jokerSDRightPanel.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 0));
-					jokerSDRightPanel.setLayout(new BorderLayout());
-					jokerSDRightPanel.setBackground(backColor);
+						jokerSDLabelsPanel.add(drawNumPanel);
+						jokerSDLabelsPanel.add(drawDatePanel);
+						jokerSDLabelsPanel.add(winColumnPanel);
+						jokerSDLabelsPanel.add(winColumnValuePanel);
+						jokerSDLabelsPanel.add(totalColumnsPanel);
+
+					jokerSDNorthPanel.add(jokerSDLabelsPanel);
+
+					JPanel jokerSDSouthPanel = new JPanel();
+					jokerSDSouthPanel.setLayout(new BorderLayout());
+					jokerSDSouthPanel.setBackground(backColor);
 
 						// Columns and initial data of the JTable for Joker single draw
 						String[] columnsSD = {"Κατηγορίες επιτυχιών", "Επιτυχίες",
@@ -1358,10 +1396,10 @@ public class WindowManageData
 						// Make the JScrollPane take the same size as the JTable
 						jokerSDTable.setPreferredScrollableViewportSize(jokerSDTable.getPreferredSize());
 
-					jokerSDRightPanel.add(new JScrollPane(jokerSDTable), BorderLayout.CENTER);
+					jokerSDSouthPanel.add(new JScrollPane(jokerSDTable), BorderLayout.NORTH);
 
-				jokerSingleDrawPanel.add(jokerSDLeftPanel);
-				jokerSingleDrawPanel.add(jokerSDRightPanel);
+				jokerSingleDrawPanel.add(jokerSDNorthPanel, BorderLayout.NORTH);
+				jokerSingleDrawPanel.add(jokerSDSouthPanel, BorderLayout.CENTER);
 
 
 				// Panel: Joker date range
@@ -1396,46 +1434,48 @@ public class WindowManageData
 
 					// JTable for Joker date range
 					jokerDRTable = new JTable(modeljokerDRTable);
-					jokerDRTable.getColumnModel().getColumn(0).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(0).setMinWidth(61);
-					jokerDRTable.getColumnModel().getColumn(1).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(1).setMinWidth(71);
-					jokerDRTable.getColumnModel().getColumn(2).setCellRenderer(centerText);
+					jokerDRTable.getTableHeader().setFont(fontNotoSansRegular.deriveFont(0, 12));
+					jokerDRTable.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					jokerDRTable.getColumnModel().getColumn(0).setCellRenderer(centerText); // Draw
+					jokerDRTable.getColumnModel().getColumn(0).setMinWidth(62);
+					jokerDRTable.getColumnModel().getColumn(1).setCellRenderer(centerText); // Date
+					jokerDRTable.getColumnModel().getColumn(1).setMinWidth(75); //71min
+					jokerDRTable.getColumnModel().getColumn(2).setCellRenderer(centerText); // Columns
 					jokerDRTable.getColumnModel().getColumn(2).setMinWidth(63);
-					jokerDRTable.getColumnModel().getColumn(3).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(3).setMinWidth(118);
-					jokerDRTable.getColumnModel().getColumn(4).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(4).setMinWidth(53);
-					jokerDRTable.getColumnModel().getColumn(5).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(3).setCellRenderer(centerText); // Win numbers
+					jokerDRTable.getColumnModel().getColumn(3).setMinWidth(139); //118min
+					jokerDRTable.getColumnModel().getColumn(4).setCellRenderer(centerText); // 5+1
+					jokerDRTable.getColumnModel().getColumn(4).setMinWidth(59); //53min
+					jokerDRTable.getColumnModel().getColumn(5).setCellRenderer(centerText); // 5+1
 					jokerDRTable.getColumnModel().getColumn(5).setMinWidth(92);
-					jokerDRTable.getColumnModel().getColumn(6).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(6).setMinWidth(53);
-					jokerDRTable.getColumnModel().getColumn(7).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(6).setCellRenderer(centerText); // 5
+					jokerDRTable.getColumnModel().getColumn(6).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(7).setCellRenderer(centerText); // 5
 					jokerDRTable.getColumnModel().getColumn(7).setMinWidth(64);
-					jokerDRTable.getColumnModel().getColumn(8).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(8).setMinWidth(53);
-					jokerDRTable.getColumnModel().getColumn(9).setCellRenderer(centerText);
+					jokerDRTable.getColumnModel().getColumn(8).setCellRenderer(centerText); // 4+1
+					jokerDRTable.getColumnModel().getColumn(8).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(9).setCellRenderer(centerText); // 4+1
 					jokerDRTable.getColumnModel().getColumn(9).setMinWidth(50);
-					jokerDRTable.getColumnModel().getColumn(10).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(10).setMinWidth(53);
-					jokerDRTable.getColumnModel().getColumn(11).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(11).setMinWidth(39);
-					jokerDRTable.getColumnModel().getColumn(12).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(12).setMinWidth(53);
-					jokerDRTable.getColumnModel().getColumn(13).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(13).setMinWidth(39);
-					jokerDRTable.getColumnModel().getColumn(14).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(14).setMinWidth(53);
-					jokerDRTable.getColumnModel().getColumn(15).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(15).setMinWidth(39);
-					jokerDRTable.getColumnModel().getColumn(16).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(16).setMinWidth(53);
-					jokerDRTable.getColumnModel().getColumn(17).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(17).setMinWidth(39);
-					jokerDRTable.getColumnModel().getColumn(18).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(18).setMinWidth(53);
-					jokerDRTable.getColumnModel().getColumn(19).setCellRenderer(centerText);
-					jokerDRTable.getColumnModel().getColumn(19).setMinWidth(39);
+					jokerDRTable.getColumnModel().getColumn(10).setCellRenderer(centerText); // 4
+					jokerDRTable.getColumnModel().getColumn(10).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(11).setCellRenderer(centerText); // 4
+					jokerDRTable.getColumnModel().getColumn(11).setMinWidth(41);
+					jokerDRTable.getColumnModel().getColumn(12).setCellRenderer(centerText); // 3+1
+					jokerDRTable.getColumnModel().getColumn(12).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(13).setCellRenderer(centerText); // 3+1
+					jokerDRTable.getColumnModel().getColumn(13).setMinWidth(41);
+					jokerDRTable.getColumnModel().getColumn(14).setCellRenderer(centerText); // 3
+					jokerDRTable.getColumnModel().getColumn(14).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(15).setCellRenderer(centerText); // 3
+					jokerDRTable.getColumnModel().getColumn(15).setMinWidth(41);
+					jokerDRTable.getColumnModel().getColumn(16).setCellRenderer(centerText); // 2+1
+					jokerDRTable.getColumnModel().getColumn(16).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(17).setCellRenderer(centerText); // 2+1
+					jokerDRTable.getColumnModel().getColumn(17).setMinWidth(41);
+					jokerDRTable.getColumnModel().getColumn(18).setCellRenderer(centerText); // 1+1
+					jokerDRTable.getColumnModel().getColumn(18).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(19).setCellRenderer(centerText); // 1+1
+					jokerDRTable.getColumnModel().getColumn(19).setMinWidth(41);
 
 					// Make table cells unselectable and uneditable
 					jokerDRTable.setEnabled(false);
@@ -1460,12 +1500,12 @@ public class WindowManageData
 
 
 		// Add elements to middle panel
-		middlePanel.add(gameSelectAndDLPanel);
+		middlePanel.add(gameSelectPanel);
 		middlePanel.add(chooseMethodLabelPanel);
-		middlePanel.add(singleDrawMethodPanel);
-		middlePanel.add(dateRangeMethodPanel);
-		middlePanel.add(dbPanel);
+		middlePanel.add(chooseMethodAndDLPanel);
 		middlePanel.add(viewPanelCards);
+		middlePanel.add(Box.createRigidArea(new Dimension(0, 12)));
+		middlePanel.add(dbPanelBorder);
 		middlePanel.add(Box.createVerticalGlue());
 
 
@@ -1492,7 +1532,7 @@ public class WindowManageData
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new Dimension(1286, 630));
+		mainPanel.setPreferredSize(new Dimension(1280, 650));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
@@ -1509,7 +1549,7 @@ public class WindowManageData
 		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new Dimension(1296, 650));
+		dialog.setMinimumSize(new Dimension(1290, 680));
 		dialog.setIconImages(icons);
 
 		// Find firstDrawDate & lastDrawId in advance, populate textFieldDrawId

@@ -6,12 +6,31 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.AreaBreak;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.properties.Leading;
+import com.itextpdf.layout.properties.Property;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +42,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import model.AddDataController;
 import model.QueriesSQL;
+import static plh24_ge3.Helper.getJsonStrFromApiURL;
+import static plh24_ge3.Helper.getUrlStrForDateRange;
 import static plh24_ge3.Helper.jokerJsonSingleDrawToObject;
+
 
 /**
  * @author Athanasios Theodoropoulos
@@ -34,11 +56,13 @@ import static plh24_ge3.Helper.jokerJsonSingleDrawToObject;
 public class WindowShowData
 {
 	// Variables declaration
+	private String lastDrawDate;
 	private final JDialog dialog;
 	private final JComboBox comboBoxGameSelect;
 	private final JComboBox comboBoxYearSelect;
 	private final JRadioButton radioButtonApi;
 	private final JTable dataViewTable;
+
 
 	// Methods
 	/**
@@ -73,6 +97,57 @@ public class WindowShowData
 			comboBoxYearSelect.addItem(i);
 		}
 	}
+
+
+	/** 
+	 * Uses the API "https://api.opap.gr/draws/v3.0/{gameId}/last-result-and-active" to
+	 * find the date of the latest draw of the selected game and stores it in the variable
+	 * lastDrawDate. This method is called when the window is first opened and every time
+	 * a different game is selected.
+	 */
+	private void findLastDrawDate()
+	{
+		// Get selected game id
+		String gId = null;
+
+		switch (comboBoxGameSelect.getSelectedItem().toString())
+		{
+			case "Κίνο":      gId = "1100"; break;
+			case "Powerspin": gId = "1110"; break;
+			case "Super3":    gId = "2100"; break;
+			case "Πρότο":     gId = "2101"; break;
+			case "Λόττο":     gId = "5103"; break;
+			case "Τζόκερ":    gId = "5104"; break;
+			case "Extra5":    gId = "5106"; break;
+		}
+
+
+		// URL string
+		String urlStr = "https://api.opap.gr/draws/v3.0/"+gId+"/last-result-and-active";
+
+		// Date format
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		try
+		{
+			// Get json string from the API
+			String jsonStr = getJsonStrFromApiURL(urlStr);
+
+			// Parse jsonStr into json element and get an object structure
+			JsonElement jElement = new JsonParser().parse(jsonStr);
+			JsonObject jObject = jElement.getAsJsonObject();
+
+			// Get the last draw object
+			JsonObject lastDraw = jObject.getAsJsonObject("last");
+
+			// Get the drawTime
+			Long drawTime = lastDraw.get("drawTime").getAsLong();
+			LocalDateTime ldt = Instant.ofEpochMilli(drawTime).atZone(ZoneId.systemDefault()).toLocalDateTime();
+			lastDrawDate = formatter.format(ldt);
+		}
+		catch (Exception ex) { /* Silently continue */ }
+	}
+
 
 	/**
 	 * Gather data for the selected game and year using the api.
@@ -226,6 +301,7 @@ public class WindowShowData
 		}
 	}
 
+
 	/**
 	 * Gather data for the selected game and year using the DB.
 	 */
@@ -319,7 +395,9 @@ public class WindowShowData
 	private void comboBoxGameSelectActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		populateComboBoxYearSelect();
+		CompletableFuture.runAsync(() -> findLastDrawDate());  // Run asynchronously
 	}
+
 
 	/**
 	 * Action of the buttonDownload.
@@ -357,6 +435,489 @@ public class WindowShowData
 			}
 		}
 	}
+
+
+	/**
+	 * Action of the buttonExportToPdf.
+	 * @param evt 
+	 */
+	private void buttonExportToPdfActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		// If lastDrawDate remains null, there's a connection error. So, show appropriate message.
+		if (lastDrawDate == null) {findLastDrawDate();}
+		if (lastDrawDate == null)
+		{
+			String message = "Σφάλμα σύνδεσης στο API του ΟΠΑΠ.";
+			JOptionPane.showMessageDialog(null, message, "Σφάλμα σύνδεσης", 0);
+			return;
+		}
+
+		// Create file name
+		String basename = "Συγκεντρωτικά δεδομένα " + comboBoxGameSelect.getSelectedItem().toString() + " έως " + lastDrawDate;
+		String filename = basename + ".pdf";
+
+
+		// Window saveAs
+		JFileChooser fileChooser = new JFileChooser()
+		{
+			@Override
+			public JDialog createDialog(Component parent)
+			{
+				JDialog dialog = super.createDialog(parent);
+				dialog.setMinimumSize(new Dimension(600, 400));
+				return dialog;
+			}
+		};
+		fileChooser.setCurrentDirectory(new File("."));
+		fileChooser.setDialogTitle("Επιλέξτε το όνομα του αρχείου pdf");
+		fileChooser.setSelectedFile(new File(filename));
+
+		int userSelection = fileChooser.showSaveDialog(null);
+
+		// If user doesn't click Save, do nothing
+		if (userSelection != JFileChooser.APPROVE_OPTION) {return;}
+
+		// Path of chosen file
+		File fileToSave = fileChooser.getSelectedFile();
+		String path = fileToSave.getAbsolutePath();
+
+		// File replace confirmation
+		if (fileToSave.exists())
+		{
+			int input = JOptionPane.showConfirmDialog(null,
+				"Το αρχείο θα αντικατασταθεί. Θέλετε να συνεχίσετε;",
+				"Επιβεβαίωση αντικατάστασης", JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE);
+			if (input != 0) {return;}
+		}
+
+
+		// Date format
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		// Get selected game id and find the date of the first draw
+		String gameId = null;
+		String date1 = "2000-01-01";
+		switch (comboBoxGameSelect.getSelectedItem().toString())
+		{
+			case "Κίνο":      gameId = "1100"; date1 = formatter.format(LocalDate.now().minusYears(3)); break;
+			case "Powerspin": gameId = "1110"; date1 = "2020-06-30"; break;
+			case "Super3":    gameId = "2100"; date1 = "2002-11-25"; break;
+			case "Πρότο":     gameId = "2101"; date1 = "2000-01-01"; break;
+			case "Λόττο":     gameId = "5103"; date1 = "2000-01-01"; break;
+			case "Τζόκερ":    gameId = "5104"; date1 = "2000-01-01"; break;
+			case "Extra5":    gameId = "5106"; date1 = "2002-11-25"; break;
+		}
+
+
+		// Variables
+		int maxSimConnections = 50;  // Max number of simultaneous calls to the API
+		int threadNum;               // Number of threads (simultaneous calls to the API)
+		List<String> urlStrList;     // List with all the urls we will call
+		List<String> jsonStrList = new ArrayList<>();  // List with the json strings
+		List<JokerDrawData> JokerDrawDataList = new ArrayList<>();  // List with all the draw data
+
+
+		// List with the API urls
+		urlStrList = getUrlStrForDateRange(Integer.parseInt(gameId), date1, lastDrawDate);
+
+
+		// Set number of threads = urlStrList.size(), but not more that maxSimConnections
+		threadNum = urlStrList.size();
+		if (threadNum > maxSimConnections) {threadNum = maxSimConnections;}
+
+		// --- Create the threads to do the job ---
+		GetJsonStrListFromUrlStrListMT[] threadArray = new GetJsonStrListFromUrlStrListMT[threadNum];
+		int taskNum = urlStrList.size();    // Total number of tasks to do
+		for (int i=0; i<threadNum; i++)
+		{
+			int index1 = i*taskNum/threadNum;      // Each thread does index2-index1
+			int index2 = (i+1)*taskNum/threadNum;  // tasks, from index1 to index2-1
+			threadArray[i] = new GetJsonStrListFromUrlStrListMT(index1, index2, urlStrList);
+			threadArray[i].start();
+		}
+
+		// Wait for all threads to finish
+		for (int i=0; i<threadNum; i++)
+		{
+			try
+			{
+				threadArray[i].join();
+			}
+			catch (InterruptedException ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+
+		// Merge results from all threads
+		for (GetJsonStrListFromUrlStrListMT thread : threadArray)
+		{
+			// Merge jsonStrList
+			thread.getJsonStrList().forEach((jsonStr) ->
+			{
+				jsonStrList.add(jsonStr);
+			});
+		}
+
+		// Parce all json strings in jsonStrList
+		for (int i = jsonStrList.size()-1; i >= 0; i--)
+		{
+			String jsonStr = jsonStrList.get(i);
+
+			// Parse jsonStr into json element and get an object structure
+			JsonElement jElement = new JsonParser().parse(jsonStr);
+			JsonObject jObject = jElement.getAsJsonObject();
+
+			// Get the totalElements
+			int totalElements = jObject.get("totalElements").getAsInt();
+
+			// If there are no draw data, go to the next jsonStrList element
+			if (totalElements == 0) {continue;}
+
+			// Get the "content" json array
+			JsonArray content = jObject.getAsJsonArray("content");
+
+			for (JsonElement drawElement : content)
+			{
+				// Get the json object from this content json element
+				JsonObject drawObject = drawElement.getAsJsonObject();
+
+				// Create a JokerDrawData object from the json object
+				JokerDrawData jokerDraw = jokerJsonSingleDrawToObject(drawObject);
+				
+				// Add to the list
+				JokerDrawDataList.add(jokerDraw);
+			}
+		}
+
+
+		// Initialize PDFwriter
+		PdfWriter pdfWriter;
+		try
+		{
+			pdfWriter = new PdfWriter(path);
+		}
+		catch (FileNotFoundException ex)
+		{
+			String message = "Σφάλμα δημιουργίας αρχείου.\nΒεβαιωθείτε πως έχετε δικαίωμα εγγραφής στο φάκελο.";
+			JOptionPane.showMessageDialog(null, message, "Σφάλμα εγγραφής", 0);
+			return;
+		}
+
+		//Initialize PDF document
+		PdfDocument pdf = new PdfDocument(pdfWriter);
+
+		// Initialize document
+		Document document = new Document(pdf, PageSize.A4);
+		document.setProperty(Property.LEADING, new Leading(Leading.MULTIPLIED, 1.0f));
+		document.setMargins(10, 36, 10, 36); // (top, right, bottom, left)
+
+
+		// Create PdfFonts to be used in the pdf document
+		PdfFont fontRegular = null;
+		PdfFont fontBold = null;
+		try
+		{
+			fontRegular = PdfFontFactory.createFont(getClass().getResource("/resources/NotoSans-Regular.ttf").toString());
+			fontBold = PdfFontFactory.createFont(getClass().getResource("/resources/NotoSans-Bold.ttf").toString());
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			try
+			{
+				fontRegular = PdfFontFactory.createFont("Helvetica", "Cp1253");
+				fontBold = PdfFontFactory.createFont("Helvetica-Bold", "Cp1253");
+			}
+			catch (Exception ex1) {System.err.println(ex1);}
+		}
+
+
+		// Variables
+		BigDecimal bd;   // BigDecimal - used for rounding
+		int drawCount = 0;
+		double moneySum = 0;
+		int jackpotCount = 0;
+		int drawCountTotal = 0;
+		double moneySumTotal = 0;
+		int jackpotCountTotal = 0;
+		int tableCounter = 0;  // Used for adding a page break every 3 tables
+		JokerDrawData jokerDraw = JokerDrawDataList.get(JokerDrawDataList.size()-1);
+		String drawDate = jokerDraw.getDrawDate();
+		String year = drawDate.substring(0, 4);
+		String prevYear = drawDate.substring(0, 4);
+		String month = drawDate.substring(5, 7);
+		String prevMonth = drawDate.substring(5, 7);
+
+		// Add a title to the document
+		Paragraph par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.add(new Text(basename).setFont(fontBold).setFontSize(18));
+		document.add(par);
+
+		// Add the first year to the document
+		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		par.setMarginTop(3f).setMarginBottom(0f);
+		par.add(new Text(year).setFont(fontBold).setFontSize(14));
+		document.add(par);
+
+		// First table
+		Table table = new Table(UnitValue.createPercentArray(new float[]{50f, 70f, 100f, 40f}));
+		table.useAllAvailableWidth();
+
+		// Column 1 header
+		Paragraph header1 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		header1.setMarginTop(-4f).setMarginBottom(-1f);
+		header1.add(new Text("Μήνας").setFont(fontBold).setFontSize(11));
+		table.addHeaderCell(header1);
+
+		// Column 2 header
+		Paragraph header2 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		header2.setMarginTop(-4f).setMarginBottom(-1f);
+		header2.add(new Text("Πλήθος κληρώσεων").setFont(fontBold).setFontSize(11));
+		table.addHeaderCell(header2);
+
+		// Column 3 header
+		Paragraph header3 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		header3.setMarginTop(-4f).setMarginBottom(-1f);
+		header3.add(new Text("Χρήματα που διανεμήθηκαν (€)").setFont(fontBold).setFontSize(11));
+		table.addHeaderCell(header3);
+
+		// Column 4 header
+		Paragraph header4 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		header4.setMarginTop(-4f).setMarginBottom(-1f);
+		header4.add(new Text("Τζακ-ποτ").setFont(fontBold).setFontSize(11));
+		table.addHeaderCell(header4);
+
+
+		// Start the counters and sum
+		drawCount++;
+		moneySum += jokerDraw.getPrizeTier5_1dividend() + jokerDraw.getPrizeTier5dividend() +
+			jokerDraw.getPrizeTier4_1dividend() + jokerDraw.getPrizeTier4dividend() +
+			jokerDraw.getPrizeTier3_1dividend() + jokerDraw.getPrizeTier3dividend() +
+			jokerDraw.getPrizeTier2_1dividend() + jokerDraw.getPrizeTier1_1dividend();
+		if (jokerDraw.getPrizeTier5_1winners() == 0) {jackpotCount++;}
+
+		for (int i = JokerDrawDataList.size()-2; i >= 0; i--)
+		{
+			jokerDraw = JokerDrawDataList.get(i);
+
+			drawDate = jokerDraw.getDrawDate();
+			year = drawDate.substring(0, 4);
+			month = drawDate.substring(5, 7);
+
+
+			// If month has changed
+			if (!month.equals(prevMonth))
+			{
+				// Month name
+				String monthName = null;
+				switch (prevMonth)
+				{
+					case "01": monthName = "Ιανουάριος"; break;
+					case "02": monthName = "Φεβρουάριος"; break;
+					case "03": monthName = "Μάρτιος"; break;
+					case "04": monthName = "Απρίλιος"; break;
+					case "05": monthName = "Μάιος"; break;
+					case "06": monthName = "Ιούνιος"; break;
+					case "07": monthName = "Ιούλιος"; break;
+					case "08": monthName = "Αύγουστος"; break;
+					case "09": monthName = "Σεπτέμβριος"; break;
+					case "10": monthName = "Οκτώβριος"; break;
+					case "11": monthName = "Νοέμβριος"; break;
+					case "12": monthName = "Δεκέμβριος"; break;
+				}
+
+				// Round the moneySum and make it BigDecimal
+				bd = BigDecimal.valueOf(moneySum);
+				BigDecimal moneySumBD = bd.setScale(2, RoundingMode.HALF_UP);
+
+				// Add the data to the table
+				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.add(new Text(monthName).setFont(fontRegular).setFontSize(11));
+				table.addCell(par);
+
+				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.add(new Text(String.valueOf(drawCount)).setFont(fontRegular).setFontSize(11));
+				table.addCell(par);
+
+				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.add(new Text(String.valueOf(moneySumBD)).setFont(fontRegular).setFontSize(11));
+				table.addCell(par);
+
+				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.add(new Text(String.valueOf(jackpotCount)).setFont(fontRegular).setFontSize(11));
+				table.addCell(par);
+
+				// Add values to "Total" variables
+				drawCountTotal += drawCount;
+				moneySumTotal += moneySum;
+				jackpotCountTotal += jackpotCount;
+
+				// Reset the counters
+				drawCount = 0;
+				moneySum = 0;
+				jackpotCount = 0;
+			}
+
+			// If year has changed
+			if (!year.equals(prevYear))
+			{
+				// Round the moneySumTotal and make it BigDecimal
+				bd = BigDecimal.valueOf(moneySumTotal);
+				BigDecimal moneySumTotalBD = bd.setScale(2, RoundingMode.HALF_UP);
+
+				// Add "Total" row to the table
+				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.add(new Text("Σύνολο").setFont(fontBold).setFontSize(11));
+				table.addCell(par);
+
+				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.add(new Text(String.valueOf(drawCountTotal)).setFont(fontBold).setFontSize(11));
+				table.addCell(par);
+
+				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.add(new Text(String.valueOf(moneySumTotalBD)).setFont(fontBold).setFontSize(11));
+				table.addCell(par);
+
+				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.add(new Text(String.valueOf(jackpotCountTotal)).setFont(fontBold).setFontSize(11));
+				table.addCell(par);
+
+				// Add last table
+				document.add(table);
+
+				// Reset the "Total" counters
+				drawCountTotal = 0;
+				moneySumTotal = 0;
+				jackpotCountTotal = 0;
+
+				// Change page every 3 tables
+				tableCounter++;
+				if (tableCounter == 3)
+				{
+					document.add(new AreaBreak());
+					tableCounter = 0;
+				}
+
+				// Add new year
+				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+				par.setMarginTop(8f).setMarginBottom(0f);
+				par.add(new Text(year).setFont(fontBold).setFontSize(14));
+				document.add(par);
+
+				// Create table for the new year
+				table = new Table(UnitValue.createPercentArray(new float[]{50f, 70f, 100f, 40f}));
+				table.useAllAvailableWidth();
+				table.addHeaderCell(header1);
+				table.addHeaderCell(header2);
+				table.addHeaderCell(header3);
+				table.addHeaderCell(header4);
+			}
+
+			// Update the counters and sum
+			drawCount++;
+			moneySum += jokerDraw.getPrizeTier5_1dividend() + jokerDraw.getPrizeTier5dividend() +
+				jokerDraw.getPrizeTier4_1dividend() + jokerDraw.getPrizeTier4dividend() +
+				jokerDraw.getPrizeTier3_1dividend() + jokerDraw.getPrizeTier3dividend() +
+				jokerDraw.getPrizeTier2_1dividend() + jokerDraw.getPrizeTier1_1dividend();
+			if (jokerDraw.getPrizeTier5_1winners() == 0) {jackpotCount++;}
+
+			prevYear = drawDate.substring(0, 4);
+			prevMonth = drawDate.substring(5, 7);
+		}
+
+		// Month name
+		String monthName = null;
+		switch (prevMonth)
+		{
+			case "01": monthName = "Ιανουάριος"; break;
+			case "02": monthName = "Φεβρουάριος"; break;
+			case "03": monthName = "Μάρτιος"; break;
+			case "04": monthName = "Απρίλιος"; break;
+			case "05": monthName = "Μάιος"; break;
+			case "06": monthName = "Ιούνιος"; break;
+			case "07": monthName = "Ιούλιος"; break;
+			case "08": monthName = "Αύγουστος"; break;
+			case "09": monthName = "Σεπτέμβριος"; break;
+			case "10": monthName = "Οκτώβριος"; break;
+			case "11": monthName = "Νοέμβριος"; break;
+			case "12": monthName = "Δεκέμβριος"; break;
+		}
+
+		// Round the moneySum and make it BigDecimal
+		bd = BigDecimal.valueOf(moneySum);
+		BigDecimal moneySumBD = bd.setScale(2, RoundingMode.HALF_UP);
+
+		// Add the last data to the table
+		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.add(new Text(monthName).setFont(fontRegular).setFontSize(11));
+		table.addCell(par);
+
+		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.add(new Text(String.valueOf(drawCount)).setFont(fontRegular).setFontSize(11));
+		table.addCell(par);
+
+		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.add(new Text(String.valueOf(moneySumBD)).setFont(fontRegular).setFontSize(11));
+		table.addCell(par);
+
+		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.add(new Text(String.valueOf(jackpotCount)).setFont(fontRegular).setFontSize(11));
+		table.addCell(par);
+
+		// Add values to "Total" variables
+		drawCountTotal += drawCount;
+		moneySumTotal += moneySum;
+		jackpotCountTotal += jackpotCount;
+
+		// Round the moneySumTotal and make it BigDecimal
+		bd = BigDecimal.valueOf(moneySumTotal);
+		BigDecimal moneySumTotalBD = bd.setScale(2, RoundingMode.HALF_UP);
+
+		// Add "Total" row to the table
+		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.add(new Text("Έως " + lastDrawDate).setFont(fontBold).setFontSize(11));
+		table.addCell(par);
+
+		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.add(new Text(String.valueOf(drawCountTotal)).setFont(fontBold).setFontSize(11));
+		table.addCell(par);
+
+		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.add(new Text(String.valueOf(moneySumTotalBD)).setFont(fontBold).setFontSize(11));
+		table.addCell(par);
+
+		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.add(new Text(String.valueOf(jackpotCountTotal)).setFont(fontBold).setFontSize(11));
+		table.addCell(par);
+
+
+		// Add the last table
+		document.add(table);
+
+		// Close document
+		document.close();
+		pdf.close();
+	}
+
 
 	/**
 	 * Action of the buttonClose.
@@ -413,7 +974,7 @@ public class WindowShowData
 				labelTitle.setForeground(Color.ORANGE);
 
 				JLabel labelTitleShadow = new JLabel("Προβολή δεδομένων");
-				labelTitleShadow.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+				labelTitleShadow.setBorder(BorderFactory.createEmptyBorder(5, 1, 0, 0));
 				labelTitleShadow.setFont(new Font(null, 3, 42));
 				labelTitleShadow.setForeground(Color.BLUE);
 
@@ -580,13 +1141,35 @@ public class WindowShowData
 				dataViewTable.setPreferredScrollableViewportSize(dataViewTable.getPreferredSize());
 
 			dataViewPanel.add(new JScrollPane(dataViewTable), BorderLayout.NORTH);
+			dataViewPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, dataViewPanel.getMinimumSize().height));
+
+
+			// Data view panel
+			JPanel exportToPdfPanel = new JPanel();
+			exportToPdfPanel.setBorder(BorderFactory.createEmptyBorder(18, 0, 0, 0));
+			exportToPdfPanel.setLayout(new BoxLayout(exportToPdfPanel, BoxLayout.X_AXIS));
+			exportToPdfPanel.setBackground(backColor);
+
+				// Button export to pdf
+				JButton buttonExportToPdf = new JButton("Εξαγωγή συγκεντρωτικών δεδομένων σε αρχείο pdf (API)");
+				buttonExportToPdf.addActionListener(this::buttonExportToPdfActionPerformed);
+
+			exportToPdfPanel.add(Box.createHorizontalGlue());
+			exportToPdfPanel.add(buttonExportToPdf);
 
 		middlePanel.add(gameSelectAndDLPanel);
 		middlePanel.add(chooseMethodLabelPanel);
 		middlePanel.add(apiMethodPanel);
 		middlePanel.add(DBMethodPanel);
 		middlePanel.add(dataViewPanel);
+		middlePanel.add(exportToPdfPanel);
 		middlePanel.add(Box.createVerticalGlue());
+
+
+		// Empty expanding panel
+		JPanel expandingPanel = new JPanel();
+		expandingPanel.setLayout(new BorderLayout());
+		expandingPanel.setBackground(backColor);
 
 
 		/*
@@ -602,7 +1185,7 @@ public class WindowShowData
 			buttonClose.setPreferredSize(new Dimension(116, 26));
 			buttonClose.addActionListener(this::buttonCloseActionPerformed);
 
-		bottomPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
+		bottomPanel.add(Box.createHorizontalGlue());
 		bottomPanel.add(buttonClose);
 
 
@@ -612,10 +1195,11 @@ public class WindowShowData
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new Dimension(870, 510));
+		mainPanel.setPreferredSize(new Dimension(870, 542));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
+		mainPanel.add(expandingPanel);
 		mainPanel.add(bottomPanel);
 
 
@@ -629,12 +1213,13 @@ public class WindowShowData
 		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new Dimension(880, 540));
+		dialog.setMinimumSize(new Dimension(880, 572));
 		dialog.setResizable(false);
 		dialog.setIconImages(icons);
 
 		// Populate comboBoxYearSelect
 		populateComboBoxYearSelect();
+		CompletableFuture.runAsync(() -> findLastDrawDate());  // Run asynchronously
 
 		dialog.setVisible(true);
 	}

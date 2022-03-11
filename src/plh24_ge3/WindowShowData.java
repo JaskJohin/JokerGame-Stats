@@ -611,7 +611,7 @@ public class WindowShowData
 		// Initialize document
 		Document document = new Document(pdf, PageSize.A4);
 		document.setProperty(Property.LEADING, new Leading(Leading.MULTIPLIED, 1.0f));
-		document.setMargins(10, 36, 10, 36); // (top, right, bottom, left)
+		document.setMargins(20, 36, 10, 36); // (top, right, bottom, left)
 
 
 		// Create PdfFonts to be used in the pdf document
@@ -652,7 +652,7 @@ public class WindowShowData
 
 		// Add a title to the document
 		Paragraph par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.setMarginTop(-18.37f).setMarginBottom(-6f);
 		par.add(new Text(basename).setFont(fontBold).setFontSize(18));
 		document.add(par);
 

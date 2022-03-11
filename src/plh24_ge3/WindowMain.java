@@ -95,7 +95,7 @@ public class WindowMain
 				labelTitle.setForeground(Color.ORANGE);
 
 				JLabel labelTitleShadow = new JLabel("Τζόκερ stats");
-				labelTitleShadow.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+				labelTitleShadow.setBorder(BorderFactory.createEmptyBorder(5, 1, 0, 0));
 				labelTitleShadow.setFont(new Font(null, 3, 53));
 				labelTitleShadow.setForeground(Color.BLUE);
 

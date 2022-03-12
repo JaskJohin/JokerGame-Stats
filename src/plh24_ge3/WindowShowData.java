@@ -23,6 +23,7 @@ import com.itextpdf.layout.properties.UnitValue;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.DriverManager;
@@ -932,6 +933,10 @@ public class WindowShowData
 	// Constructor
 	public WindowShowData()
 	{
+		// Background color
+		Color backColor = new java.awt.Color(244, 244, 250);
+
+
 		// Icons list
 		final List<Image> icons = new ArrayList<>();
 		try
@@ -952,8 +957,17 @@ public class WindowShowData
 		}
 
 
-		// Background color
-		Color backColor = new java.awt.Color(244, 244, 250);
+		// Font
+		Font fontRobotoRegular = null;
+		try
+		{
+			fontRobotoRegular = Font.createFont(Font.PLAIN, getClass().getResourceAsStream("/resources/Roboto-Regular.ttf"));
+		}
+		catch (FontFormatException | IOException ex)
+		{
+			System.err.println(ex);
+			fontRobotoRegular = new Font("Dialog", 0, 12);  // Fallback, not suppose to happen
+		}
 
 
 		/*
@@ -992,12 +1006,12 @@ public class WindowShowData
 		middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 		middlePanel.setBackground(backColor);
 
-			// Game selection & download panel
-			JPanel gameSelectAndDLPanel = new JPanel();
-			gameSelectAndDLPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-			gameSelectAndDLPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
-			gameSelectAndDLPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameSelectAndDLPanel.getMinimumSize().height));
-			gameSelectAndDLPanel.setBackground(backColor);
+			// Game selection & year selection panel
+			JPanel gameSelectPanel = new JPanel();
+			gameSelectPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			gameSelectPanel.setLayout(new FlowLayout(0, 0, 0));  // align,hgap,vgap (1,5,5)
+			gameSelectPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameSelectPanel.getMinimumSize().height));
+			gameSelectPanel.setBackground(backColor);
 
 				// Label game select
 				JLabel labelGameSelect = new JLabel("Επιλέξτε τυχερό παιχνίδι");
@@ -1008,92 +1022,116 @@ public class WindowShowData
 				comboBoxGameSelect.addActionListener(this::comboBoxGameSelectActionPerformed);
 				comboBoxGameSelect.setBackground(backColor);
 
-				// Button download
-				JButton buttonDownload = new JButton("Προβολή συγκεντρωτικών δεδομένων ανά μήνα για το έτος");
-				buttonDownload.addActionListener((evt) ->
-				{
-					CompletableFuture.runAsync(() -> this.buttonDownloadActionPerformed(evt));
-				});
+				// Label year
+				JLabel labelYear = new JLabel("Έτος");
+				labelYear.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 6));
 
 				// ComboBox year select
 				comboBoxYearSelect = new JComboBox();
 				comboBoxYearSelect.setBackground(backColor);
 
-			gameSelectAndDLPanel.add(labelGameSelect);
-			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(10,0)));
-			gameSelectAndDLPanel.add(comboBoxGameSelect);
-			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(50,0)));
-			gameSelectAndDLPanel.add(buttonDownload);
-			gameSelectAndDLPanel.add(Box.createRigidArea(new Dimension(6,0)));
-			gameSelectAndDLPanel.add(comboBoxYearSelect);
+			gameSelectPanel.add(labelGameSelect);
+			gameSelectPanel.add(Box.createRigidArea(new Dimension(10,0)));
+			gameSelectPanel.add(comboBoxGameSelect);
+			gameSelectPanel.add(Box.createRigidArea(new Dimension(50,0)));
+			gameSelectPanel.add(labelYear);
+			gameSelectPanel.add(comboBoxYearSelect);
+			gameSelectPanel.add(Box.createRigidArea(new Dimension(50,0)));
 
 
 			// Choose search method label panel
 			JPanel chooseMethodLabelPanel = new JPanel();
 			chooseMethodLabelPanel.setBorder(BorderFactory.createEmptyBorder(12, 0, 0, 0));
 			chooseMethodLabelPanel.setLayout(new FlowLayout(0, 0, 0));
-			chooseMethodLabelPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, chooseMethodLabelPanel.getMinimumSize().height));
 			chooseMethodLabelPanel.setBackground(backColor);
 
 				// Label choose method
 				JLabel labelChooseMethod = new JLabel("Επιλέξτε από που θέλετε να αντληθούν τα δεδομένα");
 
 			chooseMethodLabelPanel.add(labelChooseMethod);
+			chooseMethodLabelPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, chooseMethodLabelPanel.getMinimumSize().height));
 
 
-			// API method panel
-			JPanel apiMethodPanel = new JPanel();
-			apiMethodPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
-			apiMethodPanel.setLayout(new FlowLayout(0, 0, 0));
-			apiMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, apiMethodPanel.getMinimumSize().height));
-			apiMethodPanel.setBackground(backColor);
+			// Choose search method and download panel
+			JPanel chooseMethodAndDLPanel = new JPanel();
+			chooseMethodAndDLPanel.setLayout(new BoxLayout(chooseMethodAndDLPanel, BoxLayout.X_AXIS));
+			chooseMethodAndDLPanel.setBackground(backColor);
 
-				// Radio button for API method
-				radioButtonApi = new JRadioButton();
-				radioButtonApi.setText("API");
-				radioButtonApi.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-				radioButtonApi.setBackground(backColor);
-				radioButtonApi.setSelected(true);
+				// Choose search method panel
+				JPanel chooseMethodPanel = new JPanel();
+				chooseMethodPanel.setLayout(new BoxLayout(chooseMethodPanel, BoxLayout.Y_AXIS));
+				chooseMethodPanel.setBackground(backColor);
 
-				// Label API method info
-				JLabel labelApiInfo = new JLabel("(Η βάση δεδομένων δε θα πειραχθεί)");
-				labelApiInfo.setBorder(BorderFactory.createEmptyBorder(1, 107, 0, 0));
-				labelApiInfo.setFont(new Font("Arial", 0, 12));
-				labelApiInfo.setForeground(Color.DARK_GRAY);
+					// API method panel
+					JPanel apiMethodPanel = new JPanel();
+					apiMethodPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+					apiMethodPanel.setLayout(new FlowLayout(0, 0, 0));
+					apiMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, apiMethodPanel.getMinimumSize().height));
+					apiMethodPanel.setBackground(backColor);
 
-			apiMethodPanel.add(radioButtonApi);
-			apiMethodPanel.add(labelApiInfo);
-			apiMethodPanel.add(Box.createRigidArea(new Dimension(79,0)));
+						// Radio button for API method
+						radioButtonApi = new JRadioButton();
+						radioButtonApi.setText("API");
+						radioButtonApi.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+						radioButtonApi.setBackground(backColor);
+						radioButtonApi.setSelected(true);
+
+						// Label API method info
+						JLabel labelApiInfo = new JLabel("(Η βάση δεδομένων δε θα πειραχθεί)");
+						labelApiInfo.setBorder(BorderFactory.createEmptyBorder(1, 107, 0, 0));
+						labelApiInfo.setFont(fontRobotoRegular.deriveFont(0, 12));
+						labelApiInfo.setForeground(Color.DARK_GRAY);
+
+					apiMethodPanel.add(radioButtonApi);
+					apiMethodPanel.add(labelApiInfo);
+					apiMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, apiMethodPanel.getMinimumSize().height));
 
 
-			// DB method panel
-			JPanel DBMethodPanel = new JPanel();
-			DBMethodPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
-			DBMethodPanel.setLayout(new FlowLayout(0, 0, 0));
-			DBMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, DBMethodPanel.getMinimumSize().height));
-			DBMethodPanel.setBackground(backColor);
+					// DB method panel
+					JPanel DBMethodPanel = new JPanel();
+					DBMethodPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+					DBMethodPanel.setLayout(new FlowLayout(0, 0, 0));
+					DBMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, DBMethodPanel.getMinimumSize().height));
+					DBMethodPanel.setBackground(backColor);
 
-				// Radio button for DB method
-				JRadioButton radioButtonDB = new JRadioButton();
-				radioButtonDB.setText("Βάση δεδομένων");
-				radioButtonDB.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-				radioButtonDB.setBackground(backColor);
-				radioButtonDB.setSelected(false);
+						// Radio button for DB method
+						JRadioButton radioButtonDB = new JRadioButton();
+						radioButtonDB.setText("Βάση δεδομένων");
+						radioButtonDB.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+						radioButtonDB.setBackground(backColor);
+						radioButtonDB.setSelected(false);
 
-				// Group radio butttons
-				ButtonGroup groupChooseMethod = new ButtonGroup();
-				groupChooseMethod.add(radioButtonApi);
-				groupChooseMethod.add(radioButtonDB);
+						// Group radio butttons
+						ButtonGroup groupChooseMethod = new ButtonGroup();
+						groupChooseMethod.add(radioButtonApi);
+						groupChooseMethod.add(radioButtonDB);
 
-				// Label DB method info
-				JLabel labelDBInfo = new JLabel("(Αν τα δεδομένα δεν υπάρχουν ήδη, τότε θα προστεθούν στη βάση δεδομένων)");
-				labelDBInfo.setBorder(BorderFactory.createEmptyBorder(1, 30, 0, 0));
-				labelDBInfo.setFont(new Font("Arial", 0, 12));
-				labelDBInfo.setForeground(Color.DARK_GRAY);
+						// Label DB method info
+						JLabel labelDBInfo = new JLabel("(Αν τα δεδομένα δεν υπάρχουν ήδη, τότε θα προστεθούν στη βάση)");
+						labelDBInfo.setBorder(BorderFactory.createEmptyBorder(1, 30, 0, 0));
+						labelDBInfo.setFont(fontRobotoRegular.deriveFont(0, 12));
+						labelDBInfo.setForeground(Color.DARK_GRAY);
 
-			DBMethodPanel.add(radioButtonDB);
-			DBMethodPanel.add(labelDBInfo);
-			DBMethodPanel.add(Box.createRigidArea(new Dimension(79,0)));
+					DBMethodPanel.add(radioButtonDB);
+					DBMethodPanel.add(labelDBInfo);
+					DBMethodPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, DBMethodPanel.getMinimumSize().height));
+
+				chooseMethodPanel.add(apiMethodPanel);
+				chooseMethodPanel.add(DBMethodPanel);
+
+
+				// Button download
+				JButton buttonDownload = new JButton("Προβολή συγκεντρωτικών");
+				buttonDownload.setPreferredSize(new Dimension(buttonDownload.getMinimumSize().width, 46));
+				buttonDownload.setMaximumSize(new Dimension(buttonDownload.getMinimumSize().width, 46));
+				buttonDownload.setText("<html><center>Προβολή συγκεντρωτικών<br>δεδομένων ανά μήνα</center></html>");
+				buttonDownload.addActionListener((evt) ->
+				{
+					CompletableFuture.runAsync(() -> this.buttonDownloadActionPerformed(evt));
+				});
+
+			chooseMethodAndDLPanel.add(chooseMethodPanel);
+			chooseMethodAndDLPanel.add(buttonDownload);
 
 
 			// Data view panel
@@ -1157,10 +1195,9 @@ public class WindowShowData
 			exportToPdfPanel.add(Box.createHorizontalGlue());
 			exportToPdfPanel.add(buttonExportToPdf);
 
-		middlePanel.add(gameSelectAndDLPanel);
+		middlePanel.add(gameSelectPanel);
 		middlePanel.add(chooseMethodLabelPanel);
-		middlePanel.add(apiMethodPanel);
-		middlePanel.add(DBMethodPanel);
+		middlePanel.add(chooseMethodAndDLPanel);
 		middlePanel.add(dataViewPanel);
 		middlePanel.add(exportToPdfPanel);
 		middlePanel.add(Box.createVerticalGlue());

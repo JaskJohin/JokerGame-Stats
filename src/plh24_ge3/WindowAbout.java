@@ -123,18 +123,18 @@ public class WindowAbout
 		}
 
 		// Font
-		Font fontNotoSansRegular = null;
-		Font fontNotoSansBold = null;
+		Font fontRobotoRegular = null;
+		Font fontRobotoBold = null;
 		try
 		{
-			fontNotoSansRegular = Font.createFont(Font.PLAIN, getClass().getResourceAsStream("/resources/NotoSans-Regular.ttf"));
-			fontNotoSansBold = Font.createFont(Font.PLAIN, getClass().getResourceAsStream("/resources/NotoSans-Bold.ttf"));
+			fontRobotoRegular = Font.createFont(Font.PLAIN, getClass().getResourceAsStream("/resources/Roboto-Regular.ttf"));
+			fontRobotoBold = Font.createFont(Font.PLAIN, getClass().getResourceAsStream("/resources/Roboto-Bold.ttf"));
 		}
 		catch (FontFormatException | IOException ex)
 		{
 			System.err.println(ex);
-			fontNotoSansRegular = new Font(null, 0, 22);  // Fallback, not suppose to happen
-			fontNotoSansBold = new Font(null, 1, 22);  // Fallback, not suppose to happen
+			fontRobotoRegular = new Font(null, 0, 22);  // Fallback, not suppose to happen
+			fontRobotoBold = new Font(null, 1, 22);  // Fallback, not suppose to happen
 		}
 
 
@@ -181,7 +181,7 @@ public class WindowAbout
 				JPanel labelDescriptionPanel = new JPanel(new FlowLayout(0, 0, 0));
 				labelDescriptionPanel.setBackground(backColor);
 					JLabel labelDescription = new JLabel("Αναζήτηση και προβολή κληρώσεων και στατιστικών του παιχνιδιού Τζόκερ.");
-					labelDescription.setFont(fontNotoSansBold.deriveFont(1, 12));
+					labelDescription.setFont(fontRobotoBold.deriveFont(1, 12));
 				labelDescriptionPanel.add(labelDescription);
 				labelDescriptionPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelDescriptionPanel.getMinimumSize().height));
 
@@ -190,132 +190,139 @@ public class WindowAbout
 				JPanel labelAuthorsPanel = new JPanel(new FlowLayout(0, 0, 0));
 				labelAuthorsPanel.setBackground(backColor);
 					JLabel labelAuthors = new JLabel("Δημιουργοί:");
-					labelAuthors.setFont(fontNotoSansBold.deriveFont(1, 12));
+					labelAuthors.setFont(fontRobotoBold.deriveFont(1, 12));
 				labelAuthorsPanel.add(labelAuthors);
-				labelAuthorsPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelAuthorsPanel.getMinimumSize().height));
+				labelAuthorsPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelAuthorsPanel.getMinimumSize().height + 1));
 
 				JPanel author1Panel = new JPanel(new FlowLayout(0, 0, 0));
 				author1Panel.setBackground(backColor);
 					labelAuthor1 = new JLabel("    " + authorList.get(0));
-					labelAuthor1.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					labelAuthor1.setFont(fontRobotoRegular.deriveFont(0, 12));
 				author1Panel.add(labelAuthor1);
-				author1Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, author1Panel.getMinimumSize().height));
+				author1Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, author1Panel.getMinimumSize().height + 1));
 
 				JPanel author2Panel = new JPanel(new FlowLayout(0, 0, 0));
 				author2Panel.setBackground(backColor);
 					labelAuthor2 = new JLabel("    " + authorList.get(1));
-					labelAuthor2.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					labelAuthor2.setFont(fontRobotoRegular.deriveFont(0, 12));
 				author2Panel.add(labelAuthor2);
-				author2Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, author2Panel.getMinimumSize().height));
+				author2Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, author2Panel.getMinimumSize().height + 1));
 
 				JPanel author3Panel = new JPanel(new FlowLayout(0, 0, 0));
 				author3Panel.setBackground(backColor);
 					labelAuthor3 = new JLabel("    " + authorList.get(2));
-					labelAuthor3.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					labelAuthor3.setFont(fontRobotoRegular.deriveFont(0, 12));
 				author3Panel.add(labelAuthor3);
-				author3Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, author3Panel.getMinimumSize().height));
+				author3Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, author3Panel.getMinimumSize().height + 1));
 
 				JPanel author4Panel = new JPanel(new FlowLayout(0, 0, 0));
 				author4Panel.setBackground(backColor);
 					labelAuthor4 = new JLabel("    " + authorList.get(3));
-					labelAuthor4.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					labelAuthor4.setFont(fontRobotoRegular.deriveFont(0, 12));
 				author4Panel.add(labelAuthor4);
-				author4Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, author4Panel.getMinimumSize().height));
+				author4Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, author4Panel.getMinimumSize().height + 1));
 
 
 				// Libraries labels
 				JPanel labelLibrariesPanel = new JPanel(new FlowLayout(0, 0, 0));
 				labelLibrariesPanel.setBackground(backColor);
 					JLabel labelLibraries = new JLabel("Χρησιμοποιούνται οι βιβλιοθήκες:");
-					labelLibraries.setFont(fontNotoSansBold.deriveFont(1, 12));
+					labelLibraries.setFont(fontRobotoBold.deriveFont(1, 12));
 				labelLibrariesPanel.add(labelLibraries);
-				labelLibrariesPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelLibrariesPanel.getMinimumSize().height));
+				labelLibrariesPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelLibrariesPanel.getMinimumSize().height + 1));
 
 				JPanel library1Panel = new JPanel(new FlowLayout(0, 0, 0));
 				library1Panel.setBackground(backColor);
-					JLabel labelLibrary1 = new JLabel("    " + "EclipseLink        (Eclipse Public License v1.0)");
-					labelLibrary1.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					JLabel labelLibrary1 = new JLabel("    " + "EclipseLink       (Eclipse Public License v1.0)");
+					labelLibrary1.setFont(fontRobotoRegular.deriveFont(0, 12));
 				library1Panel.add(labelLibrary1);
-				library1Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library1Panel.getMinimumSize().height));
+				library1Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library1Panel.getMinimumSize().height + 1));
 
 				JPanel library2Panel = new JPanel(new FlowLayout(0, 0, 0));
 				library2Panel.setBackground(backColor);
-					JLabel labelLibrary2 = new JLabel("    " + "Apache Derby  (Apache License 2.0)");
-					labelLibrary2.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					JLabel labelLibrary2 = new JLabel("    " + "Apache Derby  (Apache License v2.0)");
+					labelLibrary2.setFont(fontRobotoRegular.deriveFont(0, 12));
 				library2Panel.add(labelLibrary2);
-				library2Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library2Panel.getMinimumSize().height));
+				library2Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library2Panel.getMinimumSize().height + 1));
 
 				JPanel library3Panel = new JPanel(new FlowLayout(0, 0, 0));
 				library3Panel.setBackground(backColor);
-					JLabel labelLibrary3 = new JLabel("    " + "Gson                   (Apache License 2.0)");
-					labelLibrary3.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					JLabel labelLibrary3 = new JLabel("    " + "Gson                  (Apache License v2.0)");
+					labelLibrary3.setFont(fontRobotoRegular.deriveFont(0, 12));
 				library3Panel.add(labelLibrary3);
-				library3Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library3Panel.getMinimumSize().height));
+				library3Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library3Panel.getMinimumSize().height + 1));
 
 				JPanel library4Panel = new JPanel(new FlowLayout(0, 0, 0));
 				library4Panel.setBackground(backColor);
-					JLabel labelLibrary4 = new JLabel("    " + "OkHttp                (Apache License 2.0)");
-					labelLibrary4.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					JLabel labelLibrary4 = new JLabel("    " + "OkHttp               (Apache License v2.0)");
+					labelLibrary4.setFont(fontRobotoRegular.deriveFont(0, 12));
 				library4Panel.add(labelLibrary4);
-				library4Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library4Panel.getMinimumSize().height));
+				library4Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library4Panel.getMinimumSize().height + 1));
 
 				JPanel library5Panel = new JPanel(new FlowLayout(0, 0, 0));
 				library5Panel.setBackground(backColor);
-					JLabel labelLibrary5 = new JLabel("    " + "Okio                    (Apache License 2.0)");
-					labelLibrary5.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					JLabel labelLibrary5 = new JLabel("    " + "Okio                    (Apache License v2.0)");
+					labelLibrary5.setFont(fontRobotoRegular.deriveFont(0, 12));
 				library5Panel.add(labelLibrary5);
-				library5Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library5Panel.getMinimumSize().height));
+				library5Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library5Panel.getMinimumSize().height + 1));
 
 				JPanel library6Panel = new JPanel(new FlowLayout(0, 0, 0));
 				library6Panel.setBackground(backColor);
-					JLabel labelLibrary6 = new JLabel("    " + "Kotlin stdlib       (Apache License 2.0)");
-					labelLibrary6.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					JLabel labelLibrary6 = new JLabel("    " + "Kotlin stdlib      (Apache License v2.0)");
+					labelLibrary6.setFont(fontRobotoRegular.deriveFont(0, 12));
 				library6Panel.add(labelLibrary6);
-				library6Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library6Panel.getMinimumSize().height));
+				library6Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library6Panel.getMinimumSize().height + 1));
 
 				JPanel library7Panel = new JPanel(new FlowLayout(0, 0, 0));
 				library7Panel.setBackground(backColor);
-					JLabel labelLibrary7 = new JLabel("    " + "JFreeChart         (GNU Lesser General Public Licence v2.1)");
-					labelLibrary7.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					JLabel labelLibrary7 = new JLabel("    " + "JFreeChart        (GNU Lesser General Public Licence v2.1)");
+					labelLibrary7.setFont(fontRobotoRegular.deriveFont(0, 12));
 				library7Panel.add(labelLibrary7);
-				library7Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library7Panel.getMinimumSize().height));
+				library7Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library7Panel.getMinimumSize().height + 1));
 
 				JPanel library8Panel = new JPanel(new FlowLayout(0, 0, 0));
 				library8Panel.setBackground(backColor);
-					JLabel labelLibrary8 = new JLabel("    " + "iTextPDF 7         (Affero General Public License v3)");
-					labelLibrary8.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					JLabel labelLibrary8 = new JLabel("    " + "iTextPDF 7        (Affero General Public License v3)");
+					labelLibrary8.setFont(fontRobotoRegular.deriveFont(0, 12));
 				library8Panel.add(labelLibrary8);
-				library8Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library8Panel.getMinimumSize().height));
+				library8Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library8Panel.getMinimumSize().height + 1));
 
 				JPanel library9Panel = new JPanel(new FlowLayout(0, 0, 0));
 				library9Panel.setBackground(backColor);
-					JLabel labelLibrary9 = new JLabel("    " + "SLF4J                   (MIT license)");
-					labelLibrary9.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					JLabel labelLibrary9 = new JLabel("    " + "SLF4J                (MIT license)");
+					labelLibrary9.setFont(fontRobotoRegular.deriveFont(0, 12));
 				library9Panel.add(labelLibrary9);
-				library9Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library9Panel.getMinimumSize().height));
+				library9Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, library9Panel.getMinimumSize().height + 1));
 
 
 				// Fonts labels
 				JPanel labelFontsPanel = new JPanel(new FlowLayout(0, 0, 0));
 				labelFontsPanel.setBackground(backColor);
-					JLabel labelFonts = new JLabel("και η γραμματοσειρά:");
-					labelFonts.setFont(fontNotoSansBold.deriveFont(1, 12));
+					JLabel labelFonts = new JLabel("και οι γραμματοσειρές:");
+					labelFonts.setFont(fontRobotoBold.deriveFont(1, 12));
 				labelFontsPanel.add(labelFonts);
-				labelFontsPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelFontsPanel.getMinimumSize().height));
+				labelFontsPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelFontsPanel.getMinimumSize().height + 1));
 
 				JPanel font1Panel = new JPanel(new FlowLayout(0, 0, 0));
 				font1Panel.setBackground(backColor);
-					JLabel labelFont1 = new JLabel("    " + "NotoSans           (SIL Open Font License v1.1)");
-					labelFont1.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					JLabel labelFont1 = new JLabel("    " + "NotoSans         (SIL Open Font License v1.1)");
+					labelFont1.setFont(fontRobotoRegular.deriveFont(0, 12));
 				font1Panel.add(labelFont1);
-				font1Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, font1Panel.getMinimumSize().height));
+				font1Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, font1Panel.getMinimumSize().height + 1));
+
+				JPanel font2Panel = new JPanel(new FlowLayout(0, 0, 0));
+				font2Panel.setBackground(backColor);
+					JLabel labelFont2 = new JLabel("    " + "Roboto              (Apache License v2.0)");
+					labelFont2.setFont(fontRobotoRegular.deriveFont(0, 12));
+				font2Panel.add(labelFont2);
+				font2Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, font2Panel.getMinimumSize().height + 1));
 
 
 				// License label
 				JPanel labelLicensePanel = new JPanel(new FlowLayout(0, 0, 0));
 				labelLicensePanel.setBackground(backColor);
 					JLabel labelLicense = new JLabel("Αυτό το πρόγραμμα διατείθεται υπό την άδεια BSD License 2.0.");
-					labelLicense.setFont(fontNotoSansBold.deriveFont(1, 12));
+					labelLicense.setFont(fontRobotoBold.deriveFont(1, 12));
 				labelLicensePanel.add(labelLicense);
 				labelLicensePanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelLicensePanel.getMinimumSize().height));
 
@@ -341,6 +348,7 @@ public class WindowAbout
 			middlePanelInfo.add(Box.createRigidArea(new Dimension(0, 2)));
 			middlePanelInfo.add(labelFontsPanel);
 			middlePanelInfo.add(font1Panel);
+			middlePanelInfo.add(font2Panel);
 			middlePanelInfo.add(Box.createRigidArea(new Dimension(0, 16)));
 			middlePanelInfo.add(labelLicensePanel);
 
@@ -394,7 +402,7 @@ public class WindowAbout
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new java.awt.Dimension(596, 526));
+		mainPanel.setPreferredSize(new java.awt.Dimension(596, 520));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanelCards);

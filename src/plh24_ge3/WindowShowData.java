@@ -265,12 +265,6 @@ public class WindowShowData
 			JsonElement jElement = new JsonParser().parse(jsonStr);
 			JsonObject jObject = jElement.getAsJsonObject();
 
-			// Get the totalElements
-			int totalElements = jObject.get("totalElements").getAsInt();
-
-			// If there are no draw data, go to the next jsonStrList element
-			if (totalElements == 0) {continue;}
-
 			// Get the "content" json array
 			JsonArray content = jObject.getAsJsonArray("content");
 
@@ -300,6 +294,25 @@ public class WindowShowData
 			dataViewTable.setValueAt(moneySumBD, i, 2);
 			dataViewTable.setValueAt(jackpotCount, i, 3);
 		}
+
+		// Calculate the "total" row
+		int totalDrawCount = 0;
+		double totalMoneySum = 0;
+		int totalJackpotCount = 0;
+
+		for (int i = 0; i < 12; i++)
+		{
+			totalDrawCount += (int) dataViewTable.getValueAt(i, 1);
+			totalMoneySum += ((BigDecimal) dataViewTable.getValueAt(i, 2)).doubleValue();
+			totalJackpotCount += (int) dataViewTable.getValueAt(i, 3);
+		}
+
+		bd = BigDecimal.valueOf(totalMoneySum);
+		BigDecimal totalMoneySumBD = bd.setScale(2, RoundingMode.HALF_UP);
+
+		dataViewTable.setValueAt(totalDrawCount, 12, 1);
+		dataViewTable.setValueAt(totalMoneySumBD, 12, 2);
+		dataViewTable.setValueAt(totalJackpotCount, 12, 3);
 	}
 
 
@@ -384,7 +397,26 @@ public class WindowShowData
 			dataViewTable.setValueAt(drawCount, i, 1);
 			dataViewTable.setValueAt(moneySumBD, i, 2);
 			dataViewTable.setValueAt(jackpotCount, i, 3);
-		} 
+		}
+
+		// Calculate the "total" row
+		int totalDrawCount = 0;
+		double totalMoneySum = 0;
+		int totalJackpotCount = 0;
+
+		for (int i = 0; i < 12; i++)
+		{
+			totalDrawCount += (int) dataViewTable.getValueAt(i, 1);
+			totalMoneySum += ((BigDecimal) dataViewTable.getValueAt(i, 2)).doubleValue();
+			totalJackpotCount += (int) dataViewTable.getValueAt(i, 3);
+		}
+
+		BigDecimal bd = BigDecimal.valueOf(totalMoneySum);
+		BigDecimal totalMoneySumBD = bd.setScale(2, RoundingMode.HALF_UP);
+
+		dataViewTable.setValueAt(totalDrawCount, 12, 1);
+		dataViewTable.setValueAt(totalMoneySumBD, 12, 2);
+		dataViewTable.setValueAt(totalJackpotCount, 12, 3);
 	}
 
 
@@ -1156,6 +1188,7 @@ public class WindowShowData
 					{"Οκτώβριος", "", "", ""},
 					{"Νοέμβριος", "", "", ""},
 					{"Δεκέμβριος", "", "", ""},
+					{"ΣΥΝΟΛΟ", "", "", ""},
 				};
 
 				// Center renderer for table columns
@@ -1232,7 +1265,7 @@ public class WindowShowData
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new Dimension(870, 542));
+		mainPanel.setPreferredSize(new Dimension(870, 558));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
@@ -1250,7 +1283,7 @@ public class WindowShowData
 		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new Dimension(880, 572));
+		dialog.setMinimumSize(new Dimension(880, 588));
 		dialog.setResizable(false);
 		dialog.setIconImages(icons);
 

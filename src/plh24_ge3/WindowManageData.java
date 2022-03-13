@@ -3,6 +3,8 @@ package plh24_ge3;
 import com.google.gson.*;
 import java.awt.*;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -468,11 +470,15 @@ public class WindowManageData
 					"<font face=\"arial\" color=\"rgb(210,105,0)\">  " + n6 +
 					"</font></pre></html>";
 
+				// Round the PrizeTier5_1dividend and make it BigDecimal
+				BigDecimal bd = BigDecimal.valueOf(jokerDraw.getPrizeTier5_1dividend());
+				BigDecimal prizeTier5_1dividendBD = bd.setScale(2, RoundingMode.HALF_UP);
+
 				// Add a row to jokerDRTable
 				modeljokerDRTable.addRow(new Object[] {
 					jokerDraw.getDrawId(), jokerDraw.getDrawDate(),
 					jokerDraw.getColumns(), winCol,
-					jokerDraw.getPrizeTier5_1winners(), jokerDraw.getPrizeTier5_1dividend(),
+					jokerDraw.getPrizeTier5_1winners(), prizeTier5_1dividendBD,
 					jokerDraw.getPrizeTier5winners(),   jokerDraw.getPrizeTier5dividend(),
 					jokerDraw.getPrizeTier4_1winners(), jokerDraw.getPrizeTier4_1dividend(),
 					jokerDraw.getPrizeTier4winners(),   jokerDraw.getPrizeTier4dividend(),
@@ -962,15 +968,15 @@ public class WindowManageData
 
 
 		// Font
-		Font fontNotoSansRegular = null;
+		Font fontRobotoRegular = null;
 		try
 		{
-			fontNotoSansRegular = Font.createFont(Font.PLAIN, getClass().getResourceAsStream("/resources/NotoSans-Regular.ttf"));
+			fontRobotoRegular = Font.createFont(Font.PLAIN, getClass().getResourceAsStream("/resources/Roboto-Regular.ttf"));
 		}
 		catch (FontFormatException | IOException ex)
 		{
 			System.err.println(ex);
-			fontNotoSansRegular = new Font(null, 0, 22);  // Fallback, not suppose to happen
+			fontRobotoRegular = new Font("Dialog", 0, 12);  // Fallback, not suppose to happen
 		}
 
 
@@ -1029,7 +1035,7 @@ public class WindowManageData
 
 				// Label with info of the last and next draw
 				labelDrawInfo = new JLabel();
-				labelDrawInfo.setFont(new Font("Arial", 0, 12));
+				labelDrawInfo.setFont(fontRobotoRegular.deriveFont(0, 12));
 				labelDrawInfo.setForeground(Color.DARK_GRAY);
 
 			gameSelectPanel.add(labelGameSelect);
@@ -1434,48 +1440,48 @@ public class WindowManageData
 
 					// JTable for Joker date range
 					jokerDRTable = new JTable(modeljokerDRTable);
-					jokerDRTable.getTableHeader().setFont(fontNotoSansRegular.deriveFont(0, 12));
-					jokerDRTable.setFont(fontNotoSansRegular.deriveFont(0, 12));
+					jokerDRTable.getTableHeader().setFont(fontRobotoRegular.deriveFont(0, 12));
+					jokerDRTable.setFont(fontRobotoRegular.deriveFont(0, 12));
 					jokerDRTable.getColumnModel().getColumn(0).setCellRenderer(centerText); // Draw
 					jokerDRTable.getColumnModel().getColumn(0).setMinWidth(62);
 					jokerDRTable.getColumnModel().getColumn(1).setCellRenderer(centerText); // Date
-					jokerDRTable.getColumnModel().getColumn(1).setMinWidth(75); //71min
+					jokerDRTable.getColumnModel().getColumn(1).setMinWidth(71); //71min
 					jokerDRTable.getColumnModel().getColumn(2).setCellRenderer(centerText); // Columns
 					jokerDRTable.getColumnModel().getColumn(2).setMinWidth(63);
 					jokerDRTable.getColumnModel().getColumn(3).setCellRenderer(centerText); // Win numbers
 					jokerDRTable.getColumnModel().getColumn(3).setMinWidth(139); //118min
 					jokerDRTable.getColumnModel().getColumn(4).setCellRenderer(centerText); // 5+1
-					jokerDRTable.getColumnModel().getColumn(4).setMinWidth(59); //53min
+					jokerDRTable.getColumnModel().getColumn(4).setMinWidth(54); //53min
 					jokerDRTable.getColumnModel().getColumn(5).setCellRenderer(centerText); // 5+1
-					jokerDRTable.getColumnModel().getColumn(5).setMinWidth(92);
+					jokerDRTable.getColumnModel().getColumn(5).setMinWidth(80);
 					jokerDRTable.getColumnModel().getColumn(6).setCellRenderer(centerText); // 5
-					jokerDRTable.getColumnModel().getColumn(6).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(6).setMinWidth(54);
 					jokerDRTable.getColumnModel().getColumn(7).setCellRenderer(centerText); // 5
 					jokerDRTable.getColumnModel().getColumn(7).setMinWidth(64);
 					jokerDRTable.getColumnModel().getColumn(8).setCellRenderer(centerText); // 4+1
-					jokerDRTable.getColumnModel().getColumn(8).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(8).setMinWidth(54);
 					jokerDRTable.getColumnModel().getColumn(9).setCellRenderer(centerText); // 4+1
 					jokerDRTable.getColumnModel().getColumn(9).setMinWidth(50);
 					jokerDRTable.getColumnModel().getColumn(10).setCellRenderer(centerText); // 4
-					jokerDRTable.getColumnModel().getColumn(10).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(10).setMinWidth(54);
 					jokerDRTable.getColumnModel().getColumn(11).setCellRenderer(centerText); // 4
-					jokerDRTable.getColumnModel().getColumn(11).setMinWidth(41);
+					jokerDRTable.getColumnModel().getColumn(11).setMinWidth(39);
 					jokerDRTable.getColumnModel().getColumn(12).setCellRenderer(centerText); // 3+1
-					jokerDRTable.getColumnModel().getColumn(12).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(12).setMinWidth(54);
 					jokerDRTable.getColumnModel().getColumn(13).setCellRenderer(centerText); // 3+1
-					jokerDRTable.getColumnModel().getColumn(13).setMinWidth(41);
+					jokerDRTable.getColumnModel().getColumn(13).setMinWidth(39);
 					jokerDRTable.getColumnModel().getColumn(14).setCellRenderer(centerText); // 3
-					jokerDRTable.getColumnModel().getColumn(14).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(14).setMinWidth(54);
 					jokerDRTable.getColumnModel().getColumn(15).setCellRenderer(centerText); // 3
-					jokerDRTable.getColumnModel().getColumn(15).setMinWidth(41);
+					jokerDRTable.getColumnModel().getColumn(15).setMinWidth(39);
 					jokerDRTable.getColumnModel().getColumn(16).setCellRenderer(centerText); // 2+1
-					jokerDRTable.getColumnModel().getColumn(16).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(16).setMinWidth(54);
 					jokerDRTable.getColumnModel().getColumn(17).setCellRenderer(centerText); // 2+1
-					jokerDRTable.getColumnModel().getColumn(17).setMinWidth(41);
+					jokerDRTable.getColumnModel().getColumn(17).setMinWidth(39);
 					jokerDRTable.getColumnModel().getColumn(18).setCellRenderer(centerText); // 1+1
-					jokerDRTable.getColumnModel().getColumn(18).setMinWidth(59);
+					jokerDRTable.getColumnModel().getColumn(18).setMinWidth(54);
 					jokerDRTable.getColumnModel().getColumn(19).setCellRenderer(centerText); // 1+1
-					jokerDRTable.getColumnModel().getColumn(19).setMinWidth(41);
+					jokerDRTable.getColumnModel().getColumn(19).setMinWidth(39);
 
 					// Make table cells unselectable and uneditable
 					jokerDRTable.setEnabled(false);
@@ -1532,7 +1538,7 @@ public class WindowManageData
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new Dimension(1280, 650));
+		mainPanel.setPreferredSize(new Dimension(1216, 650));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
@@ -1549,7 +1555,7 @@ public class WindowManageData
 		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new Dimension(1290, 680));
+		dialog.setMinimumSize(new Dimension(1226, 680));
 		dialog.setIconImages(icons);
 
 		// Find firstDrawDate & lastDrawId in advance, populate textFieldDrawId

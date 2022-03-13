@@ -28,6 +28,7 @@ import static plh24_ge3.Helper.getJsonStrFromApiURL;
 import static plh24_ge3.Helper.getUrlStrForDateRange;
 import static plh24_ge3.Helper.jokerJsonSingleDrawToObject;
 
+
 /**
  * @author Athanasios Theodoropoulos
  * @author Alexandros Dimitrakopoulos
@@ -76,7 +77,7 @@ public class WindowManageData
 	 */
 	private void findDateOfFirstDraw()
 	{
-		// The 1st draw can be found from: "https://api.opap.gr/draws/v3.0/{gameId}/1";
+		// The 1st draw can be found from: "https://api.opap.gr/draws/v3.0/{gameId}/1".
 		// Kino is an exception. It's earliest data are from about 3 years in the past.
 		if (comboBoxGameSelect.getSelectedItem().equals("Κίνο"))
 		{

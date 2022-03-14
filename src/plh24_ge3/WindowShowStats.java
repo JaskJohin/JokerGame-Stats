@@ -683,9 +683,9 @@ public class WindowShowStats
 			pdfImg3.setHeight(246);
 
 			document.add(pdfImg1);
-			document.add(new Paragraph("\n").setFontSize(5));
+			document.add(new Paragraph("\n").setFontSize(10));
 			document.add(pdfImg2);
-			document.add(new Paragraph("\n").setFontSize(5));
+			document.add(new Paragraph("\n").setFontSize(10));
 			document.add(pdfImg3);
 		}
 		catch (IOException ex) {ex.printStackTrace();}

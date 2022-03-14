@@ -644,7 +644,7 @@ public class WindowShowData
 		// Initialize document
 		Document document = new Document(pdf, PageSize.A4);
 		document.setProperty(Property.LEADING, new Leading(Leading.MULTIPLIED, 1.0f));
-		document.setMargins(20, 36, 10, 36); // (top, right, bottom, left)
+		document.setMargins(23, 36, 10, 36); // (top, right, bottom, left)
 
 
 		// Create PdfFonts to be used in the pdf document
@@ -652,8 +652,8 @@ public class WindowShowData
 		PdfFont fontBold = null;
 		try
 		{
-			fontRegular = PdfFontFactory.createFont(getClass().getResource("/resources/NotoSans-Regular.ttf").toString());
-			fontBold = PdfFontFactory.createFont(getClass().getResource("/resources/NotoSans-Bold.ttf").toString());
+			fontRegular = PdfFontFactory.createFont(getClass().getResource("/resources/Roboto-Regular.ttf").toString());
+			fontBold = PdfFontFactory.createFont(getClass().getResource("/resources/Roboto-Bold.ttf").toString());
 		}
 		catch (Exception ex)
 		{
@@ -685,13 +685,13 @@ public class WindowShowData
 
 		// Add a title to the document
 		Paragraph par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		par.setMarginTop(-18.37f).setMarginBottom(-6f);
-		par.add(new Text(basename).setFont(fontBold).setFontSize(18));
+		par.setMarginTop(-14.8f).setMarginBottom(-1f);
+		par.add(new Text(basename).setFont(fontBold).setFontSize(19));
 		document.add(par);
 
 		// Add the first year to the document
 		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		par.setMarginTop(3f).setMarginBottom(0f);
+		par.setMarginTop(4f).setMarginBottom(2f);
 		par.add(new Text(year).setFont(fontBold).setFontSize(14));
 		document.add(par);
 
@@ -701,26 +701,26 @@ public class WindowShowData
 
 		// Column 1 header
 		Paragraph header1 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		header1.setMarginTop(-4f).setMarginBottom(-1f);
-		header1.add(new Text("Μήνας").setFont(fontBold).setFontSize(11));
+		header1.setMarginTop(0f).setMarginBottom(0f);
+		header1.add(new Text("Μήνας").setFont(fontBold).setFontSize(12));
 		table.addHeaderCell(header1);
 
 		// Column 2 header
 		Paragraph header2 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		header2.setMarginTop(-4f).setMarginBottom(-1f);
-		header2.add(new Text("Πλήθος κληρώσεων").setFont(fontBold).setFontSize(11));
+		header2.setMarginTop(0f).setMarginBottom(0f);
+		header2.add(new Text("Πλήθος κληρώσεων").setFont(fontBold).setFontSize(12));
 		table.addHeaderCell(header2);
 
 		// Column 3 header
 		Paragraph header3 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		header3.setMarginTop(-4f).setMarginBottom(-1f);
-		header3.add(new Text("Χρήματα που διανεμήθηκαν (€)").setFont(fontBold).setFontSize(11));
+		header3.setMarginTop(0f).setMarginBottom(0f);
+		header3.add(new Text("Χρήματα που διανεμήθηκαν (€)").setFont(fontBold).setFontSize(12));
 		table.addHeaderCell(header3);
 
 		// Column 4 header
 		Paragraph header4 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		header4.setMarginTop(-4f).setMarginBottom(-1f);
-		header4.add(new Text("Τζακ-ποτ").setFont(fontBold).setFontSize(11));
+		header4.setMarginTop(0f).setMarginBottom(0f);
+		header4.add(new Text("Τζακ-ποτ").setFont(fontBold).setFontSize(12));
 		table.addHeaderCell(header4);
 
 
@@ -768,22 +768,22 @@ public class WindowShowData
 
 				// Add the data to the table
 				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 				par.add(new Text(monthName).setFont(fontRegular).setFontSize(11));
 				table.addCell(par);
 
 				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 				par.add(new Text(String.valueOf(drawCount)).setFont(fontRegular).setFontSize(11));
 				table.addCell(par);
 
 				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 				par.add(new Text(String.valueOf(moneySumBD)).setFont(fontRegular).setFontSize(11));
 				table.addCell(par);
 
 				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 				par.add(new Text(String.valueOf(jackpotCount)).setFont(fontRegular).setFontSize(11));
 				table.addCell(par);
 
@@ -807,22 +807,22 @@ public class WindowShowData
 
 				// Add "Total" row to the table
 				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 				par.add(new Text("Σύνολο").setFont(fontBold).setFontSize(11));
 				table.addCell(par);
 
 				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 				par.add(new Text(String.valueOf(drawCountTotal)).setFont(fontBold).setFontSize(11));
 				table.addCell(par);
 
 				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 				par.add(new Text(String.valueOf(moneySumTotalBD)).setFont(fontBold).setFontSize(11));
 				table.addCell(par);
 
 				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-				par.setMarginTop(-4f).setMarginBottom(-2f);
+				par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 				par.add(new Text(String.valueOf(jackpotCountTotal)).setFont(fontBold).setFontSize(11));
 				table.addCell(par);
 
@@ -844,7 +844,7 @@ public class WindowShowData
 
 				// Add new year
 				par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-				par.setMarginTop(8f).setMarginBottom(0f);
+				par.setMarginTop(11f).setMarginBottom(2f);
 				par.add(new Text(year).setFont(fontBold).setFontSize(14));
 				document.add(par);
 
@@ -893,22 +893,22 @@ public class WindowShowData
 
 		// Add the last data to the table
 		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 		par.add(new Text(monthName).setFont(fontRegular).setFontSize(11));
 		table.addCell(par);
 
 		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 		par.add(new Text(String.valueOf(drawCount)).setFont(fontRegular).setFontSize(11));
 		table.addCell(par);
 
 		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 		par.add(new Text(String.valueOf(moneySumBD)).setFont(fontRegular).setFontSize(11));
 		table.addCell(par);
 
 		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 		par.add(new Text(String.valueOf(jackpotCount)).setFont(fontRegular).setFontSize(11));
 		table.addCell(par);
 
@@ -923,22 +923,22 @@ public class WindowShowData
 
 		// Add "Total" row to the table
 		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 		par.add(new Text("Έως " + lastDrawDate).setFont(fontBold).setFontSize(11));
 		table.addCell(par);
 
 		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 		par.add(new Text(String.valueOf(drawCountTotal)).setFont(fontBold).setFontSize(11));
 		table.addCell(par);
 
 		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 		par.add(new Text(String.valueOf(moneySumTotalBD)).setFont(fontBold).setFontSize(11));
 		table.addCell(par);
 
 		par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
-		par.setMarginTop(-4f).setMarginBottom(-2f);
+		par.setMarginTop(-0.7f).setMarginBottom(-0.7f);
 		par.add(new Text(String.valueOf(jackpotCountTotal)).setFont(fontBold).setFontSize(11));
 		table.addCell(par);
 

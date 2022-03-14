@@ -298,24 +298,17 @@ public class WindowAbout
 				// Fonts labels
 				JPanel labelFontsPanel = new JPanel(new FlowLayout(0, 0, 0));
 				labelFontsPanel.setBackground(backColor);
-					JLabel labelFonts = new JLabel("και οι γραμματοσειρές:");
+					JLabel labelFonts = new JLabel("και η γραμματοσειρά:");
 					labelFonts.setFont(fontRobotoBold.deriveFont(1, 12));
 				labelFontsPanel.add(labelFonts);
 				labelFontsPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, labelFontsPanel.getMinimumSize().height + 1));
 
 				JPanel font1Panel = new JPanel(new FlowLayout(0, 0, 0));
 				font1Panel.setBackground(backColor);
-					JLabel labelFont1 = new JLabel("    " + "NotoSans         (SIL Open Font License v1.1)");
+					JLabel labelFont1 = new JLabel("    " + "Roboto              (Apache License v2.0)");
 					labelFont1.setFont(fontRobotoRegular.deriveFont(0, 12));
 				font1Panel.add(labelFont1);
 				font1Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, font1Panel.getMinimumSize().height + 1));
-
-				JPanel font2Panel = new JPanel(new FlowLayout(0, 0, 0));
-				font2Panel.setBackground(backColor);
-					JLabel labelFont2 = new JLabel("    " + "Roboto              (Apache License v2.0)");
-					labelFont2.setFont(fontRobotoRegular.deriveFont(0, 12));
-				font2Panel.add(labelFont2);
-				font2Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, font2Panel.getMinimumSize().height + 1));
 
 
 				// License label
@@ -348,7 +341,6 @@ public class WindowAbout
 			middlePanelInfo.add(Box.createRigidArea(new Dimension(0, 2)));
 			middlePanelInfo.add(labelFontsPanel);
 			middlePanelInfo.add(font1Panel);
-			middlePanelInfo.add(font2Panel);
 			middlePanelInfo.add(Box.createRigidArea(new Dimension(0, 16)));
 			middlePanelInfo.add(labelLicensePanel);
 
@@ -402,7 +394,7 @@ public class WindowAbout
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new java.awt.Dimension(596, 520));
+		mainPanel.setPreferredSize(new java.awt.Dimension(596, 510));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanelCards);

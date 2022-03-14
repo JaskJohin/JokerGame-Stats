@@ -38,9 +38,29 @@ import javax.swing.table.DefaultTableCellRenderer;
 import POJOs.AverageDistributedPrizeCat;
 import POJOs.BonusOccurrence;
 import model.QueriesSQL;
-import model.Utilities;
 import POJOs.WinningNumberOccurrence;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.element.AreaBreak;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+import com.itextpdf.layout.properties.VerticalAlignment;
 import java.awt.FlowLayout;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.OverlayLayout;
@@ -57,6 +77,7 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.TextAnchor;
+
 
 /**
  * @author Athanasios Theodoropoulos
@@ -147,6 +168,10 @@ public class WindowShowStats
 				{
 					numbersStatsTable.setValueAt(wnDelays, i, 2);
 				}
+				else
+				{
+					numbersStatsTable.setValueAt("-", i, 2);
+				}
 			}
 			catch (ParseException ex)
 			{
@@ -168,6 +193,10 @@ public class WindowShowStats
 				if (bonusOccurrences != 0)
 				{
 					bonusNumbersStatsTable.setValueAt(bonusDelays, j, 2);
+				}
+				else
+				{
+					bonusNumbersStatsTable.setValueAt("-", j, 2);
 				}
 			}
 			catch (ParseException ex)
@@ -371,7 +400,299 @@ public class WindowShowStats
 	}
 
 
+ 	/**
+	 * Method to create pdf file from statistical data
+	 * @param fromDate  Start date
+	 * @param toDate    End date
+	 * @param dest      Full name of file to save
+	 * @param basename  Base name of file to save
+	 * @throws ParseException 
+	 */
+	public void createPdf(String fromDate, String toDate, String dest, String basename) throws ParseException {
 
+		//Variable declaration
+		Integer number, bonus;
+
+		//Initialize PDF writer
+		PdfWriter writer;
+		try {
+			writer = new PdfWriter(dest);
+		} catch (FileNotFoundException ex) {
+			String message = "Σφάλμα δημιουργίας αρχείου.\nΒεβαιωθείτε πως έχετε δικαίωμα εγγραφής στο φάκελο.";
+			JOptionPane.showMessageDialog(null, message, "Σφάλμα εγγραφής", 0);
+			return;
+		}
+
+		//Initialize PDF document
+		PdfDocument pdf = new PdfDocument(writer);
+
+		// Initialize document
+		Document document = new Document(pdf, PageSize.A4);
+		document.setMargins(26, 26, 26, 26); // (top, right, bottom, left)
+
+		//Create PdfFonts to be used for text formatting
+		PdfFont normalFont = null;
+		PdfFont boldFont = null;
+		PdfFont boldItalicFont = null;
+		PdfFont italicFont = null;
+		try {
+			normalFont = PdfFontFactory.createFont(getClass().getResource("/resources/Roboto-Regular.ttf").toString());
+			boldFont = PdfFontFactory.createFont(getClass().getResource("/resources/Roboto-Bold.ttf").toString());
+			boldItalicFont = PdfFontFactory.createFont(getClass().getResource("/resources/Roboto-BoldItalic.ttf").toString());
+			italicFont = PdfFontFactory.createFont(getClass().getResource("/resources/Roboto-Italic.ttf").toString());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			try {
+				normalFont = PdfFontFactory.createFont("Helvetica", "Cp1253");
+				boldFont = PdfFontFactory.createFont("Helvetica-Bold", "Cp1253");
+				boldItalicFont = PdfFontFactory.createFont("Helvetica-BoldOblique", "Cp1253");
+				italicFont = PdfFontFactory.createFont("Helvetica-Oblique", "Cp1253");
+			} catch (Exception ex1) {System.err.println(ex1);}
+		}
+
+		//Add title to the document
+		Paragraph par = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		par.setMarginTop(-4f).setMarginBottom(6f);
+		par.add(new Text(basename).setFont(boldFont).setFontSize(18));
+		document.add(par);
+
+		//initialize outer table to define to columns for the document
+		Table outerTable = new Table(2).useAllAvailableWidth();
+
+		//Initialize the left column of the outer table
+		Cell left = new Cell();
+
+		//Outer Table cells will have no border
+		left.setBorder(Border.NO_BORDER);
+
+		//Add a description of the contents of the table
+		Paragraph par1 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		Text text1 = new Text("Εμφανίσεις και καθυστερήσεις αριθμών");
+		text1.setFont(boldFont);
+		text1.setFontSize(14);
+		par1.add(text1);
+
+		//Add paragraph to the table cell
+		left.add(par1);
+		//Add a blank line
+		left.add(new Paragraph("\n").setFontSize(6));
+
+		//Create a nested Table to store the winning number statistics
+		Table nestedTable1 = new Table(UnitValue
+				.createPercentArray(new float[]{100f, 100f, 100f}))
+				.setVerticalAlignment(VerticalAlignment.MIDDLE);
+		nestedTable1.setMarginRight(4);
+
+		//Add the headers. For each header define formatting individually
+		//1st column header
+		Paragraph ltHeader1 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		ltHeader1.setMarginTop(10f);
+		Text textHeader1 = new Text("Αριθμός");
+		textHeader1.setFont(boldItalicFont);
+		textHeader1.setFontSize(13);
+		ltHeader1.add(textHeader1);
+		nestedTable1.addHeaderCell(ltHeader1);
+		//2nd column header
+		Paragraph ltHeader2 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		ltHeader2.setMarginTop(10f);
+		Text textHeader2 = new Text("Εμφανίσεις");
+		textHeader2.setFont(boldItalicFont);
+		textHeader2.setFontSize(13);
+		ltHeader2.add(textHeader2);
+		nestedTable1.addHeaderCell(ltHeader2);
+		//3rd column header
+		Paragraph ltHeader3 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		Text textHeader3 = new Text("Καθυστέρηση εμφάνισης");
+		textHeader3.setFont(boldItalicFont);
+		textHeader3.setFontSize(13);
+		ltHeader3.add(textHeader3);
+		nestedTable1.addHeaderCell(ltHeader3);
+
+		//Add the statistical data for the 45 (winning) numbers
+		for(int i = 0; i < 45; i++) {
+			number = i + 1;
+			Paragraph p1 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+			Text t1 = new Text(number.toString());
+			t1.setFont(normalFont);
+			t1.setFontSize(12);
+			p1.add(t1);
+			nestedTable1.addCell(p1);
+			Integer occurrences = QueriesSQL.singleNumberOccurrences(fromDate, toDate, i + 1);
+			Paragraph p2 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+			Text t2 = new Text(occurrences.toString());
+			t2.setFont(normalFont);
+			t2.setFontSize(12);
+			p2.add(t2);
+			nestedTable1.addCell(p2);
+			Integer delays = QueriesSQL.singleNumberDelays(fromDate, toDate, i + 1);
+			Paragraph p3 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+			Text t3 = new Text(delays.toString());
+			t3.setFont(normalFont);
+			t3.setFontSize(12);
+			if (occurrences.toString().equals("0")) {t3 = new Text("-");}
+			p3.add(t3);
+			nestedTable1.addCell(p3);     
+		}
+
+		//Add the nested table to the left cell (column)
+		left.add(nestedTable1);
+
+		//Create the right cell
+		Cell right = new Cell();
+		right.setBorder(Border.NO_BORDER);
+
+		//Same as above but now for the right table 
+		//in which bonus statistics will be displayed
+		Paragraph par3 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		Text text3 = new Text("Εμφανίσεις και καθυστερήσεις Τζόκερ");
+		text3.setFont(boldFont);
+		text3.setFontSize(14);
+		par3.add(text3);
+
+		right.add(par3);
+		right.add(new Paragraph("\n").setFontSize(6));
+
+		//Create a nested table to store bonus statistics
+		Table nestedTable2 = new Table(UnitValue
+				.createPercentArray(new float[]{100f, 100f, 100f}))
+				.setVerticalAlignment(VerticalAlignment.MIDDLE);
+		nestedTable2.setMarginLeft(4);
+
+		//Add 1st column header
+		Paragraph rtHeader1 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		Text textHeaderRight1 = new Text("Αριθμός Τζόκερ");
+		textHeaderRight1.setFont(boldItalicFont);
+		textHeaderRight1.setFontSize(13);
+		rtHeader1.add(textHeaderRight1);
+		nestedTable2.addHeaderCell(rtHeader1);
+
+		//Add 2nd column header
+		Paragraph rtextHeaderRight2 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		rtextHeaderRight2.setMarginTop(10f);
+		Text textHeaderRight2 = new Text("Εμφανίσεις");
+		textHeaderRight2.setFont(boldItalicFont);
+		textHeaderRight2.setFontSize(13);
+		rtextHeaderRight2.add(textHeaderRight2);
+		nestedTable2.addHeaderCell(rtextHeaderRight2);
+
+		//Add 3rd column header
+		Paragraph rtextHeaderRight3 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+		Text textHeaderRight3 = new Text("Καθυστέρηση εμφάνισης");
+		textHeaderRight3.setFont(boldItalicFont);
+		textHeaderRight3.setFontSize(13);
+		rtextHeaderRight3.add(textHeaderRight3);
+		nestedTable2.addHeaderCell(rtextHeaderRight3);
+
+		//Add the bonus statistical data
+		for(int j = 0; j < 20; j++) {
+			bonus = j + 1;
+			Paragraph p1 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+			Text t1 = new Text(bonus.toString());
+			t1.setFont(normalFont);
+			t1.setFontSize(12);
+			p1.add(t1);
+			nestedTable2.addCell(p1);
+			Integer occurrences = QueriesSQL.singleBonusOccurrences(fromDate, toDate, j + 1);
+			Paragraph p2 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+			Text t2 = new Text(occurrences.toString());
+			t2.setFont(normalFont);
+			t2.setFontSize(12);
+			p2.add(t2);
+			nestedTable2.addCell(p2);
+			Integer delays = QueriesSQL.singleBonusDelays(fromDate, toDate, j + 1);
+			Paragraph p3 = new Paragraph().setTextAlignment(TextAlignment.CENTER);
+			Text t3 = new Text(delays.toString());
+			t3.setFont(normalFont);
+			t3.setFontSize(12);
+			if (occurrences.toString().equals("0")) {t3 = new Text("-");}
+			p3.add(t3);
+			nestedTable2.addCell(p3);
+		} 
+
+		//Add the 2nd nested table to the right cell (column)
+		right.add(nestedTable2);
+
+		//Add both left and right cells to the outer table
+		outerTable.addCell(left);
+		outerTable.addCell(right);
+
+		//Also the outer table to the document
+		document.add(outerTable);
+
+		//Add new line
+		document.add(new Paragraph("\n").setFontSize(12));
+
+		//Note
+		Paragraph note = new Paragraph();
+		Text line1 = new Text("Σημείωση:\n");
+		line1.setFont(italicFont);
+		line1.setFontSize(12);
+		Text line2 = new Text("Καθυστέρηση εμφάνισης '0' σημαίνει ότι ο αριθμός εμφανίστηκε στην πιο πρόσφατη κλήρωση,");
+		line2.setFont(normalFont);
+		line2.setFontSize(12);
+		Text line3 = new Text("καθυστέρηση εμφάνισης '1' σημαίνει ότι ο αριθμός εμφανίστηκε στην προτελευταία κλήρωση, κτλ.\n");
+		line3.setFont(normalFont);
+		line3.setFontSize(12);
+		Text line4 = new Text("Καθυστέρηση εμφάνισης '-' σημαίνει ότι ο αριθμός δεν έχει εμφανίστεί καθόλου στο συγκεκριμένο εύρος ημερομηνιών.");
+		line4.setFont(normalFont);
+		line4.setFontSize(12);
+		note.add(line1);
+		note.add(line2);
+		note.add(line3);
+		note.add(line4);
+		document.add(note);
+
+		//New page
+		document.add(new AreaBreak());
+
+		// Generate images from the chart panels
+		int w = chart1Panel.getWidth();
+		int h = chart1Panel.getHeight();
+		BufferedImage bi1 = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g1 = bi1.createGraphics();
+		chart1Panel.paint(g1);
+
+		w = chart2Panel.getWidth();
+		h = chart2Panel.getHeight();
+		BufferedImage bi2 = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2 = bi2.createGraphics();
+		chart2Panel.paint(g2);
+
+		w = chart3Panel.getWidth();
+		h = chart3Panel.getHeight();
+		BufferedImage bi3 = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g3 = bi3.createGraphics();
+		chart3Panel.paint(g3);
+
+		// Add images to pdf
+		try
+		{
+			ImageData imgData1 = ImageDataFactory.create(bi1, null);
+			com.itextpdf.layout.element.Image pdfImg1 = new com.itextpdf.layout.element.Image(imgData1);
+			pdfImg1.setWidth(540);  // 543 max
+			pdfImg1.setHeight(246);
+
+			ImageData imgData2 = ImageDataFactory.create(bi2, null);
+			com.itextpdf.layout.element.Image pdfImg2 = new com.itextpdf.layout.element.Image(imgData2);
+			pdfImg2.setWidth(540);  // 543 max
+			pdfImg2.setHeight(246);
+
+			ImageData imgData3 = ImageDataFactory.create(bi3, null);
+			com.itextpdf.layout.element.Image pdfImg3 = new com.itextpdf.layout.element.Image(imgData3);
+			pdfImg3.setWidth(540);  // 543 max
+			pdfImg3.setHeight(246);
+
+			document.add(pdfImg1);
+			document.add(new Paragraph("\n").setFontSize(5));
+			document.add(pdfImg2);
+			document.add(new Paragraph("\n").setFontSize(5));
+			document.add(pdfImg3);
+		}
+		catch (IOException ex) {ex.printStackTrace();}
+
+		//Close document
+		document.close();
+	}
 
 
 	// Button actions
@@ -577,6 +898,11 @@ public class WindowShowStats
 			return;
 		}
 
+		// Create file name
+		String basename = "Στατιστικά " + comboBoxGameSelect.getSelectedItem().toString() + " από " + searchDate1 + " έως " + searchDate2;
+		String filename = basename + ".pdf";
+
+
 		// Window saveAs
 		JFileChooser fileChooser = new JFileChooser()
 		{
@@ -590,7 +916,7 @@ public class WindowShowStats
 		};
 		fileChooser.setCurrentDirectory(new File("."));
 		fileChooser.setDialogTitle("Επιλέξτε το όνομα του αρχείου pdf");
-		fileChooser.setSelectedFile(new File("TzokerStatisticalData.pdf"));
+		fileChooser.setSelectedFile(new File(filename));
 
 		int userSelection = fileChooser.showSaveDialog(null);
 
@@ -614,7 +940,7 @@ public class WindowShowStats
 		// Call the function to create the pdf with the statistics for the given date range
 		try
 		{
-			new Utilities().createPdf(searchDate1, searchDate2, path);
+			createPdf(searchDate1, searchDate2, path, basename);
 		}
 		catch (Exception ex)
 		{
@@ -682,7 +1008,7 @@ public class WindowShowStats
 				labelTitle.setForeground(Color.ORANGE);
 
 				JLabel labelTitleShadow = new JLabel("Προβολή στατιστικών");
-				labelTitleShadow.setBorder(BorderFactory.createEmptyBorder(6, 0, 0, 0));
+				labelTitleShadow.setBorder(BorderFactory.createEmptyBorder(5, 1, 0, 0));
 				labelTitleShadow.setFont(new Font(null, 3, 42));
 				labelTitleShadow.setForeground(Color.BLUE);
 
@@ -987,7 +1313,7 @@ public class WindowShowStats
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setPreferredSize(new Dimension(1150, 560));
+		mainPanel.setPreferredSize(new Dimension(1150, 614));
 		mainPanel.setBackground(backColor);
 		mainPanel.add(topPanel);
 		mainPanel.add(middlePanel);
@@ -1004,7 +1330,8 @@ public class WindowShowStats
 		dialog.setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);   // Appear in the center of screen
-		dialog.setMinimumSize(new Dimension(1160, 590));
+		dialog.setMinimumSize(new Dimension(1160, 644));
+		dialog.setResizable(false);
 		dialog.setIconImages(icons);
 
 		// Find firstDrawDate

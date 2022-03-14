@@ -1,4 +1,4 @@
-package plh24_ge3;
+package view;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;

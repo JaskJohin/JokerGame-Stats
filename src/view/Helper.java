@@ -1,4 +1,4 @@
-package plh24_ge3;
+package view;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

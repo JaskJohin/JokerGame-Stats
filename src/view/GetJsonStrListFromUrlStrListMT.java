@@ -1,8 +1,8 @@
-package plh24_ge3;
+package view;
 
 import java.util.ArrayList;
 import java.util.List;
-import static plh24_ge3.Helper.getJsonStrFromApiURL;
+import static view.Helper.getJsonStrFromApiURL;
 
 /**
  * Connect to API "https://api.opap.gr/draws/v3.0/{gameId}/draw-date/{fromDate}/{toDate}"

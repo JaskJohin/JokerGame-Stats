@@ -1,4 +1,4 @@
-package plh24_ge3;
+package view;
 
 /**
  * Data of a single draw of the game Joker.

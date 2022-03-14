@@ -1,4 +1,4 @@
-package plh24_ge3;
+package view;
 
 import com.google.gson.*;
 import java.awt.*;
@@ -24,9 +24,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.AddDataController;
 import model.QueriesSQL;
-import static plh24_ge3.Helper.getJsonStrFromApiURL;
-import static plh24_ge3.Helper.getUrlStrForDateRange;
-import static plh24_ge3.Helper.jokerJsonSingleDrawToObject;
+import static view.Helper.getJsonStrFromApiURL;
+import static view.Helper.getUrlStrForDateRange;
+import static view.Helper.jokerJsonSingleDrawToObject;
 
 
 /**
